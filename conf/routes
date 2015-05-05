@@ -1,0 +1,17 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                                       @controllers.ApplicationController.index
+
+GET     /hostels/hints/hostels/:query           @controllers.HintsController.hostelHints(query: String)
+GET     /hostels/hints/locations/:query         @controllers.HintsController.locationHints(query: String)
+
+GET     /hostels/search/:location               @controllers.SearchController.displayAll(location: String)
+GET     /hostels/search/:city/:tags             @controllers.SearchController.classify(city: String, tags: String)
+
+GET     /stats                                  @controllers.StatsController.getStats
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                           @controllers.Assets.at(path="/public", file)

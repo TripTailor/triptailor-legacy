@@ -1,0 +1,95 @@
+html, body {
+	height: 100%;
+}
+body {
+	background: url(../images/van.jpg) no-repeat center center fixed;
+	background-size: cover;
+}
+h4 {
+	color: white;
+	text-shadow: 0 0 2px #333;
+}
+#logo {
+	text-align: center;
+}
+#topbar {
+	width: 100%;
+	height: 60px;
+	top: 0;
+}
+#container {
+	text-align: center;
+	padding: 0 5%;
+	margin-top: 8%;
+}
+#search {
+	background-color: rgba(24, 49, 82, 0.9);
+	padding: 3% 6%;
+	border-radius: 4px;
+	margin-top: 3%;
+	box-shadow: 0 0 2px #333;
+}
+#city {
+	margin-top: 3%;
+}
+input[type=text] {
+	display: block;
+	width: 100%;
+	margin: 0 -13px;
+	height: 40px;
+}
+a {
+	padding: 12px;
+	margin-top: 3%;
+	text-decoration: none;
+}
+
+.autocomplete {
+	position: absolute;
+	top: 0;
+	width: calc(100% + 27px);
+	background-color: white;
+	margin-left: -13px;
+	display: none;
+	text-align: left;
+	font-family: Arial;
+	padding-top: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+}
+.autocomplete p {
+	margin: 0;
+	font-size: 16px;
+	padding: 8px 20px;
+}
+#hostels {
+	margin-bottom: 10px;
+}
+.title {
+	color: #183152;
+	font-weight: bold;
+}
+.autocomplete-element {
+	cursor: pointer;
+	background-color: white;
+}
+.autocomplete-element:hover {
+	background-color: #C4D7ED;
+}
+
+.addthis_sharing_toolbox {
+	margin-top: 10%;
+}
+
+@media (min-width: 700px) {
+	.autocomplete {
+		max-height: 300px;
+	}
+	#logo {
+		text-align: left;
+		margin-left: 7%;
+	}
+	#container {
+		padding: 0 25%;
+	}
+}

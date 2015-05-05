@@ -1,0 +1,20 @@
+@(title: String)(content: Html)
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+        <title>@title</title>
+
+        <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/general.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hostels.css")">
+        <link rel="shortcut icon" href="@routes.Assets.at("images/favicon.ico")">
+    </head>
+    <body>
+        @content
+    </body>
+</html>

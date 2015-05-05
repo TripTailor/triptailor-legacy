@@ -1,0 +1,49 @@
+@(classifiedHostels: Seq[ClassifiedHostel], locationOpt: Option[Location], searchIdOpt: Option[Int])
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <title>TripTailor</title>
+
+        <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+        <link href="@routes.Assets.at("stylesheets/general.css")" rel="stylesheet" type="text/css">
+        <link href="@routes.Assets.at("stylesheets/hostels_search.css")" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" type="images/x-icon" href="@routes.Assets.at("images/favicon.ico")">
+
+    </head>
+
+    <body>
+
+        <div id="topbar">
+            <div class="center-vertical">
+                <h4 id="logo"><a href="@controllers.routes.ApplicationController.index()">TripTailor Hostels</a></h4>
+                @locationOpt.map { location => <div id="location">@(location.city), @(location.country)</div> }
+            </div>
+        </div>
+
+        <div id="container">
+            @classifiedHostels.zipWithIndex.map { case (classified, index) =>
+                <div class="hostel-entry @{if (index % 2 == 0) " left" else ""}">
+                    <a href=@classified.hostel.url target="_blank" onclick="saveHostelClick(@searchIdOpt.getOrElse(-1), @classified.hostel.id); return true;">
+                        <h1>@classified.hostel.name</h1>
+                        <div>
+                            @classified.orderedTags.map { tag =>
+                                <span class="@{if (tag.tagType == 0) "shared" else "unique"}">@tag.attribute</span>
+                            }
+                        </div>
+                        <div class="price">
+                            @classified.hostel.price.map { price =>
+                                @if(price > 0) {
+                                    <h3>@views.PriceFormatter.format(price)</h3>
+                                }
+                            }
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+
+        <script src="@routes.Assets.at("javascripts/hostels_search.js")"></script>
+    </body>
+</html>

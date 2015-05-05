@@ -1,0 +1,45 @@
+@(todayStats: Stats, completeStats: Stats)
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>TripTailor</title>
+
+        <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+        <link href="@routes.Assets.at("stylesheets/general.css")" rel="stylesheet" type="text/css">
+        <link href="@routes.Assets.at("stylesheets/stats.css")" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" type="images/x-icon" href="/img/favicon.ico">
+
+    </head>
+
+    <body>
+        <div id="topbar">
+            <div class="center-vertical">
+                <h4 id="logo"><a href="@controllers.routes.ApplicationController.index()">TripTailor Hostels</a></h4>
+            </div>
+        </div>
+
+        <div id="container">
+            <h1>Today</h1>
+            <span><h2>@todayStats.searches</h2>searches</span>
+            <span><h2>@todayStats.adwords</h2>adword searches</span>
+            <span><h2>@views.DoubleTruncator.truncate(todayStats.searchSession, 2)</h2>searches/session</span>
+            <span><h2>@views.DoubleTruncator.truncate(todayStats.linkSearch, 2)</h2>hostels clicked/search</span>
+            <span><h2>@todayStats.hostelSearches</h2>hostel searches</span>
+            <span><h2>@todayStats.attributeSearches</h2>attribute searches</span>
+
+            <div class="line"></div>
+
+            <h1>Since the beginning of time</h1>
+            <span><h2>@completeStats.searches</h2>searches</span>
+            <span><h2>@completeStats.adwords</h2>adword searches</span>
+            <span><h2>@views.DoubleTruncator.truncate(completeStats.searchSession, 2)</h2>searches/session</span>
+            <span><h2>@views.DoubleTruncator.truncate(completeStats.linkSearch, 2)</h2>hostels clicked/search</span>
+            <span><h2>@completeStats.hostelSearches</h2>hostel searches</span>
+            <span><h2>@completeStats.attributeSearches</h2>attribute searches</span>
+        </div>
+
+        <!-- <script src="/TripTailor/js/stats.js"></script> -->
+    </body>
+</html>

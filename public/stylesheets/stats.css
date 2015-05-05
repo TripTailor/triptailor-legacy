@@ -1,0 +1,56 @@
+#topbar {
+	width: 100%;
+	background-color: #183152;
+	border-bottom: 1px solid #ABC8E2;
+	text-align: center;
+	padding: 4% 0;
+}
+#container {
+	padding: 50px;
+}
+h1 {
+	margin: 0;
+	margin-bottom: 20px;
+}
+span {
+	display: inline-block;
+	width: 300px;
+	margin-right: 50px;
+}
+span h2 {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.line {
+	border-top: 1px solid black;
+	margin: 50px 0;
+}
+.center-vertical {
+	transform: none;
+}
+
+@media (min-width: 700px) {
+	#topbar {
+		position: fixed;
+		width: 100%;
+		height: 60px;
+		top: 0;
+		text-align: left;
+		padding: 0;
+	}
+	#topbar h4 {
+		margin: 0;
+		margin-left: 7%;
+	}
+
+	#container {
+		width: 80%;
+		margin: 0 auto;
+		margin-top: 61px;
+	}
+
+	.center-vertical {
+		transform: translateY(-50%);
+	}
+}
