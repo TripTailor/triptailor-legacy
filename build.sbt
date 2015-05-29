@@ -4,7 +4,7 @@ scalaVersion := "2.11.6"
 
 val dbDependencies = Seq(
   "mysql" % "mysql-connector-java" % "5.1.35",
-  "com.typesafe.play" %% "play-slick" % "1.0.0-RC3",
+  "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.typesafe.slick" %% "slick-codegen" % "3.0.0",
   "com.zaxxer" % "HikariCP" % "2.3.5" % Compile
 )
