@@ -7,7 +7,7 @@ import play.api.Configuration
 trait HostelsClassifierConfig { self: HostelsClassifier =>
   lazy val SharedTags = config.getInt("classifier.hostels.model.sharedTags").get
   lazy val UniqueTags = config.getInt("classifier.hostels.model.uniqueTags").get
-  lazy val WeightBase = config.getInt("classifier.hostels.model.weightBase").get
+  lazy val WeightBase = config.getDouble("classifier.hostels.model.weightBase").get
 }
 
 class HostelsClassifier @Inject()(protected val config: Configuration, protected val clicheTags: Set[String]) extends HostelsClassifierConfig {
@@ -26,20 +26,21 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
     println("classifying by hostel")
     import HostelsClassifier.{hcAscendingOrdering, tagDescendingOrdering}
 
-    val highestNoReviews = model.maxBy(_.noReviews).noReviews
+    val reviews          = model.maxBy(_.noReviews).noReviews
+    val highestNoReviews = if (H.noReviews < reviews) H.noReviews else reviews
 
     (for {
-      (m, i)                 ← model.zipWithIndex
+      m                      ← (H +: model).toStream
       nameWords              = m.name.split("\\s+").map(_.toLowerCase)
       (shared_har, diff_har) = H.attributes.partition(har => m.attributes contains har._1)
       unique_mar             = m.attributes -- H.attributes.keys
       (nbrShared, nbrUnique) = if (m.name equalsIgnoreCase H.name) (SharedTags + UniqueTags, 0) else (SharedTags, UniqueTags)
-      sharedTags             = createTags(shared_har, 0, nameWords).sorted take nbrShared
-      uniqueTags             = createTags(unique_mar, 1, nameWords).sorted take nbrUnique
+      sharedTags             = createTags(shared_har, 0, nameWords, m).sorted take nbrShared
+      uniqueTags             = createTags(unique_mar, 1, nameWords, m).sorted take (SharedTags + nbrUnique - sharedTags.size)
       orderedTags            = (sharedTags ++ uniqueTags).sorted
       rating                 = computeRating(shared_har, m) + computeRating(diff_har, m)
-      penalizedRating        = computeHostelPenalizedRating(m, highestNoReviews + (i + 1), rating)
-    } yield ClassifiedHostel(m, penalizedRating, orderedTags)).sorted
+      penalizedRating        = computeHostelPenalizedRating(m, highestNoReviews + 1, rating)
+    } yield ClassifiedHostel(m, penalizedRating, orderedTags)).filter(_.orderedTags.nonEmpty).sorted.distinct
   }
 
   /**
@@ -55,27 +56,27 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
     println("classifying by tags")
     import HostelsClassifier.{hcDescendingOrdering, tagDescendingOrdering}
 
-    val averageNoReviews = model.foldLeft(0d)(_ + _.noReviews) / model.size
+    val averageNoReviews = model.foldLeft(0)(_ + _.noReviews) / model.size
 
     (for {
-      (m, i)          ← model.zipWithIndex
+      m               ← model.toStream
       nameWords       = m.name.split("\\s+").map(_.toLowerCase)
       shared_tar      = m.attributes.filter(mar => tags contains mar._1)
       unique_mar      = m.attributes -- tags
-      sharedTags      = createTags(shared_tar, 0, nameWords).sorted take SharedTags
-      uniqueTags      = createTags(unique_mar, 1, nameWords).sorted take (SharedTags + UniqueTags - sharedTags.size)
+      sharedTags      = createTags(shared_tar, 0, nameWords, m).sorted take SharedTags
+      uniqueTags      = createTags(unique_mar, 1, nameWords, m).sorted take (SharedTags + UniqueTags - sharedTags.size)
       orderedTags     = (sharedTags ++ uniqueTags).sorted
       rating          = shared_tar.values.sum / tags.size
-      penalizedRating = computeTagPenalizedRating(m, averageNoReviews + (i + 1), rating)
-    } yield ClassifiedHostel(m, penalizedRating, orderedTags)).sorted
+      penalizedRating = computeTagPenalizedRating(m, averageNoReviews + 1, rating)
+    } yield ClassifiedHostel(m, penalizedRating, orderedTags)).filter(_.orderedTags.nonEmpty).sorted
   }
 
-  private def createTags(ar: Map[String,Double], tagType: Int, nameWords: Seq[String]): Seq[TagHolder] = {
+  private def createTags(ar: Map[String,Double], tagType: Int, nameWords: Seq[String], m: Hostel): Seq[TagHolder] = {
     def condition(attr: String) = !clicheTags.contains(attr) && !nameWords.contains(attr)
 
     ar.toSeq.flatMap { case (a, r) =>
       if (condition(a))
-        Some(TagHolder(a, r, tagType))
+        Some(TagHolder(a, m.attributes(a), tagType))
       else
         None
     }
@@ -92,7 +93,7 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
     (rating * math.pow(WeightBase, reviewRatio)) / WeightBase
   }
 
-  private def computeTagPenalizedRating(m: Hostel, averageNoReviews: Double, rating: Double): Double = {
+  private def computeTagPenalizedRating(m: Hostel, averageNoReviews: Int, rating: Double): Double = {
     val modelReviews = m.noReviews + 1
     val reviewRatio  = if (averageNoReviews / modelReviews < 1) 1 else averageNoReviews / modelReviews
     (rating / math.pow(WeightBase, reviewRatio)) * WeightBase

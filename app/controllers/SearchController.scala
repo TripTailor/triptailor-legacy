@@ -31,21 +31,20 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val fOpt =
       for {
         location       ← FutureO(locationsDAO.loadLocation(city, TagHolder.ClicheTags))
-        _ = println("loading location")
+        _ = println("loaded location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
-        _ = println("loading model")
+        _ = println("loaded model")
         parameters     = paramsQuery.replace("-", " ").replace("%21", "-")
         possibleHostel = parameters.split(",").head.mkString
-//        hostel         ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
-        hostel         ← FutureO(Future(model.find(_.name == possibleHostel)))
+        hostel         ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
         adwords        = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
         searchId       ← if (hostel.nonEmpty) FutureO(searchesDAO.saveHostelSearch(sessionId, hostel.name, location.city, adwords))
                          else FutureO(searchesDAO.saveTagsSearch(sessionId, parameters.split("[ ,]"), location.city, adwords))
-        _ = println("saving tag search")
+        _ = println("saved search")
         classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified     = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
                          else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
-      } yield (classified, location, searchId)
+      } yield (classified, location, -1)
 
     mapSearchResultToHttpResult(fOpt.future, sessionId)
   }
@@ -59,12 +58,12 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val fOpt =
       for {
         location   ← FutureO(locationsDAO.loadLocation(city, TagHolder.ClicheTags))
-        _ = println("loading location")
+        _ = println("loaded location")
         model      ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
-        _ = println("loading model")
+        _ = println("loaded model")
         adwords    = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
         searchId   ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adwords))
-        _ = println("saving search")
+        _ = println("saved search")
         classifier = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified = classifier.classifyByTags(model.toSeq, tags = Seq(""))
       } yield (classified, location, searchId)

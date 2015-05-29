@@ -7,7 +7,7 @@ import play.api.db.slick._
 import slick.driver.MySQLDriver.api._
 import slick.profile.RelationalProfile
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.concurrent.Future
 
 import db.Tables._
@@ -16,30 +16,21 @@ import db.Tables._
 class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
   extends HasDatabaseConfigProvider[RelationalProfile] {
 
-  def loadModel2(city: String, country: String): Future[Seq[models.Hostel]] =
+  type HostelAttrsRow = (String, Double, Double, Double)
+
+  def loadModel(city: String, country: String): Future[Seq[models.Hostel]] =
     for {
-      hostels    ← db.run(hostelQuery(city, country).result)
-      _ = println("loaded hostels")
-      attributes ← Future.sequence(hostels.map(h => db.run(hostelAttributesQuery(h.id).result)))
-      _ = println("loaded attributes for hostels")
-      hostel     = hostels zip attributes map { case (h, haa) => createHostel(h, haa) }
-      _ = println("creating hostels")
+      hostelRows ← db.run(hostelQuery(city, country).result)
+      hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes))
     } yield hostel
 
-  def loadModel(city: String, country: String): Future[Iterable[models.Hostel]] = {
-    val hostels      = hostelQuery(city, country)
-    val hostelsAttrs = hostelWithAttributesQuery(hostels)
-
-    val f = db.run(hostelsAttrs.result)
-    f.map(groupByHostelRows).map(createHostels)
-  }
-
   def loadHostel(name: String): Future[models.Hostel] = {
-    val hostels     = hostelQuery(name)
-    val hostelAttrs = hostelWithAttributesQuery(hostels)
-
-    val f = db.run(hostelAttrs.result)
-    f.map(groupByHostelRows).map(createHostels).map(_.headOption getOrElse models.Hostel.empty)
+    val f =
+      for {
+        hostelRows ← db.run(hostelQuery(name).take(1).result)
+        hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes))
+      } yield hostel
+    f.map(_.headOption getOrElse models.Hostel.empty)
   }
 
   def getHostelHints(query: String): Future[Map[String, Seq[String]]] = {
@@ -70,12 +61,16 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       if location.city === city && location.country === country
     } yield hostel
 
-  private def hostelWithAttributesQuery(hostels: Query[Hostel, HostelRow, Seq]) =
-    for {
-      hostel ← hostels
-      ha     ← HostelAttribute if hostel.id === ha.hostelId
-      attr   ← Attribute       if attr.id === ha.attributeId
-    } yield (hostel, attr.name, ha.rating)
+  private def createHostelWithAttributes(hostelRow: HostelRow): Future[models.Hostel] = {
+    val sql =
+      sql"""
+        SELECT name, freq, cfreq, rating
+        FROM   hostel_attribute, attribute
+        WHERE  hostel_attribute.hostel_id = ${hostelRow.id}
+        AND    hostel_attribute.attribute_id = attribute.id
+      """.as[HostelAttrsRow]
+    db.run(sql).map(createHostel(hostelRow, _))
+  }
 
   private def hostelNameAndCityQuery(query: String) =
     for {
@@ -83,47 +78,27 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       if (l.city like query) || (h.name like query)
     } yield (h.name, l.city)
 
-  private def hostelAttributesQuery(hid: Int) =
-    for {
-      (ha, a) ← HostelAttribute join Attribute on (_.attributeId === _.id)
-      if ha.hostelId === hid
-    } yield (ha, a)
-
   private def attributesQuery(possibleTag: String): Query[Rep[String],String,Seq] =
     for {
       attr ← Attribute if attr.name like possibleTag
     } yield attr.name
 
-  private def createHostel(h: HostelRow, attributes: Seq[(HostelAttributeRow, AttributeRow)]) = {
-    def seqOp(n: Double, haa: (HostelAttributeRow, AttributeRow)) = haa._1.rating
-    def combOp(n: Double, rating: Double) = n + rating
+  private def createHostel(hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
+    models.Hostel(
+      id = hr.id,
+      name = hr.name,
+      noReviews = hr.noReviews,
+      price = hr.price.map(_.toDouble).map(BigDecimal.apply),
+      url = hr.url,
+      attributes = createHostelAttributes(attrsRows)
+    )
 
-    val n = attributes.aggregate(0d)(seqOp, combOp)
-    val attributeRatings =
-      attributes.foldLeft( Map.empty[String,Double] ) { case (acc, (ha, a)) =>
-        acc + (a.name -> (ha.cfreq / n) * (ha.rating / ha.freq))
-      }
-    models.Hostel(h.id, h.name, h.noReviews, h.price.map(_.toDouble).map(BigDecimal.apply), h.url, attributeRatings)
+  private def createHostelAttributes(attrsRows: Seq[HostelAttrsRow]) = {
+    val n = attrsRows.foldLeft(0)((n, row) => n + row._2.toInt)
+    attrsRows.foldLeft( Map.empty[String,Double] ) { case (attributes, (name, freq, cfreq, rating)) =>
+      attributes + (name -> (cfreq / n) * (rating / freq))
+    }
   }
-
-  private def createHostels(hostelRowWithAttrs: Map[HostelRow, Map[String,Double]]): Iterable[models.Hostel] =
-    for ((h, attrs) ← hostelRowWithAttrs) yield {
-      models.Hostel(
-        id          = h.id,
-        name        = h.name,
-        noReviews   = h.noReviews,
-        price       = h.price.map(_.toDouble).map(BigDecimal.apply),
-        url         = h.url,
-        attributes  = attrs
-      )
-    }
-
-  private def groupByHostelRows(hostelAttrs: Seq[(HostelRow,String,Double)]): Map[HostelRow, Map[String,Double]] =
-    hostelAttrs.groupBy(_._1) mapValues { row =>
-      row.map {
-        case (_, attr, rating) => (attr, rating)
-      }.toMap
-    }
 
   private def groupHostelsAndAttributes(hostelsNamesCities: Seq[(String,String)], attributes: Seq[String]): Map[String, Seq[String]] =
     Map(

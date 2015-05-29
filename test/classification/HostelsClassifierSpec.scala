@@ -22,6 +22,21 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       classifier.classify(model, H3).head.hostel shouldBe H3
     }
 
+    "includes H as first classified hostel when model does not already include it" in {
+      val classifier = new HostelsClassifier(generateConfig(), clicheTags = Set())
+
+      val H1 = Hostel(1, "1", 10, None, None, Map("a" -> 1))
+      val H2 = Hostel(2, "2", 10, None, None, Map("b" -> 1))
+      val H3 = Hostel(3, "3", 10, None, None, Map("c" -> 1))
+
+      val model = Seq(H1, H2, H3)
+      val H     = Hostel(4, "4", 10, None, None, Map("d" -> 1.0))
+
+      val classified = classifier.classify(model, H)
+      classified should have size 4
+      classified.head.hostel shouldBe H
+    }
+
     "compute a correct number of shared and unique tags based on config arguments" in {
       val sharedTagsCount = 3
       val uniqueTagsCount = 3
@@ -72,9 +87,11 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val tags2 = ('c' to 'f').map(_.toString)
       val tags3 = ('d' to 'g').map(_.toString)
 
-      val H1 = Hostel(1, "1", 10, None, None, tags1.map(_ -> 1.0).toMap)
-      val H2 = Hostel(2, "2", 10, None, None, tags2.map(_ -> 1.0).toMap)
-      val H3 = Hostel(3, "3", 10, None, None, tags3.map(_ -> 1.0).toMap)
+      val sameRating = 1.0
+
+      val H1 = Hostel(1, "1", 10, None, None, tags1.map(_ -> sameRating).toMap)
+      val H2 = Hostel(2, "2", 10, None, None, tags2.map(_ -> sameRating).toMap)
+      val H3 = Hostel(3, "3", 10, None, None, tags3.map(_ -> sameRating).toMap)
 
       val model = Seq(H1, H2, H3)
 

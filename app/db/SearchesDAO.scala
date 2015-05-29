@@ -20,9 +20,9 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   def saveHostelSearch(sessionId: String, hostelName: String, city: String, adwords: Int): Future[Option[Int]] =
     (for {
-      locationHostel     ← FutureO(db.run(hostelLocationQuery(hostelName, city).result).map(_.headOption))
-      (hostel, location) = locationHostel
-      searchId           ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, Some(hostel))).map(Some(_)))
+      hostel    ← FutureO(db.run(hostelQuery(hostelName).result.headOption))
+      location  ← FutureO(db.run(locationQuery(city).result.headOption))
+      searchId  ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, Some(hostel))).map(Some(_)))
     } yield searchId).future
 
   // TODO: Separate into smaller methods
@@ -59,17 +59,14 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       searchId ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, None)).map(Some(_)))
     } yield searchId).future
 
-  private def hostelLocationQuery(name: String, city: String) =
-    for {
-      h ← Hostel   if h.name === name
-      l ← Location if l.id === h.locationId && l.city === city
-    } yield (h, l)
-
   private def attributeLocationQuery(tags: Seq[String], city: String) =
     for {
       l ← Location  if l.city === city
       a ← Attribute if a.name inSetBind tags
     } yield (a, l)
+
+  private def hostelQuery(name: String) =
+    Hostel.filter(_.name === name)
 
   private def locationQuery(city: String) =
     Location.filter(_.city === city)
