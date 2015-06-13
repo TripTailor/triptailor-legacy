@@ -1,49 +1,249 @@
-@(classifiedHostels: Seq[ClassifiedHostel], locationOpt: Option[Location], searchIdOpt: Option[Int])
+@()(implicit req: RequestHeader)
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-        <title>TripTailor</title>
+@main("TripTailor Hostels") {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hostels.css")">
+} {
+    <script type="text/jsx">
 
-        <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-        <link href="@routes.Assets.at("stylesheets/general.css")" rel="stylesheet" type="text/css">
-        <link href="@routes.Assets.at("stylesheets/hostels_search.css")" rel="stylesheet" type="text/css">
-        <link rel="shortcut icon" type="images/x-icon" href="@routes.Assets.at("images/favicon.ico")">
+        var HOSTELSTODISPLAY = 16;
 
-    </head>
-
-    <body>
-
-        <div id="topbar">
-            <div class="center-vertical">
-                <h4 id="logo"><a href="@controllers.routes.ApplicationController.index()">TripTailor Hostels</a></h4>
-                @locationOpt.map { location => <div id="location">@(location.city), @(location.country)</div> }
-            </div>
-        </div>
-
-        <div id="container">
-            @classifiedHostels.zipWithIndex.map { case (classified, index) =>
-                <div class="hostel-entry @{if (index % 2 == 0) " left" else ""}">
-                    <a href=@classified.hostel.url target="_blank" onclick="saveHostelClick(@searchIdOpt.getOrElse(-1), @classified.hostel.id); return true;">
-                        <h1>@classified.hostel.name</h1>
-                        <div>
-                            @classified.orderedTags.map { tag =>
-                                <span class="@{if (tag.tagType == 0) "shared" else "unique"}">@tag.attribute</span>
-                            }
-                        </div>
-                        <div class="price">
-                            @classified.hostel.price.map { price =>
-                                @if(price > 0) {
-                                    <h3>@views.PriceFormatter.format(price)</h3>
-                                }
-                            }
-                        </div>
-                    </a>
-                </div>
+        var Hostels = React.createClass({
+            getInitialState: function() {
+                return {location: getQueryValue("location").replace(/-/g, " ").replace(/,(?![ |,]+)/g, ", "), query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY};
+            },
+            componentWillMount: function() {
+                this.getResults(this.getStringTags(this.state.tags));
+            },
+            displayMoreResults: function() {
+                this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
+            },
+            updateLocationValue: function(value) {
+                this.setState({location: value});
+            },
+            updateQueryValue: function(value) {
+                this.setState({query: value});
+            },
+            addTag: function(value) {
+                var tags = this.state.tags.slice(0, this.state.tags.length);
+                tags.push(value);
+                this.setState({tags: tags});
+                this.getResults(this.getStringTags(tags));
+            },
+            removeTag: function() {
+                var tags = this.state.tags.slice(0, this.state.tags.length - 1);
+                this.setState({tags: tags});
+                this.getResults(this.getStringTags(tags));
+            },
+            removeSpecificTag: function(i) {
+                var tags = this.state.tags.slice(0, i).concat(this.state.tags.slice(i + 1, this.state.tags.length));
+                this.setState({tags: tags});
+                this.getResults(this.getStringTags(tags));
+            },
+            getStringTags: function(tagsArr) {
+                var tags = "";
+                if(tagsArr.length > 0) {
+                    tags = tagsArr[0];
+                    for(var i = 1; i < tagsArr.length; i++) {
+                        tags += "-" + tagsArr[i];
+                    }
+                }
+                return tags;
+            },
+            getArrayTags: function(tagsString) {
+                var tags = [];
+                var split = tagsString.split("-");
+                for(var i in split) {
+                    if(split[i] != '') {
+                        tags.push(split[i]);
+                    }
+                }
+                return tags;
+            },
+            getResults: function(tags) {
+                var route;
+                if (tags === "")
+                  route = jsRoutes.controllers.SearchController.displayAll(getQueryValue("location"));
+                else
+                  route = jsRoutes.controllers.SearchController.classify(getQueryValue("location"), tags);
+                $.ajax({
+                    url: route.absoluteURL(),
+                    dataType: 'json',
+                    type: route.type,
+                    success: function(data) {
+                        this.setState({results: data});
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        console.error(route.absoluteURL(), status, err.toString());
+                    }.bind(this)
+                });
+            },
+            render: function() {
+                return (
+                    <div>
+                        <TripTailorNavBar />
+                        <SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag}/>
+                        <Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} />
+                        <TripTailorFooter />
+                    </div>
+                );
             }
-        </div>
+        });
 
-        <script src="@routes.Assets.at("javascripts/hostels_search.js")"></script>
-    </body>
-</html>
+        var SearchHeader = React.createClass({
+            enterSubmit: function() {
+                this.refs.also.enterSubmit();
+            },
+            render: function() {
+                return (
+                    <div className="container-fluid header">
+                        <AutoCompleteSearch {...this.props} enterSubmit={this.enterSubmit} />
+                        <AlsoTry ref="also" location={this.props.location} tags={this.props.tags} />
+                    </div>
+                );
+            }
+        });
+
+        var AutoCompleteSearch = React.createClass({
+            render: function() {
+                return (
+                    <div className="row no-horizontal-margins">
+                        <div className="col-md-4 form-col-left">
+                            <p className="header-label" ><strong>Location</strong></p>
+                            <TripTailorAutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} submit={this.props.enterSubmit} />
+                        </div>
+                        <div className="col-md-8 form-col-center">
+                            <p className="header-label" ><strong>Tags</strong></p>
+                            <TripTailorAutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.props.query} updateValue={this.props.updateQueryValue} submit={this.props.enterSubmit} tags={this.props.tags} addTag={this.props.addTag} removeTag={this.props.removeTag} removeSpecificTag={this.props.removeSpecificTag} />
+                        </div>
+                    </div>
+                );
+            }
+        });
+
+        var AlsoTry = React.createClass({
+            submit: function(e) {
+                /*if(cityVal == "")
+                    city.style.border = "2px solid #5F2B25"; */
+                if(this.props.location == '') {
+                    e.preventDefault();
+                    return;
+                }
+                var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+                if(this.props.tags.length > 0) {
+                    url += "&tags=" + this.props.tags[0];
+                    for(var i = 1; i < this.props.tags.length; i++)
+                    url += "-" + this.props.tags[i];
+                }
+                React.findDOMNode(this.refs.submit).href = url + adVariables();
+            },
+            enterSubmit: function() {
+                React.findDOMNode(this.refs.submit).click();
+            },
+            render: function() {
+                return (
+                    <div className="row also">
+                        <div className="col-md-10">
+                            <p className="header-label"><strong>Also Try</strong></p>
+                        </div>
+                        <div className="col-md-2 submit-col">
+                            <a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
+                        </div>
+                    </div>
+                );
+            }
+        });
+
+        var Content = React.createClass({
+            render: function() {
+                return (
+                    <div className="container-fluid content">
+                        {this.props.results.length > 0 ? <NumberResults results={this.props.results.length} /> : ''}
+                        <ResultsGrid {...this.props} />
+                        {this.props.results.length > this.props.displayedResults ? <button onClick={this.props.displayMoreResults}>Show more results</button> : ''}
+                    </div>
+                );
+            }
+        });
+
+        var NumberResults = React.createClass({
+            render: function() {
+                return (
+                    <p className="results-number">Matching results <strong>{this.props.results}</strong></p>
+                );
+            }
+        });
+
+        var ResultsGrid = React.createClass({
+            render: function() {
+                var rows = [];
+                var results = [];
+                for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
+                    results.push(<Result key={i} result={this.props.results[i]} />);
+                    if((i + 1) % 4 == 0) {
+                        rows.push(
+                            <div key={rows.length} className="row">
+                                {results}
+                            </div>
+                        );
+                        results = [];
+                    }
+                };
+                if(results.length > 0) {
+                    rows.push(
+                        <div key={rows.length} className="row">
+                            {results}
+                        </div>
+                    );
+                }
+                return (
+                    <div>
+                        {rows}
+                    </div>
+                );
+            }
+        });
+
+        var Result = React.createClass({
+            render: function() {
+                return (
+                    <div className="col-md-3" target="_blank">
+                        <div className="result">
+                            <a href={this.props.result.url != 'null' ? this.props.result.url : '#'} target="_blank" className="result-a">
+                                <div className="result-name"><strong>{this.props.result.name}</strong></div>
+                                <div className="result-price">{this.props.result.price} USD</div>
+                                <TagsRow tags={this.props.result.tags} />
+                            </a>
+                        </div>
+                    </div>
+                );
+            }
+        });
+
+        var TagsRow = React.createClass({
+            render: function() {
+                var tags = $.map(this.props.tags, function(value, i) {
+                    return (
+                        <Tag key={i} name={value.name} type={value.type} />
+                    );
+                });
+
+                return (
+                    <div className="result-tags">
+                        {tags}
+                    </div>
+                );
+            }
+        });
+
+        var Tag = React.createClass({
+            render: function() {
+                return (
+                    <div className={this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}>{this.props.name}</div>
+                );
+            }
+        });
+
+        React.render(<Hostels />, document.body);
+
+    </script>
+}

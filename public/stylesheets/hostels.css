@@ -1,95 +1,96 @@
-html, body {
-	height: 100%;
-}
 body {
-	background: url(../images/van.jpg) no-repeat center center fixed;
-	background-size: cover;
+	color: #5A5B5B;
 }
-h4 {
-	color: white;
-	text-shadow: 0 0 2px #333;
+
+.navbar-triptailor {
+	background: #4A5667;
 }
-#logo {
-	text-align: center;
+
+.header {
+	background: #EDF2F5;
+	padding-top: 25px;
+	padding-bottom: 25px;
 }
-#topbar {
-	width: 100%;
-	height: 60px;
-	top: 0;
+.header-label {
+	margin-bottom: 15px;
+	font-size: 12px;
 }
-#container {
-	text-align: center;
-	padding: 0 5%;
-	margin-top: 8%;
+.inline-input-left, .autocomplete-tags-container {
+	border-top: 1px solid #DBDFE5;
+	border-bottom: 1px solid #DBDFE5;
+	border-left: 1px solid #DBDFE5;
 }
-#search {
-	background-color: rgba(24, 49, 82, 0.9);
-	padding: 3% 6%;
-	border-radius: 4px;
-	margin-top: 3%;
-	box-shadow: 0 0 2px #333;
+.inline-input-left:focus {
+	border-top: 1px solid #DBDFE5;
+	border-bottom: 1px solid #DBDFE5;
+	border-left: 1px solid #DBDFE5;
 }
-#city {
-	margin-top: 3%;
-}
-input[type=text] {
-	display: block;
-	width: 100%;
-	margin: 0 -13px;
+.autocomplete-tags-container {
 	height: 40px;
+	border-right: 1px solid #DBDFE5;
 }
-a {
-	padding: 12px;
-	margin-top: 3%;
+.tag-search-container {
+	display: table;
+	width: 100%;
+	border-spacing: 10px 4px;
+	padding: 0 5px;
+}
+.also {
+	margin-top: 25px;
+}
+.submit-col {
+	text-align: center;
+}
+.submit {
+	margin-top: 35px;
+}
+
+.content {
+	padding-bottom: 120px;
+}
+.results-number {
+	margin: 25px 0;
+}
+.result {
+	border: 1px solid #DBDFE5;
+	padding: 0 15px;
+	margin-bottom: 40px;
+}
+.result-a {
+	color: inherit;
+}
+.result-a:link, .result-a:visited, .result-a:hover, .result-a:active {
+	color: inherit;
 	text-decoration: none;
 }
-
-.autocomplete {
-	position: absolute;
-	top: 0;
-	width: calc(100% + 27px);
-	background-color: white;
-	margin-left: -13px;
-	display: none;
-	text-align: left;
-	font-family: Arial;
-	padding-top: 4px;
-	max-height: 200px;
-	overflow-y: auto;
+.result-name, .result-price {
+	border-bottom: 1px solid #DBDFE5;
 }
-.autocomplete p {
-	margin: 0;
-	font-size: 16px;
-	padding: 8px 20px;
+.result-name {
+	padding-top: 25px;
+	padding-bottom: 15px;
 }
-#hostels {
+.result-price {
+	padding: 15px 0;
+	font-size: 12px;
+}
+.result-tags {
+	padding-top: 15px;
+	margin-bottom: 5px;
+	max-height: 95px;
+	overflow: hidden;
+}
+.tag {
+	color: white;
+	display: inline-block;
+	margin-right: 10px;
 	margin-bottom: 10px;
+	padding: 5px 10px;
+	border-radius: 3px;
 }
-.title {
-	color: #183152;
-	font-weight: bold;
+.tag-selected {
+	background: #5C87D1;
 }
-.autocomplete-element {
-	cursor: pointer;
-	background-color: white;
-}
-.autocomplete-element:hover {
-	background-color: #C4D7ED;
-}
-
-.addthis_sharing_toolbox {
-	margin-top: 10%;
-}
-
-@media (min-width: 700px) {
-	.autocomplete {
-		max-height: 300px;
-	}
-	#logo {
-		text-align: left;
-		margin-left: 7%;
-	}
-	#container {
-		padding: 0 25%;
-	}
+.tag-unselected {
+	background: #637079;
 }

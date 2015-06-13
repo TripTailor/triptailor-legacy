@@ -19,13 +19,13 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
   type LocationResult = (Int, String, String, String)
 
-  def loadLocation(city: String, stop: Set[String]): Future[Option[models.Location]] =
+  def loadLocation(city: String): Future[Option[models.Location]] =
     (for {
       location ← FutureO(db.run(locationQuery(city)).map(buildLocationOpt))
       services ← FutureO(db.run(servicesQuery(location.id).take(10).to[Set].result.map(Some(_))))
     } yield createLocationWithServices(services, location)).future
 
-  def getLocationHints(query: String): Future[Seq[String]] =
+  def locationHints(query: String): Future[Seq[String]] =
     db.run(hintsQuery(s"$query%").take(10).result)
       .map(createCityCountryStrings)
 

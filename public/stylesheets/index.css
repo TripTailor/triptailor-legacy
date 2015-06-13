@@ -1,0 +1,181 @@
+/*** General style ***/
+body {
+  color: white;
+}
+
+/*** Header inputs ***/
+
+.form-row {
+	margin: auto 0;
+}
+.a-col {
+	text-align: center;
+	padding-left: 0;
+	padding-right: 0;
+}
+.inline-input-left, .input-tags {
+	border-radius: 4px;
+}
+.autocomplete-input-container {
+	border-radius: 4px;
+}
+.tag-search-container {
+	border-spacing: 10px 5px;
+}
+
+/*** Header ***/
+.jumbotron {
+	padding-top: 0px;
+	padding-bottom: 114px;
+	margin-bottom: 0;
+
+	background: url(../images/sf.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.container-jumbotron {
+	padding: 0;
+}
+.row-jumbotron {
+	margin-left: 0;
+	margin-right: 0;
+}
+.navbar-brand {
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+}
+.nav .navbar-nav {
+	margin-top: 10px;
+}
+.navbar-triptailor .navbar-nav>li>a {
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+}
+.jumbotron .header {
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 38px;
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+	color: white;
+	margin-top: 80px;
+	margin-bottom: 8px;
+}
+.jumbotron .subheader {
+	font-size: 18px;
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+	color: white;
+	margin-bottom: 52px;
+}
+
+/*** Tips ***/
+
+.tips-header-container {
+	padding-top: 40px;
+	padding-bottom: 32px;
+}
+.tips-header {
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 30px;
+	color: #000;
+	margin-top: 0;
+	margin-bottom: 8px;
+}
+.tips-subheader {
+	color: #000;
+	margin-bottom: 0;
+}
+.tip-a {
+	color: inherit;
+}
+.tip-a:hover, .tip-a:active, .tip-a:link {
+	color: inherit;
+}
+.tip-big {
+	height: 300px;
+	background: url(../images/istanbul.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.tip {
+	height: 300px;
+}
+.bangkok {
+	background: url(../images/bangkok.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.amsterdam {
+	background: url(../images/amsterdam.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.rio {
+	background: url(../images/rio.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.ny {
+	background: url(../images/ny.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.tip-content-container {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+.tip-content {
+	vertical-align: middle;
+	display: table-cell;
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+}
+.tip-content h3 {
+	margin-top: 0;
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 24px;
+}
+.tip-content p {
+	color: inherit;
+}
+.tip-results {
+	display: inline-block;
+	background-color: #ff5a5f;
+	padding: 10px 8px;
+	border-radius: 3px;
+	color: inherit;
+}
+.bottom-tips {
+	margin-top: 30px;
+	margin-bottom: 100px;
+}
+
+/*** Media queries ***/
+
+@media (min-width: 992px) {
+	.form-col-left {
+		border-right: 1px solid #ccc;
+	}
+	.inline-input-left {
+		border-radius: 4px 0 0 4px;
+	}
+	.inline-input-center {
+		border-radius: 0;
+	}
+	.submit {
+		border-radius: 0 4px 4px 0;
+    width: 100%;
+	}
+
+	.autocomplete-input-container {
+		border-radius: 0;
+	}
+}

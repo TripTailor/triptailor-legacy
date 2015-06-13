@@ -1,11 +1,12 @@
 package classification
 
 import com.typesafe.config.ConfigFactory
-import models.Hostel
+import models.{TagHolder, Hostel}
 import org.scalatest.{Matchers, WordSpec}
 import play.api.Configuration
 
 class HostelsClassifierSpec extends WordSpec with Matchers {
+  import TagHolder.{SharedType, UniqueType}
 
   "#classify" should {
     "make the first classified hostel obtained from model be the same as H" in {
@@ -51,17 +52,17 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val model = Seq(H1, H2)
 
       val classified = classifier.classify(model, H1)
-      classified.head.orderedTags.count(_.tagType == 0) shouldEqual sharedTagsCount + uniqueTagsCount
-      classified.head.orderedTags.count(_.tagType == 1) shouldEqual 0
-      classified.last.orderedTags.count(_.tagType == 0) shouldEqual sharedTagsCount
-      classified.last.orderedTags.count(_.tagType == 1) shouldEqual uniqueTagsCount
+      classified.head.orderedTags.count(_.tagType == SharedType) shouldEqual sharedTagsCount + uniqueTagsCount
+      classified.head.orderedTags.count(_.tagType == UniqueType) shouldEqual 0
+      classified.last.orderedTags.count(_.tagType == SharedType) shouldEqual sharedTagsCount
+      classified.last.orderedTags.count(_.tagType == UniqueType) shouldEqual uniqueTagsCount
 
       val classifier2 = new HostelsClassifier(generateConfig(tags1.size, tags2.size), clicheTags = Set())
       val classified2 = classifier2.classify(model, H1)
-      classified2.head.orderedTags.count(_.tagType == 0) shouldEqual math.min(tags1.size + tags2.size, H1.attributes.size)
-      classified2.head.orderedTags.count(_.tagType == 1) shouldEqual 0
-      classified2.last.orderedTags.count(_.tagType == 0) shouldEqual tags1.size
-      classified2.last.orderedTags.count(_.tagType == 1) shouldEqual tags2.size
+      classified2.head.orderedTags.count(_.tagType == SharedType) shouldEqual math.min(tags1.size + tags2.size, H1.attributes.size)
+      classified2.head.orderedTags.count(_.tagType == UniqueType) shouldEqual 0
+      classified2.last.orderedTags.count(_.tagType == SharedType) shouldEqual tags1.size
+      classified2.last.orderedTags.count(_.tagType == UniqueType) shouldEqual tags2.size
     }
   }
 
@@ -76,8 +77,8 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val model = Seq(Hostel(1, "1", 10, None, None, (tags1 ++ tags2).map(_ -> 1.0).toMap))
 
       val classified = classifier.classifyByTags(model, tags1)
-      classified.head.orderedTags.count(_.tagType == 0) shouldEqual sharedTags
-      classified.last.orderedTags.count(_.tagType == 1) shouldEqual uniqueTags
+      classified.head.orderedTags.count(_.tagType == SharedType) shouldEqual sharedTags
+      classified.last.orderedTags.count(_.tagType == UniqueType) shouldEqual uniqueTags
     }
 
     "make the first classified hostel be the one with the highest ranked matching tags" in {
@@ -119,11 +120,11 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val classified = classifier.classifyByTags(model, tags)
       classified.map(_.hostel) shouldBe Seq(H2, H1)
 
-      classified.head.orderedTags.count(_.tagType == 0) shouldEqual 1
-      classified.head.orderedTags.count(_.tagType == 1) shouldEqual 1
+      classified.head.orderedTags.count(_.tagType == SharedType) shouldEqual 1
+      classified.head.orderedTags.count(_.tagType == UniqueType) shouldEqual 1
 
-      classified.last.orderedTags.count(_.tagType == 0) shouldEqual 3
-      classified.last.orderedTags.count(_.tagType == 1) shouldEqual 0
+      classified.last.orderedTags.count(_.tagType == SharedType) shouldEqual 3
+      classified.last.orderedTags.count(_.tagType == UniqueType) shouldEqual 0
     }
   }
 

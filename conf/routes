@@ -5,13 +5,18 @@
 # Home page
 GET     /                                       @controllers.ApplicationController.index
 
-GET     /hostels/hints/hostels/:query           @controllers.HintsController.hostelHints(query: String)
-GET     /hostels/hints/locations/:query         @controllers.HintsController.locationHints(query: String)
+GET     /hostels/search                         @controllers.SearchController.search
 
+# JSON endpoints
+GET     /hostels/hints                          @controllers.HintsController.hostelHints
 GET     /hostels/search/:location               @controllers.SearchController.displayAll(location: String)
 GET     /hostels/search/:city/:tags             @controllers.SearchController.classify(city: String, tags: String)
+GET     /suggestions/:city/:tags                @controllers.HintsController.tagSuggestions(city: String, tags: String)
 
-GET     /stats                                  @controllers.StatsController.getStats
+GET     /stats                                  @controllers.StatsController.stats
+
+# Javascript Reverse Routing
+GET     /javascriptRoutes                       @controllers.ApplicationController.javascriptRoutes
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                           @controllers.Assets.at(path="/public", file)

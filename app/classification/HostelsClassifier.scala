@@ -10,7 +10,8 @@ trait HostelsClassifierConfig { self: HostelsClassifier =>
   lazy val WeightBase = config.getDouble("classifier.hostels.model.weightBase").get
 }
 
-class HostelsClassifier @Inject()(protected val config: Configuration, protected val clicheTags: Set[String]) extends HostelsClassifierConfig {
+class HostelsClassifier @Inject()(protected val config: Configuration, protected val clicheTags: Set[String])
+  extends HostelsClassifierConfig {
 
   /**
    * m: Individual Hostel taken from model
@@ -23,7 +24,6 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
    * @return ordered collection of ClassifiedHostel
    */
   def classify(model: Seq[Hostel], H: Hostel): Seq[ClassifiedHostel] = {
-    println("classifying by hostel")
     import HostelsClassifier.{hcAscendingOrdering, tagDescendingOrdering}
 
     val reviews          = model.maxBy(_.noReviews).noReviews
@@ -35,8 +35,8 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
       (shared_har, diff_har) = H.attributes.partition(har => m.attributes contains har._1)
       unique_mar             = m.attributes -- H.attributes.keys
       (nbrShared, nbrUnique) = if (m.name equalsIgnoreCase H.name) (SharedTags + UniqueTags, 0) else (SharedTags, UniqueTags)
-      sharedTags             = createTags(shared_har, 0, nameWords, m).sorted take nbrShared
-      uniqueTags             = createTags(unique_mar, 1, nameWords, m).sorted take (SharedTags + nbrUnique - sharedTags.size)
+      sharedTags             = createTags(shared_har, TagHolder.SharedType, nameWords, m).sorted take nbrShared
+      uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (SharedTags + nbrUnique - sharedTags.size)
       orderedTags            = (sharedTags ++ uniqueTags).sorted
       rating                 = computeRating(shared_har, m) + computeRating(diff_har, m)
       penalizedRating        = computeHostelPenalizedRating(m, highestNoReviews + 1, rating)
@@ -53,7 +53,6 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
    * @return ordered collection of ClassifiedHostel
    */
   def classifyByTags(model: Seq[Hostel], tags: Seq[String]) = {
-    println("classifying by tags")
     import HostelsClassifier.{hcDescendingOrdering, tagDescendingOrdering}
 
     val averageNoReviews = model.foldLeft(0)(_ + _.noReviews) / model.size
@@ -63,8 +62,8 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
       nameWords       = m.name.split("\\s+").map(_.toLowerCase)
       shared_tar      = m.attributes.filter(mar => tags contains mar._1)
       unique_mar      = m.attributes -- tags
-      sharedTags      = createTags(shared_tar, 0, nameWords, m).sorted take SharedTags
-      uniqueTags      = createTags(unique_mar, 1, nameWords, m).sorted take (SharedTags + UniqueTags - sharedTags.size)
+      sharedTags      = createTags(shared_tar, TagHolder.SharedType, nameWords, m).sorted take SharedTags
+      uniqueTags      = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (SharedTags + UniqueTags - sharedTags.size)
       orderedTags     = (sharedTags ++ uniqueTags).sorted
       rating          = shared_tar.values.sum / tags.size
       penalizedRating = computeTagPenalizedRating(m, averageNoReviews + 1, rating)

@@ -22,7 +22,7 @@ class StatsController @Inject() (dbConfigProvider: DatabaseConfigProvider, stats
     )
   }
 
-  def getStats = Action.async {
+  def stats = Action.async {
     val timestamp = DateTime.now.withTime(0, 0, 0, 0).getMillis
     val todayStatsFuture    = statsDAO.getStats(timestamp)
     val completeStatsFuture = statsDAO.getStats(0L)
