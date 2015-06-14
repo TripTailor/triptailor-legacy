@@ -15,6 +15,8 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
 
+import scala.concurrent.Future
+
 @Singleton
 class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
                                  locationsDAO: LocationsDAO,
@@ -24,8 +26,25 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
   private val logger = Logger(this.getClass)
 
-  def search = Action { implicit request =>
-    Ok(views.html.hostels())
+  def search = Action.async { implicit request =>
+    val queryParams = locationTagsParamsBinding.bindFromRequest.get
+
+    val fOptLocation =
+      queryParams match {
+        case HintsParams(_, Some(location)) =>
+          location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
+            case Array(city, country) =>
+              locationsDAO.loadLocationWithCountry(city, country)
+            case Array(city) =>
+              locationsDAO.loadLocation(city)
+          }
+        case HintsParams(_, _) =>
+          Future.successful(None)
+      }
+
+    fOptLocation.map { locationOpt =>
+      Ok(views.html.hostels(locationOpt))
+    }
   }
 
   def classify(cityQuery: String, tagsQuery: String) = Action.async { implicit request =>
@@ -80,6 +99,13 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       Ok(Json.toJson(results))
     }
   }
+
+  private val locationTagsParamsBinding = Form(
+    mapping(
+      "tags"      -> optional(nonEmptyText),
+      "location"  -> optional(nonEmptyText)
+    )(HintsParams.apply)(HintsParams.unapply)
+  )
 
   private val queryParamsBinding = Form(
     mapping(

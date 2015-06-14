@@ -25,17 +25,36 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
       services ← FutureO(db.run(servicesQuery(location.id).take(10).to[Set].result.map(Some(_))))
     } yield createLocationWithServices(services, location)).future
 
+  def loadLocationWithCountry(city: String, country: String): Future[Option[models.Location]] = {
+    (for {
+      location ← FutureO(db.run(locationWithCountryQuery(city, country)).map(buildLocationOpt))
+      services ← FutureO(db.run(servicesQuery(location.id).take(10).to[Set].result.map(Some(_))))
+    } yield createLocationWithServices(services, location)).future
+  }
+
   def locationHints(query: String): Future[Seq[String]] =
     db.run(hintsQuery(s"$query%").take(10).result)
       .map(createCityCountryStrings)
 
-  def locationQuery(city: String): DBIO[Seq[(Int, String, String, String)]] = {
+  def locationQuery(city: String) = {
     val LocationsLimit = 10
 
     sql"""
        SELECT   l.id, l.city, l.country, a.name
        FROM     hostel h, attribute a, hostel_attribute ha, location l
        WHERE    l.city = $city and h.id = ha.hostel_id and a.id = ha.attribute_id and h.location_id = l.id
+       GROUP BY a.name
+       ORDER BY rating DESC LIMIT $LocationsLimit
+    """.as[LocationResult]
+  }
+
+  def locationWithCountryQuery(city: String, country: String) = {
+    val LocationsLimit = 10
+
+    sql"""
+       SELECT   l.id, l.city, l.country, a.name
+       FROM     hostel h, attribute a, hostel_attribute ha, location l
+       WHERE    l.city = $city and l.country = $country and h.id = ha.hostel_id and a.id = ha.attribute_id and h.location_id = l.id
        GROUP BY a.name
        ORDER BY rating DESC LIMIT $LocationsLimit
     """.as[LocationResult]
