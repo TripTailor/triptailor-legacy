@@ -11,6 +11,8 @@ import play.api.mvc.{Action, Controller}
 import play.api.data.Form
 import play.api.data.Forms._
 
+import scala.concurrent.Future
+
 @Singleton
 class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locationsDAO: LocationsDAO, tagsDAO: TagsDAO)
   extends Controller {
@@ -30,10 +32,17 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
   }
 
   def tagSuggestions(location: String, tags: String) = Action.async { implicit request =>
-    val city       = location.replace("-", " ").split(",").head.replaceAll("[^a-zA-Z -]", "")
     val chosenTags = tags.replace("-", " ").replace("%21", "-").split("[ ,]")
 
-    tagsDAO.tagSuggestions(city, chosenTags).map { results =>
+    val tagSuggestionsFuture =
+      location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
+        case Array(city, country) =>
+          tagsDAO.tagSuggestions(city, country, chosenTags)
+        case Array(city) =>
+          Future.successful(Seq.empty[String])
+      }
+
+    tagSuggestionsFuture.map { results =>
       Ok(Json.toJson(results))
     }
   }

@@ -19,10 +19,10 @@ class TagsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     db.run(q.take(10).result)
   }
 
-  def tagSuggestions(city: String, tagsToExclude: Seq[String]): Future[Seq[String]] =
-    db.run(tagsQuery(city, tagsToExclude))
+  def tagSuggestions(city: String, country: String, tagsToExclude: Seq[String]): Future[Seq[String]] =
+    db.run(tagsQuery(city, country, tagsToExclude))
 
-  private def tagsQuery(city: String, tagsToExclude: Seq[String]) = {
+  private def tagsQuery(city: String, country: String, tagsToExclude: Seq[String]) = {
     val Suggestions = 10
     val excluded    = s"""(${tagsToExclude.map("'" + _ + "'").mkString(", ")})"""
 
@@ -30,7 +30,7 @@ class TagsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
        select name from (
          select a.name, ha.rating
          from location l, hostel h, attribute a, hostel_attribute ha
-         where l.city = $city and h.location_id = l.id and h.id = ha.hostel_id and a.id = ha.attribute_id and a.name not in #$excluded
+         where l.city = $city and l.country = $country and h.location_id = l.id and h.id = ha.hostel_id and a.id = ha.attribute_id and a.name not in #$excluded
          order by ha.rating desc
        ) as q1
        group by name
