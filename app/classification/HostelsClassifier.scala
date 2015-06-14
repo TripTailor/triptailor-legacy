@@ -5,8 +5,7 @@ import models.{ClassifiedHostel, Hostel, TagHolder}
 import play.api.Configuration
 
 trait HostelsClassifierConfig { self: HostelsClassifier =>
-  lazy val SharedTags = config.getInt("classifier.hostels.model.sharedTags").get
-  lazy val UniqueTags = config.getInt("classifier.hostels.model.uniqueTags").get
+  lazy val TotalTags  = config.getInt("classifier.hostels.model.totalTags").get
   lazy val WeightBase = config.getDouble("classifier.hostels.model.weightBase").get
 }
 
@@ -34,9 +33,9 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
       nameWords              = m.name.split("\\s+").map(_.toLowerCase)
       (shared_har, diff_har) = H.attributes.partition(har => m.attributes contains har._1)
       unique_mar             = m.attributes -- H.attributes.keys
-      (nbrShared, nbrUnique) = if (m.name equalsIgnoreCase H.name) (SharedTags + UniqueTags, 0) else (SharedTags, UniqueTags)
+      (nbrShared, nbrUnique) = if (m.name equalsIgnoreCase H.name) (TotalTags, 0) else (TotalTags, TotalTags)
       sharedTags             = createTags(shared_har, TagHolder.SharedType, nameWords, m).sorted take nbrShared
-      uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (SharedTags + nbrUnique - sharedTags.size)
+      uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (TotalTags - sharedTags.size)
       orderedTags            = (sharedTags ++ uniqueTags).sorted
       rating                 = computeRating(shared_har, m) + computeRating(diff_har, m)
       penalizedRating        = computeHostelPenalizedRating(m, highestNoReviews + 1, rating)
@@ -62,8 +61,8 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
       nameWords       = m.name.split("\\s+").map(_.toLowerCase)
       shared_tar      = m.attributes.filter(mar => tags contains mar._1)
       unique_mar      = m.attributes -- tags
-      sharedTags      = createTags(shared_tar, TagHolder.SharedType, nameWords, m).sorted take SharedTags
-      uniqueTags      = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (SharedTags + UniqueTags - sharedTags.size)
+      sharedTags      = createTags(shared_tar, TagHolder.SharedType, nameWords, m).sorted take TotalTags
+      uniqueTags      = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (TotalTags - sharedTags.size)
       orderedTags     = (sharedTags ++ uniqueTags).sorted
       rating          = shared_tar.values.sum / tags.size
       penalizedRating = computeTagPenalizedRating(m, averageNoReviews + 1, rating)
