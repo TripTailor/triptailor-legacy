@@ -33,8 +33,7 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
       nameWords              = m.name.split("\\s+").map(_.toLowerCase)
       (shared_har, diff_har) = H.attributes.partition(har => m.attributes contains har._1)
       unique_mar             = m.attributes -- H.attributes.keys
-      (nbrShared, nbrUnique) = if (m.name equalsIgnoreCase H.name) (TotalTags, 0) else (TotalTags, TotalTags)
-      sharedTags             = createTags(shared_har, TagHolder.SharedType, nameWords, m).sorted take nbrShared
+      sharedTags             = createTags(shared_har, TagHolder.SharedType, nameWords, m).sorted take TotalTags
       uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (TotalTags - sharedTags.size)
       orderedTags            = (sharedTags ++ uniqueTags).sorted
       rating                 = computeRating(shared_har, m) + computeRating(diff_har, m)

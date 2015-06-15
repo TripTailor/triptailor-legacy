@@ -32,12 +32,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val fOptLocation =
       queryParams match {
         case HintsParams(_, Some(location)) =>
-          location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
-            case Array(city, country) =>
-              locationsDAO.loadLocationWithCountry(city, country)
-            case Array(city) =>
-              locationsDAO.loadLocation(city)
-          }
+          loadLocation(location)
         case HintsParams(_, _) =>
           Future.successful(None)
       }
@@ -47,15 +42,13 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }
   }
 
-  def classify(cityQuery: String, tagsQuery: String) = Action.async { implicit request =>
+  def classify(location: String, tagsQuery: String) = Action.async { implicit request =>
     val queryParams = queryParamsBinding.bindFromRequest.get
     val sessionId   = request.session.get("id").getOrElse(generateId)
 
-    val city = cityQuery.replace("-", " ").replaceAll("%21", "-").split(",").head.replaceAll("[^a-zA-Z -]", "")
-
     val fOpt =
       for {
-        location       ← FutureO(locationsDAO.loadLocation(city))
+        location       ← FutureO(loadLocation(location))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
@@ -80,11 +73,9 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val queryParams = queryParamsBinding.bindFromRequest.get
     val sessionId   = request.session.get("id").getOrElse(generateId)
 
-    val city = location.replace("-", " ").split(",").head.replaceAll("[^a-zA-Z -]", "")
-
     val fOpt =
       for {
-        location   ← FutureO(locationsDAO.loadLocation(city))
+        location   ← FutureO(loadLocation(location))
         _          = logger.info(s"loaded location $location")
         model      ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _          = logger.info("loaded model")
@@ -99,6 +90,14 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       Ok(Json.toJson(results))
     }
   }
+
+  private def loadLocation(location: String) =
+    location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
+      case Array(city, country) =>
+        locationsDAO.loadLocationWithCountry(city, country)
+      case Array(city) =>
+        locationsDAO.loadLocation(city)
+    }
 
   private val locationTagsParamsBinding = Form(
     mapping(
