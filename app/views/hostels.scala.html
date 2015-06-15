@@ -17,10 +17,10 @@
 
         var Hostels = React.createClass({
             getInitialState: function() {
-                return {location: getQueryValue("location").replace(/-/g, " ").replace(/,(?![ |,]+)/g, ", "), query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY};
+                return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY};
             },
             componentWillMount: function() {
-                this.getResults(this.getStringTags(this.state.tags));
+                this.getResults(getStringTags(this.state.tags));
             },
             displayMoreResults: function() {
                 this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
@@ -35,27 +35,17 @@
                 var tags = this.state.tags.slice(0, this.state.tags.length);
                 tags.push(value);
                 this.setState({tags: tags});
-                this.getResults(this.getStringTags(tags));
+                this.getResults(getStringTags(tags));
             },
             removeTag: function() {
                 var tags = this.state.tags.slice(0, this.state.tags.length - 1);
                 this.setState({tags: tags});
-                this.getResults(this.getStringTags(tags));
+                this.getResults(getStringTags(tags));
             },
             removeSpecificTag: function(i) {
                 var tags = this.state.tags.slice(0, i).concat(this.state.tags.slice(i + 1, this.state.tags.length));
                 this.setState({tags: tags});
-                this.getResults(this.getStringTags(tags));
-            },
-            getStringTags: function(tagsArr) {
-                var tags = "";
-                if(tagsArr.length > 0) {
-                    tags = tagsArr[0];
-                    for(var i = 1; i < tagsArr.length; i++) {
-                        tags += "-" + tagsArr[i];
-                    }
-                }
-                return tags;
+                this.getResults(getStringTags(tags));
             },
             getArrayTags: function(tagsString) {
                 var tags = [];
@@ -69,10 +59,12 @@
             },
             getResults: function(tags) {
                 var route;
+								var location = (city + "\," + country).replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+								console.log(location);
                 if (tags === "")
-                  route = jsRoutes.controllers.SearchController.displayAll(getQueryValue("location"));
+                  route = jsRoutes.controllers.SearchController.displayAll(location);
                 else
-                  route = jsRoutes.controllers.SearchController.classify(getQueryValue("location"), tags);
+                  route = jsRoutes.controllers.SearchController.classify(location, tags);
                 $.ajax({
                     url: route.absoluteURL(),
                     dataType: 'json',
@@ -85,6 +77,7 @@
                     }.bind(this)
                 });
             },
+						
             render: function() {
                 return (
                     <div>
@@ -129,6 +122,12 @@
         });
 
         var AlsoTry = React.createClass({
+					getInitialState: function() {
+						return {tags: []};
+					},
+					componentWillMount: function() {
+						this.getSuggestions();
+					},
             submit: function(e) {
                 /*if(cityVal == "")
                     city.style.border = "2px solid #5F2B25"; */
@@ -147,11 +146,34 @@
             enterSubmit: function() {
                 React.findDOMNode(this.refs.submit).click();
             },
+						getSuggestions: function() {
+							var route = jsRoutes.controllers.HintsController.tagSuggestions(city + "," + country, getStringTags(this.props.tags));
+							$.ajax({
+										url: route.absoluteURL(),
+										dataType: 'json',
+										type: route.type,
+										success: function(data) {
+											this.setState({tags: data});
+										}.bind(this),
+										error: function(xhr, status, err) {
+												console.error(route.absoluteURL(), status, err.toString());
+										}.bind(this)
+								});
+						},
             render: function() {
+								var tags = $.map(this.state.tags, function(value, i) {
+                    return (
+												<Tag key={i} name={value} type={1} />
+                    );
+                });
+
                 return (
                     <div className="row also">
                         <div className="col-md-10">
                             <p className="header-label"><strong>Also Try</strong></p>
+														<div>
+															{tags}
+														</div>
                         </div>
                         <div className="col-md-2 submit-col">
                             <a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>

@@ -27,3 +27,14 @@ var getQueryValue = function(variable) {
 	}
 	return "";
 };
+
+var getStringTags = function(tagsArr) {
+	var tags = "";
+	if(tagsArr.length > 0) {
+		tags = tagsArr[0];
+		for(var i = 1; i < tagsArr.length; i++) {
+			tags += "-" + tagsArr[i];
+		}
+	}
+	return tags;
+}
