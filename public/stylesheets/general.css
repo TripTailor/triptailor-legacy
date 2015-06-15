@@ -132,16 +132,16 @@ body {
 	top: 0;
 	background-color: white;
 	padding-top: 4px;
-	max-height: 190px;
-	overflow-y: auto;
+	max-height: 164px;
 	z-index: 2;
 	width: 100%;
 	color: #5e5e5e;
+	overflow-y: auto;
 }
 .autocomplete p {
 	margin: 0;
-	font-size: 16px;
-	padding: 8px 20px;
+	padding: 6px 15px;
+	font-size: 14px;
 }
 .autocomplete-element {
 	cursor: pointer;

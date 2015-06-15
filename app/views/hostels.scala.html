@@ -165,9 +165,9 @@
             render: function() {
                 return (
                     <div className="container-fluid content">
-                        {this.props.results.length > 0 ? <NumberResults results={this.props.results.length} /> : ''}
+                        <NumberResults results={this.props.results.length} />
                         <ResultsGrid {...this.props} />
-                        {this.props.results.length > this.props.displayedResults ? <button onClick={this.props.displayMoreResults}>Show more results</button> : ''}
+                        
                     </div>
                 );
             }
@@ -205,7 +205,8 @@
                 }
                 return (
                     <div>
-                        {rows}
+                    	{rows}
+											{this.props.results.length > this.props.displayedResults ? <button className="submit more-results" onClick={this.props.displayMoreResults}>Show more results</button> : ''}
                     </div>
                 );
             }

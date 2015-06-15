@@ -94,3 +94,9 @@ body {
 .tag-unselected {
 	background: #637079;
 }
+.more-results {
+	border: none;
+	outline: none;
+	width: 100%;
+	margin-top: 40px;
+}
