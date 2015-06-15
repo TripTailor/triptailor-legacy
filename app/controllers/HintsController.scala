@@ -3,6 +3,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import db.{TagsDAO, HostelsDAO, LocationsDAO}
+import models.TagHolder
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
@@ -37,7 +38,7 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
     val tagSuggestionsFuture =
       location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
         case Array(city, country) =>
-          tagsDAO.tagSuggestions(city, country, chosenTags)
+          tagsDAO.tagSuggestions(city, country, chosenTags ++ TagHolder.ClicheTags)
         case Array(city) =>
           Future.successful(Seq.empty[String])
       }
