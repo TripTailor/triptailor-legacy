@@ -38,7 +38,7 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
     val tagSuggestionsFuture =
       location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
         case Array(city, country) =>
-          tagsDAO.tagSuggestions(city, country, chosenTags ++ TagHolder.ClicheTags)
+          tagsDAO.tagSuggestions(city, country, TagHolder.ClicheTags ++ chosenTags)
         case Array(city) =>
           Future.successful(Seq.empty[String])
       }
