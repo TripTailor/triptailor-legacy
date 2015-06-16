@@ -1,30 +1,33 @@
 package db
 
-import javax.inject.{Singleton, Inject}
-
-import play.api.db.slick.{HasDatabaseConfigProvider, DatabaseConfigProvider}
-import slick.profile.RelationalProfile
-
-import slick.driver.MySQLDriver.api._
-import scala.concurrent.Future
+import javax.inject.{Inject, Singleton}
 
 import db.Tables._
+import play.api.Configuration
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
+import slick.driver.MySQLDriver.api._
+import slick.profile.RelationalProfile
+
+import scala.concurrent.Future
+
+trait TagsDAOConfig { self: TagsDAO =>
+  lazy val Suggestions = config.getInt("tags.suggestions").get
+}
 
 @Singleton
-class TagsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
-  extends HasDatabaseConfigProvider[RelationalProfile]  {
+class TagsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider, protected val config: Configuration)
+  extends HasDatabaseConfigProvider[RelationalProfile] with TagsDAOConfig {
 
   def tagsQuery(query: String): Future[Seq[String]] = {
     val q = for (a ← Attribute if a.name like s"$query%") yield a.name
     db.run(q.take(10).result)
   }
 
-  def tagSuggestions(city: String, country: String, tagsToExclude: Seq[String]): Future[Seq[String]] =
+  def tagSuggestions(city: String, country: String, tagsToExclude: Set[String]): Future[Seq[String]] =
     db.run(tagsQuery(city, country, tagsToExclude))
 
-  private def tagsQuery(city: String, country: String, tagsToExclude: Seq[String]) = {
-    val Suggestions = 10
-    val excluded    = s"""(${tagsToExclude.map("'" + _ + "'").mkString(", ")})"""
+  private def tagsQuery(city: String, country: String, tagsToExclude: Set[String]) = {
+    val excluded = s"""(${tagsToExclude.map("'" + _ + "'").mkString(", ")})"""
 
     sql"""
        select name from (
