@@ -38,6 +38,9 @@ body {
 .also {
 	margin-top: 25px;
 }
+.tag-also {
+	cursor: pointer;
+}
 .submit-col {
 	text-align: center;
 }

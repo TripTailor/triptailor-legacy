@@ -14,10 +14,10 @@ body {
 	padding-right: 0;
 }
 .inline-input-left, .input-tags {
-	border-radius: 4px;
+	border-radius: 5px;
 }
 .autocomplete-input-container {
-	border-radius: 4px;
+	border-radius: 5px;
 }
 .tag-search-container {
 	border-spacing: 10px 5px;
@@ -165,13 +165,13 @@ body {
 		border-right: 1px solid #ccc;
 	}
 	.inline-input-left {
-		border-radius: 4px 0 0 4px;
+		border-radius: 5px 0 0 5px;
 	}
 	.inline-input-center {
 		border-radius: 0;
 	}
 	.submit {
-		border-radius: 0 4px 4px 0;
+		border-radius: 0 5px 5px 0;
     width: 100%;
 	}
 

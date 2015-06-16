@@ -46,7 +46,7 @@ body {
 	margin-top: 10px;
 }
 .submit {
-	border-radius: 4px;
+	border-radius: 5px;
   height: 40px;
 	background-color: #f66a52;
 	padding: 10px 12px;
@@ -153,7 +153,7 @@ body {
 /* Tags style */
 .autocomplete-tags-container {
 	background-color: white;
-	border-radius: 4px;
+	border-radius: 5px;
 }
 .tag-search-container {
 	display: table;
