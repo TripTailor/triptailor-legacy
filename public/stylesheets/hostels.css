@@ -83,8 +83,10 @@ body {
 .result-tags {
 	padding-top: 15px;
 	margin-bottom: 5px;
-	max-height: 95px;
 	overflow: hidden;
+}
+.tags-less {
+	max-height: 95px;
 }
 .tag {
 	color: white;
@@ -93,6 +95,12 @@ body {
 	margin-bottom: 10px;
 	padding: 5px 10px;
 	border-radius: 3px;
+}
+.more-tags {
+	border: none;
+	outline: none;
+	background: #dbdfe5;
+	color: #637079;
 }
 .tag-selected {
 	background: #5C87D1;
