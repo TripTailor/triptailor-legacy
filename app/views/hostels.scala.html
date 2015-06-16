@@ -45,7 +45,6 @@
                 this.getResults(getStringTags(tags));
             },
 						removeSpecificAlsoTag: function(i) {
-							console.log("remove");
                 this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
             },
 						displayMoreResults: function() {
@@ -275,12 +274,14 @@
 							for(; i < 4 && i < this.props.tags.length; i++) {
 								tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
 							}
-							{!this.props.more ? tags.push(<button className="tag more-tags" onClick={this.props.showMoreTags}>More</button>) : ""};
-							if(this.props.more) {
+							if (!this.props.more) {
+								tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showMoreTags}>More</button>);
+							}
+							else {
 								for(; i < this.props.tags.length; i++) {
 									tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
 								}
-								tags.push(<button className="tag more-tags" onClick={this.props.showLessTags}>Less</button>)
+								tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showLessTags}>Less</button>);
 							}
 
 							return (
