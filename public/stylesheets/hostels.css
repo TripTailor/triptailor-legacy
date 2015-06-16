@@ -72,6 +72,9 @@ body {
 .result-name {
 	padding-top: 25px;
 	padding-bottom: 15px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .result-price {
 	padding: 15px 0;
