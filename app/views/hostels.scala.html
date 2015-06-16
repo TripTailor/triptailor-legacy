@@ -114,7 +114,7 @@
                 return (
                     <div className="container-fluid header">
                         <AutoCompleteSearch {...this.props} enterSubmit={this.enterSubmit} />
-												<AlsoTry ref="also" tags={this.props.alsoTags} addTag={this.props.addTag} removeSpecificAlsoTag={this.props.removeSpecificAlsoTag} />
+												<AlsoTry ref="also" location={this.props.location} tags={this.props.tags} alsoTags={this.props.alsoTags} addTag={this.props.addTag} removeSpecificAlsoTag={this.props.removeSpecificAlsoTag} />
                     </div>
                 );
             }
@@ -157,7 +157,7 @@
                 React.findDOMNode(this.refs.submit).click();
             },
             render: function() {
-								var tags = $.map(this.props.tags, function(value, i) {
+								var tags = $.map(this.props.alsoTags, function(value, i) {
                     return (
 												<AlsoTryTag key={i} index={i} name={value} add={this.props.addTag} remove={this.props.removeSpecificAlsoTag} />
                     );
