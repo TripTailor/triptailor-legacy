@@ -38,6 +38,9 @@ body {
 .also {
 	margin-top: 25px;
 }
+.also-tags-div {
+	padding-top: 5px;
+}
 .tag-also {
 	cursor: pointer;
 }
