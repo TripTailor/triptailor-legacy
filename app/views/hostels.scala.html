@@ -71,9 +71,9 @@
                 });
             },
 						getSuggestions: function() {
-							var route = jsRoutes.controllers.HintsController.tagSuggestions(city + "," + country, getStringTags(this.state.tags));
+							var route = jsRoutes.controllers.HintsController.tagSuggestions();
 							$.ajax({
-										url: route.absoluteURL(),
+										url: route.absoluteURL() + "?location=" + (city + "," + country) + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
 										dataType: 'json',
 										type: route.type,
 										success: function(data) {
