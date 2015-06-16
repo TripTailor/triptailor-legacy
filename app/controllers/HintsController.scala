@@ -32,14 +32,15 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
     results.map(r => Ok(Json.toJson(r)))
   }
 
-  def tagSuggestions(location: String, tags: String) = Action.async { implicit request =>
-    val chosenTags = tags.replace("-", " ").replace("%21", "-").split("[ ,]")
+  def tagSuggestions = Action.async { implicit request =>
+    val queryParams = suggestionsParamsBinding.bindFromRequest.get
 
     val tagSuggestionsFuture =
-      location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
-        case Array(city, country) =>
-          tagsDAO.tagSuggestions(city, country, TagHolder.ClicheTags ++ chosenTags)
-        case Array(city) =>
+      queryParams match {
+        case TagsSuggestions(Some(location), optionalTags) =>
+          val chosenTagsOpt = optionalTags.map(_.replace("-", " ").replace("%21", "-").split("[ ,]"))
+          tagSuggestionsFor(location, chosenTagsOpt.fold(TagHolder.ClicheTags)(TagHolder.ClicheTags ++ _))
+        case TagsSuggestions(_, _) =>
           Future.successful(Seq.empty[String])
       }
 
@@ -48,11 +49,26 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
     }
   }
 
+  private def tagSuggestionsFor(location: String, tagsToExclude: Set[String]) =
+    location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
+      case Array(city, country) =>
+        tagsDAO.tagSuggestions(city, country, tagsToExclude)
+      case Array(city) =>
+        Future.successful(Seq.empty[String])
+    }
+
   private val hintsParamsBinding = Form(
     mapping(
       "tags"      -> optional(nonEmptyText),
       "locations" -> optional(nonEmptyText)
     )(HintsParams.apply)(HintsParams.unapply)
+  )
+
+  private val suggestionsParamsBinding = Form(
+    mapping(
+      "location" -> optional(nonEmptyText),
+      "tags"     -> optional(nonEmptyText)
+    )(TagsSuggestions.apply)(TagsSuggestions.unapply)
   )
 
 }

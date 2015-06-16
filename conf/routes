@@ -11,7 +11,7 @@ GET     /hostels/search                         @controllers.SearchController.se
 GET     /hostels/hints                          @controllers.HintsController.hostelHints
 GET     /hostels/search/:location               @controllers.SearchController.displayAll(location: String)
 GET     /hostels/search/:city/:tags             @controllers.SearchController.classify(city: String, tags: String)
-GET     /tags/suggestions/:city/:tags           @controllers.HintsController.tagSuggestions(city: String, tags: String)
+GET     /tags/suggestions                       @controllers.HintsController.tagSuggestions
 
 GET     /stats                                  @controllers.StatsController.stats
 
