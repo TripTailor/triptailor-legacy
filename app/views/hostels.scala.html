@@ -52,7 +52,7 @@
             },
             getResults: function(tags) {
                 var route;
-								var location = (city + "\," + country).replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+								var location = (city + "," + country).replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
                 if (tags === "")
                   route = jsRoutes.controllers.SearchController.displayAll(location);
                 else
@@ -255,13 +255,12 @@
             render: function() {
                 return (
                     <div className="col-md-3">
-												<div className="result">
-                            <a href={this.props.result.url != 'null' ? this.props.result.url : '#'} target="_blank" className="result-a">
-                                <div className="result-name"><strong>{this.props.result.name}</strong></div>
-                                <div className="result-price">{this.props.result.price} USD</div>
-																<TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
-                            </a>
-                        </div>
+											<div className="result">
+                      	<div className="result-name"><strong>{this.props.result.name}</strong></div>
+                        <div className="result-price">{this.props.result.price} USD</div>
+												<div className="result-book"><a href={this.props.result.url != 'null' ? this.props.result.url : '#'} target="_blank" className="result-a">Book with HostelWorld</a></div>
+												<TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
+                    	</div>
                     </div>
                 );
             }

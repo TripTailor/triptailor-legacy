@@ -59,14 +59,7 @@ body {
 	padding: 0 15px;
 	margin-bottom: 40px;
 }
-.result-a {
-	color: inherit;
-}
-.result-a:link, .result-a:visited, .result-a:hover, .result-a:active {
-	color: inherit;
-	text-decoration: none;
-}
-.result-name, .result-price {
+.result-name, .result-price, .result-book {
 	border-bottom: 1px solid #DBDFE5;
 }
 .result-name {
@@ -79,6 +72,21 @@ body {
 .result-price {
 	padding: 15px 0;
 	font-size: 12px;
+}
+.result-book {
+	padding: 15px 0;
+	text-align: center;
+}
+.result-a {
+	background: #dbdfe5;
+	color: #637079;
+	padding: 7px 10px;
+	border-radius: 3px;
+	display: block;
+}
+.result-a:link, .result-a:visited, .result-a:hover, .result-a:active {
+	color: #637079;
+	text-decoration: none;
 }
 .result-tags {
 	padding-top: 15px;
