@@ -19,7 +19,7 @@ var TripTailorNavBar = React.createClass({
 
 					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul className="nav navbar-nav navbar-right">
-							<li><a href="#">How it works</a></li>
+							<li><a href={jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}>How it works</a></li>
 							{/* <li><a href="#">About us</a></li> */}
 							<li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li>
 						</ul>

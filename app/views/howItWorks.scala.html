@@ -1,25 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title>TripTailor Hostels</title>
+@()(implicit req: RequestHeader)
 
-		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500' rel='stylesheet' type='text/css'>
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/general.css" rel="stylesheet">
-		<link href="css/hiw.css" rel="stylesheet">
-		<link rel="shortcut icon" type="images/x-icon" href="img/favicon.ico">
-
-	</head>
-	<body>
-		<!-- addthis -->
-		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
-
-		<script type="text/jsx" src="js/components.js"></script>
-		<script type="text/jsx">
-
+@main("TripTailor Hostels") {
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hiw.css")">
+} {
+    <script type="text/jsx">
 			var Header = React.createClass({
 				render: function() {
 					return (
@@ -103,7 +87,7 @@
 					return (
 						<div>
 							<Header />
-							<Menu />
+	SearchController						<Menu />
 							<Content />
 							<TripTailorFooter />
 						</div>
@@ -112,12 +96,5 @@
 			});
 
 			React.render(<HIW />, document.body);
-
     </script>
-
-    <script src="https://fb.me/react-0.13.3.js"></script>
-    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
-    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-	</body>
-</html>
+}
