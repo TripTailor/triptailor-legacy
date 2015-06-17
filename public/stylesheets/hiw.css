@@ -1,0 +1,85 @@
+.jumbotron {
+	padding-top: 0;
+	padding-bottom: 156px;
+	margin-bottom: 0;
+	background: url(../img/hiw.jpg) no-repeat center center;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
+.container-jumbotron {
+	padding: 0;
+}
+.navbar-brand {
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+}
+.navbar-triptailor .navbar-nav>li>a {
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+}
+.jumbotron .header {
+	margin-top: 130px;
+	margin-bottom: 8px;
+	font-family: 'Ubuntu', sans-serif;
+	color: white;
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+	text-align: center;
+	font-size: 38px;
+}
+.jumbotron .subheader {
+	margin-bottom: 0;
+	font-family: 'Ubuntu', sans-serif;
+	color: white;
+	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+	text-align: center;
+	font-size: 18px;
+}
+
+.menu {
+	text-align: center;
+	font-family: 'Ubuntu', sans-serif;
+	background: #5c87d1;
+	padding: 17px 0;
+	margin-bottom: 30px;
+}
+.menu a:link, .menu a:visited, .menu a:hover, .menu a:active {
+	text-decoration: none;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 30px;
+	color: #5a5b5b;
+	margin-bottom: 60px;
+	text-align: center;
+}
+.step-title {
+	color: #5a5b5b;
+	font-weight: 500;
+	margin-bottom: 15px;
+	text-align: center;
+}
+.step-text {
+	color: #a8a8a8;
+	font-family: 'Ubuntu', sans-serif;
+	text-align: center;
+	margin-bottom: 0;
+}
+.features-container {
+	margin-top: 60px;
+	background: #edf2f5;
+	padding: 30px 0;
+}
+.feature-title {
+	color: #5a5b5b;
+	font-weight: 500;
+	margin-bottom: 10px;
+	text-align: center;
+}
+.feature-text {
+	color: #a8a8a8;
+	font-family: 'Ubuntu', sans-serif;
+	text-align: center;
+	margin-bottom: 0;
+}

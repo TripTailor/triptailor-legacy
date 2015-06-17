@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>TripTailor Hostels</title>
+
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu:400,500' rel='stylesheet' type='text/css'>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/general.css" rel="stylesheet">
+		<link href="css/hiw.css" rel="stylesheet">
+		<link rel="shortcut icon" type="images/x-icon" href="img/favicon.ico">
+
+	</head>
+	<body>
+		<!-- addthis -->
+		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
+
+		<script type="text/jsx" src="js/components.js"></script>
+		<script type="text/jsx">
+
+			var Header = React.createClass({
+				render: function() {
+					return (
+						<div className="jumbotron">
+							<div className="container-fluid container-jumbotron">
+
+								<TripTailorNavBar />
+
+								<h1 className="header">To travel is to live</h1>
+								<p className="subheader">Hans Christian Andersen</p>
+
+							</div>
+						</div>
+					);
+				}
+			});
+
+			var Menu = React.createClass({
+				render: function() {
+					return (
+						<ul className="list-inline menu">
+							<li><a href="#howItWorks">How It Works</a></li>
+							<li><a href="#features">Features</a></li>
+						</ul>
+					);
+				}
+			});
+
+			var Content = React.createClass({
+				render: function() {
+					return (
+						<div className="container-fluid container-jumbotron">
+							<p id="howItWorks" className="title">How It Works</p>
+							<div className="row no-horizontal-margins">
+								<div className="col-md-3">
+									<p className="step-title">1. Pick a city</p>
+									<p className="step-text">Pick a city from hundreds of cities around the world</p>
+								</div>
+								<div className="col-md-3">
+									<p className="step-title">2. Play with tags</p>
+									<p className="step-text">Add and remove tags as you filter hostels</p>
+								</div>
+								<div className="col-md-3">
+									<p className="step-title">3. Browse hostels</p>
+									<p className="step-text">Hostels where the tags are more relevant will be displayed first</p>
+								</div>
+								<div className="col-md-3">
+									<p className="step-title">4. Book your hostel</p>
+									<p className="step-text">Finish your booking with HostelWorld</p>
+								</div>
+							</div>
+
+							<div className="features-container">
+								<p id="features" className="title">Features</p>
+								<div className="row no-horizontal-margins">
+									<div className="col-md-3">
+										<p className="feature-title">Easy</p>
+										<p className="feature-text">Only pick a city and some tags</p>
+									</div>
+									<div className="col-md-3">
+										<p className="feature-title">Wise</p>
+										<p className="feature-text">The application knows the most relevant tags for each hostel</p>
+									</div>
+									<div className="col-md-3">
+										<p className="feature-title">Smart</p>
+										<p className="feature-text">The application knows how to sort the hostels, based on tags</p>
+									</div>
+									<div className="col-md-3">
+										<p className="feature-title">Interactive</p>
+										<p className="feature-text">Play with tags as you refine your search</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					);
+				}
+			});
+
+			var HIW = React.createClass({
+				render: function() {
+					return (
+						<div>
+							<Header />
+							<Menu />
+							<Content />
+							<TripTailorFooter />
+						</div>
+					);
+				}
+			});
+
+			React.render(<HIW />, document.body);
+
+    </script>
+
+    <script src="https://fb.me/react-0.13.3.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+	</body>
+</html>
