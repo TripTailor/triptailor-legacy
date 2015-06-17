@@ -111,6 +111,10 @@ body {
 .footer-list {
 	margin-bottom: 0;
 }
+.footer-list a:link, .footer-list a:visited, .footer-list a:hover, .footer-list a:active {
+	text-decoration: none;
+	color: inherit;
+}
 .love {
 	margin-top: 30px;
 }

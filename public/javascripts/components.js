@@ -38,7 +38,7 @@ var TripTailorFooter = React.createClass({
 					<div className="col-sm-4">
 						<p className="footer-header">Company</p>
 						<ul className="list-unstyled footer-list">
-							<li>How it works</li>
+							<li><a href={jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}>How it works</a></li>
 							{/* <li>About Us</li>
 									<li>Contact</li> */}
 						</ul>
