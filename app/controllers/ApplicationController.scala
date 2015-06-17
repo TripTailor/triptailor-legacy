@@ -14,10 +14,15 @@ class ApplicationController @Inject()(dbConfigProvider: DatabaseConfigProvider) 
     Ok(views.html.index())
   }
 
+  def howItWorks = Action { implicit request =>
+    Ok(views.html.howItWorks())
+  }
+
   def javascriptRoutes = Action { implicit request =>
     Ok(
       JavaScriptReverseRouter.apply("jsRoutes")(
         routes.javascript.ApplicationController.index,
+        routes.javascript.ApplicationController.howItWorks,
         routes.javascript.HintsController.hostelHints,
         routes.javascript.HintsController.tagSuggestions,
         routes.javascript.SearchController.search,
