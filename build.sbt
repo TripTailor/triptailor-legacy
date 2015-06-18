@@ -9,6 +9,21 @@ val dbDependencies = Seq(
   "com.zaxxer" % "HikariCP" % "2.3.5" % Compile
 )
 
+/** Frontend assets **/
+val jsWebJars = Seq(
+  "org.webjars" %% "webjars-play" % "2.4.0-1",
+  "org.webjars" % "jquery" % "2.1.4",
+  "org.webjars" % "react" % "0.13.3"
+)
+
+val cssWebJars = Seq(
+  "org.webjars" % "font-awesome" % "4.3.0-2",
+  "org.webjars" % "bootstrap" % "3.3.5",
+  "org.webjars" % "font-awesome" % "4.3.0-2"
+)
+
+val webJarAssetDependencies = cssWebJars ++ jsWebJars
+
 val testDependencies = Seq(
   "org.scalatestplus" %% "play" % "1.2.0" % "test",
   "org.mockito" % "mockito-all" % "1.9.0" % "test"
@@ -27,7 +42,7 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws
-) ++ dbDependencies ++ testDependencies
+) ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
 
 initialCommands in console := consoleCommands
 
