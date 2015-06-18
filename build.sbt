@@ -21,6 +21,7 @@ val cssWebJars = Seq(
   "org.webjars" % "bootstrap" % "3.3.5",
   "org.webjars" % "font-awesome" % "4.3.0-2"
 )
+/****/
 
 val webJarAssetDependencies = cssWebJars ++ jsWebJars
 
@@ -45,6 +46,8 @@ libraryDependencies ++= Seq(
 ) ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
 
 initialCommands in console := consoleCommands
+
+sources in (Compile, doc)  := Seq.empty
 
 routesGenerator := InjectedRoutesGenerator
 
