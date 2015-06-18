@@ -31,7 +31,7 @@ var Content = React.createClass({displayName: "Content",
 		return (
 			React.createElement("div", {className: "container-fluid container-jumbotron"}, 
 				React.createElement("p", {id: "howItWorks", className: "title"}, "How It Works"), 
-				React.createElement("div", {className: "row no-horizontal-margins"}, 
+				React.createElement("div", {className: "row no-horizontal-margins row-container"}, 
 					React.createElement("div", {className: "col-md-3"}, 
 						React.createElement("p", {className: "step-title"}, "1. Pick a city"), 
 						React.createElement("p", {className: "step-text"}, "Pick a city from hundreds of cities around the world")
@@ -52,7 +52,7 @@ var Content = React.createClass({displayName: "Content",
 
 				React.createElement("div", {className: "features-container"}, 
 					React.createElement("p", {id: "features", className: "title"}, "Features"), 
-					React.createElement("div", {className: "row no-horizontal-margins"}, 
+					React.createElement("div", {className: "row no-horizontal-margins row-container"}, 
 						React.createElement("div", {className: "col-md-3"}, 
 							React.createElement("p", {className: "feature-title"}, "Easy"), 
 							React.createElement("p", {className: "feature-text"}, "Only pick a city and some tags")
