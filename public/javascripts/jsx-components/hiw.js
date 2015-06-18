@@ -2,7 +2,7 @@ var Header = React.createClass({
 	render: function() {
 		return (
 			<div className="jumbotron">
-				<div className="container-fluid container-jumbotron">
+				<div className="container-fluid">
 
 					<TripTailorNavBar />
 
@@ -29,9 +29,9 @@ var Menu = React.createClass({
 var Content = React.createClass({
 	render: function() {
 		return (
-			<div className="container-fluid container-jumbotron">
+			<div className="container-fluid">
 				<p id="howItWorks" className="title">How It Works</p>
-				<div className="row no-horizontal-margins row-container">
+				<div className="row no-horizontal-margins">
 					<div className="col-md-3 step">
 						<i className="fa fa-check-circle fa-3x"></i>
 						<p className="step-title">1. Pick a city</p>
@@ -56,7 +56,7 @@ var Content = React.createClass({
 
 				<div className="features-container">
 					<p id="features" className="title">Features</p>
-					<div className="row no-horizontal-margins row-container">
+					<div className="row no-horizontal-margins">
 						<div className="col-md-3 step">
 							<i className="fa fa-thumbs-o-up fa-3x"></i>
 							<p className="step-title">Easy</p>

@@ -1,15 +1,14 @@
 .jumbotron {
 	padding-top: 0;
 	padding-bottom: 156px;
+	padding-left: 0;
+	padding-right: 0;
 	margin-bottom: 0;
 	background: url(../images/hiw.jpg) no-repeat center center;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
-}
-.container-jumbotron {
-	padding: 0;
 }
 .navbar-brand {
 	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
@@ -79,4 +78,8 @@
 	background: #edf2f5;
 	padding-top: 30px;
 	padding-bottom: 60px;
+	margin-left: -30px;
+	margin-right: -30px;
+	padding-left: 30px;
+	padding-right: 30px;
 }

@@ -2,11 +2,11 @@ var Header = React.createClass({displayName: "Header",
 	render: function() {
 		return (
 			React.createElement("div", {className: "jumbotron"}, 
-				React.createElement("div", {className: "container-fluid container-jumbotron"}, 
+				React.createElement("div", {className: "container-fluid"}, 
 
 					React.createElement(TripTailorNavBar, null), 
 
-					React.createElement("div", {className: "row row-jumbotron"}, 
+					React.createElement("div", {className: "row"}, 
 						React.createElement("div", {className: "col-md-10 col-md-offset-1 text-center"}, 
 							React.createElement("h1", {className: "header"}, "Looking for a hostel?"), 
 							React.createElement("p", {className: "subheader"}, "Pick a city and write some tags, and we will find the perfect match for you")
@@ -160,7 +160,7 @@ enterSubmit: function() {
 						 },
 render: function() {
 					return (
-							React.createElement("div", {className: "row row-jumbotron"}, 
+							React.createElement("div", {className: "row"}, 
 							React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
 							React.createElement("div", {className: "row form-row"}, 
 							React.createElement("div", {className: "col-md-5 form-col-left"}, 

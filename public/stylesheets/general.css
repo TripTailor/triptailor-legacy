@@ -66,6 +66,9 @@ body {
 	margin-bottom: 0;
 	border: none;
 }
+.navbar-triptailor .container-fluid {
+	padding: 0;
+}
 .navbar-brand {
 	font-family: 'Ubuntu', sans-serif;
 	font-size: 16px;

@@ -2,11 +2,11 @@ var Header = React.createClass({
 	render: function() {
 		return (
 			<div className="jumbotron">
-				<div className="container-fluid container-jumbotron">
+				<div className="container-fluid">
 
 					<TripTailorNavBar />
 
-					<div className="row row-jumbotron">
+					<div className="row">
 						<div className="col-md-10 col-md-offset-1 text-center">
 							<h1 className="header">Looking for a hostel?</h1>
 							<p className="subheader">Pick a city and write some tags, and we will find the perfect match for you</p>
@@ -160,7 +160,7 @@ enterSubmit: function() {
 						 },
 render: function() {
 					return (
-							<div className="row row-jumbotron">
+							<div className="row">
 							<div className="col-md-10 col-md-offset-1">
 							<div className="row form-row">
 							<div className="col-md-5 form-col-left">

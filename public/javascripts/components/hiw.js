@@ -2,7 +2,7 @@ var Header = React.createClass({displayName: "Header",
 	render: function() {
 		return (
 			React.createElement("div", {className: "jumbotron"}, 
-				React.createElement("div", {className: "container-fluid container-jumbotron"}, 
+				React.createElement("div", {className: "container-fluid"}, 
 
 					React.createElement(TripTailorNavBar, null), 
 
@@ -29,9 +29,9 @@ var Menu = React.createClass({displayName: "Menu",
 var Content = React.createClass({displayName: "Content",
 	render: function() {
 		return (
-			React.createElement("div", {className: "container-fluid container-jumbotron"}, 
+			React.createElement("div", {className: "container-fluid"}, 
 				React.createElement("p", {id: "howItWorks", className: "title"}, "How It Works"), 
-				React.createElement("div", {className: "row no-horizontal-margins row-container"}, 
+				React.createElement("div", {className: "row no-horizontal-margins"}, 
 					React.createElement("div", {className: "col-md-3 step"}, 
 						React.createElement("i", {className: "fa fa-check-circle fa-3x"}), 
 						React.createElement("p", {className: "step-title"}, "1. Pick a city"), 
@@ -56,7 +56,7 @@ var Content = React.createClass({displayName: "Content",
 
 				React.createElement("div", {className: "features-container"}, 
 					React.createElement("p", {id: "features", className: "title"}, "Features"), 
-					React.createElement("div", {className: "row no-horizontal-margins row-container"}, 
+					React.createElement("div", {className: "row no-horizontal-margins"}, 
 						React.createElement("div", {className: "col-md-3 step"}, 
 							React.createElement("i", {className: "fa fa-thumbs-o-up fa-3x"}), 
 							React.createElement("p", {className: "step-title"}, "Easy"), 
