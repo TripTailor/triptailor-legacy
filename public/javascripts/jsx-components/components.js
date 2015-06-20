@@ -194,7 +194,7 @@ var TripTailorAutoCompleteTags = React.createClass({
 	},
 	handleKeyUp: function(e) {
 		if(e.keyCode == 27) {
-			this.props.addTag(React.findDOMNode(this.refs.query).value);
+			this.props.addTag(React.findDOMNode(this.refs.query).value.toLowerCase());
 			this.props.updateValue("");
 			this.setState({hints: [], selectedItem: -1});
 		}
@@ -208,7 +208,7 @@ var TripTailorAutoCompleteTags = React.createClass({
 				this.props.submit();
 		}
 		else if(e.keyCode == 32) {
-			this.props.addTag(this.props.value.trim());
+			this.props.addTag(this.props.value.trim().toLowerCase());
 			this.props.updateValue("");
 		}
 	},
