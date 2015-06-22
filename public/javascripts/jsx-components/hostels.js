@@ -126,163 +126,163 @@ var AlsoTry = React.createClass({
 	submit: function(e) {
 		/*if(cityVal == "")
 			city.style.border = "2px solid #5F2B25"; */
-	if(this.props.location == '') {
-	e.preventDefault();
-	return;
-	}
-	var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-	if(this.props.tags.length > 0) {
-	url += "&tags=" + this.props.tags[0];
-	for(var i = 1; i < this.props.tags.length; i++)
-	url += "-" + this.props.tags[i];
-	}
-	React.findDOMNode(this.refs.submit).href = url + adVariables();
+		if(this.props.location == '') {
+			e.preventDefault();
+			return;
+		}
+		var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+		if(this.props.tags.length > 0) {
+			url += "&tags=" + this.props.tags[0];
+			for(var i = 1; i < this.props.tags.length; i++)
+			url += "-" + this.props.tags[i];
+		}
+		React.findDOMNode(this.refs.submit).href = url + adVariables();
 	},
-enterSubmit: function() {
-React.findDOMNode(this.refs.submit).click();
-},
-render: function() {
-var tags = $.map(this.props.alsoTags, function(value, i) {
-	return (
-		<AlsoTryTag key={i} index={i} name={value} add={this.props.addTag} remove={this.props.removeSpecificAlsoTag} />
-		);
-	}.bind(this));
+	enterSubmit: function() {
+		React.findDOMNode(this.refs.submit).click();
+	},
+	render: function() {
+		var tags = $.map(this.props.alsoTags, function(value, i) {
+			return (
+				<AlsoTryTag key={i} index={i} name={value} add={this.props.addTag} remove={this.props.removeSpecificAlsoTag} />
+			);
+		}.bind(this));
 
-return (
-		<div className="row also">
-		<div className="col-md-10">
-		<p className="header-label"><strong>Also Try</strong></p>
-		<div className="also-tags-div">
-		{tags}
-		</div>
-		</div>
-		<div className="col-md-2 submit-col">
-		<a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
-		</div>
-		</div>
+		return (
+			<div className="row also">
+				<div className="col-md-10">
+					<p className="header-label"><strong>Also Try</strong></p>
+					<div className="also-tags-div">
+						{tags}
+					</div>
+				</div>
+				<div className="col-md-2 submit-col">
+					<a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
+				</div>
+			</div>
 		);
-				}
+	}
 });
 
 var AlsoTryTag = React.createClass({
-handleClick: function() {
-this.props.add(this.props.name);
-this.props.remove(this.props.index);
-},
-render: function() {
-return (
-	<div className="tag tag-unselected tag-also" onClick={this.handleClick}>{this.props.name}</div>
-	);
-}
+	handleClick: function() {
+		this.props.add(this.props.name);
+		this.props.remove(this.props.index);
+	},
+	render: function() {
+		return (
+			<div className="tag tag-unselected tag-also" onClick={this.handleClick}>{this.props.name}</div>
+		);
+	}
 });
 
 var Content = React.createClass({
-render: function() {
-return (
-	<div className="container-fluid content">
-	<NumberResults results={this.props.results.length} />
-	<ResultsGrid {...this.props} />
-	</div>
-	);
-}
+	render: function() {
+		return (
+			<div className="container-fluid content">
+				<NumberResults results={this.props.results.length} />
+				<ResultsGrid {...this.props} />
+			</div>
+		);
+	}
 });
 
 var NumberResults = React.createClass({
-render: function() {
-return (
-	<p className="results-number">Matching results <strong>{this.props.results}</strong></p>
-	);
-}
+	render: function() {
+		return (
+			<p className="results-number">Matching results <strong>{this.props.results}</strong></p>
+		);
+	}
 });
 
 var ResultsGrid = React.createClass({
-getInitialState: function() {
-return {more: false};
-},
-showMoreTags: function(e) {
-e.preventDefault();
-this.setState({more: true});
-},
-showLessTags: function(e) {
-e.preventDefault();
-this.setState({more: false});
-},
-render: function() {
-var rows = [];
-var results = [];
-for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
-results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} />);
-if((i + 1) % 4 == 0) {
-rows.push(
-	<div key={rows.length} className="row">
-	{results}
-	</div>
-	);
-results = [];
-}
-};
-if(results.length > 0) {
-	rows.push(
-			<div key={rows.length} className="row">
-			{results}
-			</div>
+	getInitialState: function() {
+		return {more: false};
+	},
+	showMoreTags: function(e) {
+		e.preventDefault();
+		this.setState({more: true});
+	},
+	showLessTags: function(e) {
+		e.preventDefault();
+		this.setState({more: false});
+	},
+	render: function() {
+		var rows = [];
+		var results = [];
+		for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
+			results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} />);
+			if((i + 1) % 4 == 0) {
+				rows.push(
+					<div key={rows.length} className="row">
+						{results}
+					</div>
+				);
+				results = [];
+			}
+		};
+		if(results.length > 0) {
+			rows.push(
+				<div key={rows.length} className="row">
+					{results}
+				</div>
 			);
-}
-return (
-		<div>
-		{rows}
-		{this.props.results.length > this.props.displayedResults ? <button className="submit more-results" onClick={this.props.displayMoreResults}>Show more results</button> : ''}
-		</div>
+		}
+		return (
+			<div>
+				{rows}
+				{this.props.results.length > this.props.displayedResults ? <button className="submit more-results" onClick={this.props.displayMoreResults}>Show more results</button> : ''}
+			</div>
 		);
-}
+	}
 });
 
 var Result = React.createClass({
-render: function() {
-return (
-	<div className="col-md-3">
-	<div className="result">
-	<div className="result-name"><strong>{this.props.result.name}</strong></div>
-	<div className="result-price">{this.props.result.price} USD</div>
-	<div className="result-book"><a href={this.props.result.url != 'null' ? this.props.result.url : '#'} target="_blank" className="result-a">Book with HostelWorld</a></div>
-	<TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
-	</div>
-	</div>
-	);
-}
+	render: function() {
+		return (
+			<div className="col-md-3">
+				<div className="result">
+					<div className="result-name"><strong>{this.props.result.name}</strong></div>
+					<div className="result-price">{this.props.result.price} USD</div>
+					<div className="result-book"><a href={this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#'} target="_blank" className="result-a">Book with HostelWorld</a></div>
+					<TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
+				</div>
+			</div>
+		);
+	}
 });
 
 var TagsRow = React.createClass({
-render: function() {
-var tags = [];
-var i = 0;
-for(; i < 4 && i < this.props.tags.length; i++) {
-tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
-}
-if (!this.props.more) {
-tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showMoreTags}>More</button>);
-}
-else {
-for(; i < this.props.tags.length; i++) {
-tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
-}
-tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showLessTags}>Less</button>);
-}
+	render: function() {
+		var tags = [];
+		var i = 0;
+		for(; i < 4 && i < this.props.tags.length; i++) {
+			tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
+		}
+		if (!this.props.more) {
+			tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showMoreTags}>More</button>);
+		}
+		else {
+			for(; i < this.props.tags.length; i++) {
+				tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
+			}
+			tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showLessTags}>Less</button>);
+		}
 
-return (
-	<div className={this.props.more ? "result-tags" : "result-tags tags-less"}>
-	{tags}
-	</div>
-	);
-}
+		return (
+			<div className={this.props.more ? "result-tags" : "result-tags tags-less"}>
+				{tags}
+			</div>
+		);
+	}
 });
 
-		var Tag = React.createClass({
-render: function() {
-return (
-	<div className={this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}>{this.props.name}</div>
-	);
-}
+var Tag = React.createClass({
+	render: function() {
+		return (
+			<div className={this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}>{this.props.name}</div>
+		);
+	}
 });
 
 React.render(<Hostels />, document.body);

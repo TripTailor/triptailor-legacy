@@ -126,163 +126,163 @@ var AlsoTry = React.createClass({displayName: "AlsoTry",
 	submit: function(e) {
 		/*if(cityVal == "")
 			city.style.border = "2px solid #5F2B25"; */
-	if(this.props.location == '') {
-	e.preventDefault();
-	return;
-	}
-	var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-	if(this.props.tags.length > 0) {
-	url += "&tags=" + this.props.tags[0];
-	for(var i = 1; i < this.props.tags.length; i++)
-	url += "-" + this.props.tags[i];
-	}
-	React.findDOMNode(this.refs.submit).href = url + adVariables();
+		if(this.props.location == '') {
+			e.preventDefault();
+			return;
+		}
+		var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+		if(this.props.tags.length > 0) {
+			url += "&tags=" + this.props.tags[0];
+			for(var i = 1; i < this.props.tags.length; i++)
+			url += "-" + this.props.tags[i];
+		}
+		React.findDOMNode(this.refs.submit).href = url + adVariables();
 	},
-enterSubmit: function() {
-React.findDOMNode(this.refs.submit).click();
-},
-render: function() {
-var tags = $.map(this.props.alsoTags, function(value, i) {
-	return (
-		React.createElement(AlsoTryTag, {key: i, index: i, name: value, add: this.props.addTag, remove: this.props.removeSpecificAlsoTag})
-		);
-	}.bind(this));
+	enterSubmit: function() {
+		React.findDOMNode(this.refs.submit).click();
+	},
+	render: function() {
+		var tags = $.map(this.props.alsoTags, function(value, i) {
+			return (
+				React.createElement(AlsoTryTag, {key: i, index: i, name: value, add: this.props.addTag, remove: this.props.removeSpecificAlsoTag})
+			);
+		}.bind(this));
 
-return (
-		React.createElement("div", {className: "row also"}, 
-		React.createElement("div", {className: "col-md-10"}, 
-		React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")), 
-		React.createElement("div", {className: "also-tags-div"}, 
-		tags
-		)
-		), 
-		React.createElement("div", {className: "col-md-2 submit-col"}, 
-		React.createElement("a", {ref: "submit", className: "submit", href: "", onClick: this.submit}, "Search")
-		)
-		)
+		return (
+			React.createElement("div", {className: "row also"}, 
+				React.createElement("div", {className: "col-md-10"}, 
+					React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")), 
+					React.createElement("div", {className: "also-tags-div"}, 
+						tags
+					)
+				), 
+				React.createElement("div", {className: "col-md-2 submit-col"}, 
+					React.createElement("a", {ref: "submit", className: "submit", href: "", onClick: this.submit}, "Search")
+				)
+			)
 		);
-				}
+	}
 });
 
 var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
-handleClick: function() {
-this.props.add(this.props.name);
-this.props.remove(this.props.index);
-},
-render: function() {
-return (
-	React.createElement("div", {className: "tag tag-unselected tag-also", onClick: this.handleClick}, this.props.name)
-	);
-}
+	handleClick: function() {
+		this.props.add(this.props.name);
+		this.props.remove(this.props.index);
+	},
+	render: function() {
+		return (
+			React.createElement("div", {className: "tag tag-unselected tag-also", onClick: this.handleClick}, this.props.name)
+		);
+	}
 });
 
 var Content = React.createClass({displayName: "Content",
-render: function() {
-return (
-	React.createElement("div", {className: "container-fluid content"}, 
-	React.createElement(NumberResults, {results: this.props.results.length}), 
-	React.createElement(ResultsGrid, React.__spread({},  this.props))
-	)
-	);
-}
+	render: function() {
+		return (
+			React.createElement("div", {className: "container-fluid content"}, 
+				React.createElement(NumberResults, {results: this.props.results.length}), 
+				React.createElement(ResultsGrid, React.__spread({},  this.props))
+			)
+		);
+	}
 });
 
 var NumberResults = React.createClass({displayName: "NumberResults",
-render: function() {
-return (
-	React.createElement("p", {className: "results-number"}, "Matching results ", React.createElement("strong", null, this.props.results))
-	);
-}
+	render: function() {
+		return (
+			React.createElement("p", {className: "results-number"}, "Matching results ", React.createElement("strong", null, this.props.results))
+		);
+	}
 });
 
 var ResultsGrid = React.createClass({displayName: "ResultsGrid",
-getInitialState: function() {
-return {more: false};
-},
-showMoreTags: function(e) {
-e.preventDefault();
-this.setState({more: true});
-},
-showLessTags: function(e) {
-e.preventDefault();
-this.setState({more: false});
-},
-render: function() {
-var rows = [];
-var results = [];
-for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
-results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags}));
-if((i + 1) % 4 == 0) {
-rows.push(
-	React.createElement("div", {key: rows.length, className: "row"}, 
-	results
-	)
-	);
-results = [];
-}
-};
-if(results.length > 0) {
-	rows.push(
-			React.createElement("div", {key: rows.length, className: "row"}, 
-			results
-			)
+	getInitialState: function() {
+		return {more: false};
+	},
+	showMoreTags: function(e) {
+		e.preventDefault();
+		this.setState({more: true});
+	},
+	showLessTags: function(e) {
+		e.preventDefault();
+		this.setState({more: false});
+	},
+	render: function() {
+		var rows = [];
+		var results = [];
+		for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
+			results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags}));
+			if((i + 1) % 4 == 0) {
+				rows.push(
+					React.createElement("div", {key: rows.length, className: "row"}, 
+						results
+					)
+				);
+				results = [];
+			}
+		};
+		if(results.length > 0) {
+			rows.push(
+				React.createElement("div", {key: rows.length, className: "row"}, 
+					results
+				)
 			);
-}
-return (
-		React.createElement("div", null, 
-		rows, 
-		this.props.results.length > this.props.displayedResults ? React.createElement("button", {className: "submit more-results", onClick: this.props.displayMoreResults}, "Show more results") : ''
-		)
+		}
+		return (
+			React.createElement("div", null, 
+				rows, 
+				this.props.results.length > this.props.displayedResults ? React.createElement("button", {className: "submit more-results", onClick: this.props.displayMoreResults}, "Show more results") : ''
+			)
 		);
-}
+	}
 });
 
 var Result = React.createClass({displayName: "Result",
-render: function() {
-return (
-	React.createElement("div", {className: "col-md-3"}, 
-	React.createElement("div", {className: "result"}, 
-	React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
-	React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
-	React.createElement("div", {className: "result-book"}, React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url : '#', target: "_blank", className: "result-a"}, "Book with HostelWorld")), 
-	React.createElement(TagsRow, {tags: this.props.result.tags, more: this.props.moreTags, showMoreTags: this.props.showMoreTags, showLessTags: this.props.showLessTags})
-	)
-	)
-	);
-}
+	render: function() {
+		return (
+			React.createElement("div", {className: "col-md-3"}, 
+				React.createElement("div", {className: "result"}, 
+					React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
+					React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
+					React.createElement("div", {className: "result-book"}, React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#', target: "_blank", className: "result-a"}, "Book with HostelWorld")), 
+					React.createElement(TagsRow, {tags: this.props.result.tags, more: this.props.moreTags, showMoreTags: this.props.showMoreTags, showLessTags: this.props.showLessTags})
+				)
+			)
+		);
+	}
 });
 
 var TagsRow = React.createClass({displayName: "TagsRow",
-render: function() {
-var tags = [];
-var i = 0;
-for(; i < 4 && i < this.props.tags.length; i++) {
-tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
-}
-if (!this.props.more) {
-tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showMoreTags}, "More"));
-}
-else {
-for(; i < this.props.tags.length; i++) {
-tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
-}
-tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showLessTags}, "Less"));
-}
+	render: function() {
+		var tags = [];
+		var i = 0;
+		for(; i < 4 && i < this.props.tags.length; i++) {
+			tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
+		}
+		if (!this.props.more) {
+			tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showMoreTags}, "More"));
+		}
+		else {
+			for(; i < this.props.tags.length; i++) {
+				tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
+			}
+			tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showLessTags}, "Less"));
+		}
 
-return (
-	React.createElement("div", {className: this.props.more ? "result-tags" : "result-tags tags-less"}, 
-	tags
-	)
-	);
-}
+		return (
+			React.createElement("div", {className: this.props.more ? "result-tags" : "result-tags tags-less"}, 
+				tags
+			)
+		);
+	}
 });
 
-		var Tag = React.createClass({displayName: "Tag",
-render: function() {
-return (
-	React.createElement("div", {className: this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}, this.props.name)
-	);
-}
+var Tag = React.createClass({displayName: "Tag",
+	render: function() {
+		return (
+			React.createElement("div", {className: this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}, this.props.name)
+		);
+	}
 });
 
 React.render(React.createElement(Hostels, null), document.body);
