@@ -3,6 +3,12 @@ var SEARCHURL  = jsRoutes.controllers.SearchController.search().absoluteURL();
 var TIMEOUT    = 200;
 
 var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
+	shareFB: function() {
+		FB.ui({
+			method: 'share',
+			href: window.location.href,
+		}, function(response){});
+	},
 	render: function() {
 		return (
 			React.createElement("nav", {className: "navbar navbar-triptailor"}, 
@@ -21,7 +27,8 @@ var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
 						React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
 							React.createElement("li", null, React.createElement("a", {href: jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}, "How it works")), 
 							/* <li><a href="#">About us</a></li> */
-							React.createElement("li", null, React.createElement("a", {className: "a-addthis", href: "#"}, React.createElement("div", {className: "addthis_sharing_toolbox addthis_top"})))
+							/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */
+							React.createElement("li", null, React.createElement("span", {onClick: this.shareFB}, "fb"))
 						)
 					)
 				)
