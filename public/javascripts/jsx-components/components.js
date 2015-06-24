@@ -3,12 +3,6 @@ var SEARCHURL  = jsRoutes.controllers.SearchController.search().absoluteURL();
 var TIMEOUT    = 200;
 
 var TripTailorNavBar = React.createClass({
-	shareFB: function() {
-		FB.ui({
-			method: 'share',
-			href: window.location.href,
-		}, function(response){});
-	},
 	render: function() {
 		return (
 			<nav className="navbar navbar-triptailor">
@@ -28,7 +22,7 @@ var TripTailorNavBar = React.createClass({
 							<li><a href={jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}>How it works</a></li>
 							{/* <li><a href="#">About us</a></li> */}
 							{/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */}
-							<li><a onClick={this.shareFB}>fb</a></li>
+							<li><a onClick={shareFB}>fb</a></li>
 							<li><a href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}>tw</a></li>
 						</ul>
 					</div>
@@ -51,10 +45,14 @@ var TripTailorFooter = React.createClass({
 									<li>Contact</li> */}
 						</ul>
 					</div>
-					{/* <div className="col-sm-4 love">
+					<div className="col-sm-4 love">
 						<p className="footer-header">Spread the love</p>
-						<div className="addthis_sharing_toolbox"></div>
-						</div> */}
+						{/* <div className="addthis_sharing_toolbox"></div> */}
+						<ul className="list-inline">
+							<li><a onClick={shareFB}>fb</a></li>
+							<li><a href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}>tw</a></li>
+						</ul>
+					</div>
 				</div>
 				<div className="row disclaimer">
 					<div className="col-sm-12">

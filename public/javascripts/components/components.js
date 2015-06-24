@@ -3,12 +3,6 @@ var SEARCHURL  = jsRoutes.controllers.SearchController.search().absoluteURL();
 var TIMEOUT    = 200;
 
 var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
-	shareFB: function() {
-		FB.ui({
-			method: 'share',
-			href: window.location.href,
-		}, function(response){});
-	},
 	render: function() {
 		return (
 			React.createElement("nav", {className: "navbar navbar-triptailor"}, 
@@ -28,7 +22,7 @@ var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
 							React.createElement("li", null, React.createElement("a", {href: jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}, "How it works")), 
 							/* <li><a href="#">About us</a></li> */
 							/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */
-							React.createElement("li", null, React.createElement("a", {onClick: this.shareFB}, "fb")), 
+							React.createElement("li", null, React.createElement("a", {onClick: shareFB}, "fb")), 
 							React.createElement("li", null, React.createElement("a", {href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, "tw"))
 						)
 					)
@@ -50,11 +44,15 @@ var TripTailorFooter = React.createClass({displayName: "TripTailorFooter",
 							/* <li>About Us</li>
 									<li>Contact</li> */
 						)
+					), 
+					React.createElement("div", {className: "col-sm-4 love"}, 
+						React.createElement("p", {className: "footer-header"}, "Spread the love"), 
+						/* <div className="addthis_sharing_toolbox"></div> */
+						React.createElement("ul", {className: "list-inline"}, 
+							React.createElement("li", null, React.createElement("a", {onClick: shareFB}, "fb")), 
+							React.createElement("li", null, React.createElement("a", {href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, "tw"))
+						)
 					)
-					/* <div className="col-sm-4 love">
-						<p className="footer-header">Spread the love</p>
-						<div className="addthis_sharing_toolbox"></div>
-						</div> */
 				), 
 				React.createElement("div", {className: "row disclaimer"}, 
 					React.createElement("div", {className: "col-sm-12"}, 

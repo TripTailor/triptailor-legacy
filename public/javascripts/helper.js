@@ -38,3 +38,10 @@ var getStringTags = function(tagsArr) {
 	}
 	return tags;
 }
+
+var shareFB = function() {
+	FB.ui({
+		method: 'share',
+		href: window.location.href,
+	}, function(response){});
+}
