@@ -28,7 +28,8 @@ var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
 							React.createElement("li", null, React.createElement("a", {href: jsRoutes.controllers.ApplicationController.howItWorks().absoluteURL()}, "How it works")), 
 							/* <li><a href="#">About us</a></li> */
 							/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */
-							React.createElement("li", null, React.createElement("span", {onClick: this.shareFB}, "fb"))
+							React.createElement("li", null, React.createElement("a", {onClick: this.shareFB}, "fb")), 
+							React.createElement("li", null, React.createElement("a", {href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, "tw"))
 						)
 					)
 				)
