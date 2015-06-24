@@ -50,32 +50,31 @@ var Content = React.createClass({displayName: "Content",
 					React.createElement("div", {className: "col-md-3 step"}, 
 						React.createElement("i", {className: "fa fa-bookmark fa-3x"}), 
 						React.createElement("p", {className: "step-title"}, "4. Book your hostel"), 
-						React.createElement("p", {className: "step-text"}, "Finish your booking with HostelWorld")
+						React.createElement("p", {className: "step-text"}, "Finish your booking with our friends at HostelWorld")
 					)
 				), 
 
 				React.createElement("div", {className: "features-container"}, 
 					React.createElement("p", {id: "features", className: "title"}, "Features"), 
 					React.createElement("div", {className: "row no-horizontal-margins"}, 
-						React.createElement("div", {className: "col-md-3 step"}, 
-							React.createElement("i", {className: "fa fa-thumbs-o-up fa-3x"}), 
-							React.createElement("p", {className: "step-title"}, "Easy"), 
-							React.createElement("p", {className: "step-text"}, "Only pick a city and some tags")
+						React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
+						React.createElement("div", {className: "row"}, 
+						React.createElement("div", {className: "col-md-4 step"}, 
+							React.createElement("i", {className: "fa fa-expand fa-3x"}), 
+							React.createElement("p", {className: "step-title"}, "Exhaustive"), 
+							React.createElement("p", {className: "step-text"}, "We browsed the web to find information about almost every hostel in the world")
 						), 
-						React.createElement("div", {className: "col-md-3 step"}, 
+						React.createElement("div", {className: "col-md-4 step"}, 
 							React.createElement("i", {className: "fa fa-magic fa-3x"}), 
-							React.createElement("p", {className: "step-title"}, "Wise"), 
-							React.createElement("p", {className: "step-text"}, "The application knows the most relevant tags for each hostel")
-						), 
-						React.createElement("div", {className: "col-md-3 step"}, 
-							React.createElement("i", {className: "fa fa-sort fa-3x"}), 
 							React.createElement("p", {className: "step-title"}, "Smart"), 
-							React.createElement("p", {className: "step-text"}, "The application knows how to sort the hostels, based on tags")
+							React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on this information to get the most relevant keywords (tags) of each hostel")
 						), 
-						React.createElement("div", {className: "col-md-3 step"}, 
-							React.createElement("i", {className: "fa fa-rocket fa-3x"}), 
-							React.createElement("p", {className: "step-title"}, "Interactive"), 
-							React.createElement("p", {className: "step-text"}, "Play with tags as you refine your search")
+						React.createElement("div", {className: "col-md-4 step"}, 
+							React.createElement("i", {className: "fa fa-dot-circle-o fa-3x"}), 
+							React.createElement("p", {className: "step-title"}, "Intuitive"), 
+							React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make, to give you the most relevant hostels")
+						)
+						)
 						)
 					)
 				)
