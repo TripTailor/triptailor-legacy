@@ -1,16 +1,16 @@
 @(locationOpt: Option[models.Location])(implicit req: RequestHeader)
 
 @main("TripTailor Hostels") {
-    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hostels.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hostels.css")">
 } {
-		<script type="text/javascript">
-			@locationOpt.fold {
-				var city    = undefined;
-				var country = undefined;
-			} { location =>
-			var city    = "@location.city";
-			var country = "@location.country";
-			}
-		</script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/components/hostels.js")"></script>
+  <script type="text/javascript">
+    @locationOpt.fold {
+      var city    = undefined;
+      var country = undefined;
+    } { location =>
+      var city    = "@location.city";
+      var country = "@location.country";
+    }
+  </script>
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/components/hostels.js")"></script>
 }

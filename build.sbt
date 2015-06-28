@@ -1,6 +1,6 @@
 name         := """triptailor"""
 version      := "1.0-SNAPSHOT"
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 val dbDependencies = Seq(
   "mysql" % "mysql-connector-java" % "5.1.35",
@@ -18,8 +18,7 @@ val jsWebJars = Seq(
 
 val cssWebJars = Seq(
   "org.webjars" % "font-awesome" % "4.3.0-2",
-  "org.webjars" % "bootstrap" % "3.3.5",
-  "org.webjars" % "font-awesome" % "4.3.0-2"
+  "org.webjars" % "bootstrap" % "3.3.5"
 )
 /****/
 
