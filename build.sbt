@@ -18,8 +18,7 @@ val jsWebJars = Seq(
 
 val cssWebJars = Seq(
   "org.webjars" % "font-awesome" % "4.3.0-2",
-  "org.webjars" % "bootstrap" % "3.3.5",
-  "org.webjars" % "font-awesome" % "4.3.0-2"
+  "org.webjars" % "bootstrap" % "3.3.5"
 )
 /****/
 
