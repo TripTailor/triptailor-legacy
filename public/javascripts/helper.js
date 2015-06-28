@@ -39,9 +39,10 @@ var getStringTags = function(tagsArr) {
 	return tags;
 }
 
-var shareFB = function() {
+var shareFB = function(e) {
 	FB.ui({
 		method: 'share',
 		href: window.location.href,
 	}, function(response){});
+	e.preventDefault();
 }
