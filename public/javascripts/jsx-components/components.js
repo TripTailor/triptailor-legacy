@@ -23,8 +23,8 @@ var TripTailorNavBar = React.createClass({
 							{/* <li><a href="#">About us</a></li> */}
 							{/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */}
 							<li>
-								<a className="fb-link" href="#" onClick={shareFB}><img src=""></img></a>
-								<a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src=""></img></a>
+								<a className="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-20.png").absoluteURL()}></img></a>
+								<a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-20.png").absoluteURL()}></img></a>
 							</li>
 						</ul>
 					</div>
@@ -51,8 +51,8 @@ var TripTailorFooter = React.createClass({
 						<p className="footer-header">Spread the love</p>
 						{/* <div className="addthis_sharing_toolbox"></div> */}
 						<ul className="list-inline">
-							<li><a className="fb-link" href="#" onClick={shareFB}><img src=""></img></a></li>
-							<li><a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src=""></img></a></li>
+							<li><a className="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-25.png").absoluteURL()}></img></a></li>
+							<li><a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-25.png").absoluteURL()}></img></a></li>
 						</ul>
 					</div>
 				</div>

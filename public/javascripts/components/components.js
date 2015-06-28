@@ -23,8 +23,8 @@ var TripTailorNavBar = React.createClass({displayName: "TripTailorNavBar",
 							/* <li><a href="#">About us</a></li> */
 							/* <li><a className="a-addthis" href="#"><div className="addthis_sharing_toolbox addthis_top"></div></a></li> */
 							React.createElement("li", null, 
-								React.createElement("a", {className: "fb-link", href: "#", onClick: shareFB}, React.createElement("img", {src: ""})), 
-								React.createElement("a", {className: "tw-link", href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, React.createElement("img", {src: ""}))
+								React.createElement("a", {className: "fb-link", href: "#", onClick: shareFB}, React.createElement("img", {src: jsRoutes.controllers.Assets.at("images/fb-20.png").absoluteURL()})), 
+								React.createElement("a", {className: "tw-link", href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, React.createElement("img", {src: jsRoutes.controllers.Assets.at("images/tw-20.png").absoluteURL()}))
 							)
 						)
 					)
@@ -51,8 +51,8 @@ var TripTailorFooter = React.createClass({displayName: "TripTailorFooter",
 						React.createElement("p", {className: "footer-header"}, "Spread the love"), 
 						/* <div className="addthis_sharing_toolbox"></div> */
 						React.createElement("ul", {className: "list-inline"}, 
-							React.createElement("li", null, React.createElement("a", {className: "fb-link", href: "#", onClick: shareFB}, React.createElement("img", {src: ""}))), 
-							React.createElement("li", null, React.createElement("a", {className: "tw-link", href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, React.createElement("img", {src: ""})))
+							React.createElement("li", null, React.createElement("a", {className: "fb-link", href: "#", onClick: shareFB}, React.createElement("img", {src: jsRoutes.controllers.Assets.at("images/fb-25.png").absoluteURL()}))), 
+							React.createElement("li", null, React.createElement("a", {className: "tw-link", href: "https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}, React.createElement("img", {src: jsRoutes.controllers.Assets.at("images/tw-25.png").absoluteURL()})))
 						)
 					)
 				), 
