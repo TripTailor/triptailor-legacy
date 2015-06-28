@@ -21,6 +21,7 @@ class ApplicationController @Inject()(dbConfigProvider: DatabaseConfigProvider) 
   def javascriptRoutes = Action { implicit request =>
     Ok(
       JavaScriptReverseRouter.apply("jsRoutes")(
+        routes.javascript.Assets.at,
         routes.javascript.ApplicationController.index,
         routes.javascript.ApplicationController.howItWorks,
         routes.javascript.HintsController.hostelHints,

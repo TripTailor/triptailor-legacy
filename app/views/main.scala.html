@@ -20,6 +20,7 @@
     <body>
         <!--JS Reverse routing-->
         @helper.javascriptRouter("jsRoutes")(
+            routes.javascript.Assets.at,
             routes.javascript.ApplicationController.index,
             routes.javascript.ApplicationController.howItWorks,
             routes.javascript.HintsController.hostelHints,
