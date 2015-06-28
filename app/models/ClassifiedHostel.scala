@@ -9,6 +9,7 @@ case class ClassifiedHostel(hostel: Hostel, rating: Double, orderedTags: Seq[Tag
 object ClassifiedHostel {
   implicit val classifiedHostelWrites = new Writes[ClassifiedHostel] {
     def writes(ch: ClassifiedHostel) = Json.obj(
+      "id"    -> ch.hostel.id,
       "name"  -> ch.hostel.name,
       "price" -> ch.hostel.price.map(_.setScale(2, RoundingMode.HALF_EVEN)),
       "url"   -> ch.hostel.url,
