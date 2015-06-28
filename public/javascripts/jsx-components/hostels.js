@@ -2,7 +2,7 @@ var HOSTELSTODISPLAY = 16;
 
 var Hostels = React.createClass({
 	getInitialState: function() {
-		return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: []};
+		return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
 	},
 	componentWillMount: function() {
 		this.getResults(getStringTags(this.state.tags));
@@ -48,7 +48,7 @@ var Hostels = React.createClass({
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
-				this.setState({results: data.classifiedHostels});
+				this.setState({results: data.classifiedHostels, searchId: data.searchID});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(route.absoluteURL(), status, err.toString());
@@ -84,7 +84,7 @@ var Hostels = React.createClass({
 			<div>
 				<TripTailorNavBar />
 				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} />
-				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} />
+				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} searchId={this.state.searchId} />
 				<TripTailorFooter />
 			</div>
 		);
@@ -211,7 +211,7 @@ var ResultsGrid = React.createClass({
 		var rows = [];
 		var results = [];
 		for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
-			results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} />);
+			results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
 			if((i + 1) % 4 == 0) {
 				rows.push(
 					<div key={rows.length} className="row">
@@ -238,6 +238,20 @@ var ResultsGrid = React.createClass({
 });
 
 var Result = React.createClass({
+	handleClick: function() {
+		$.ajax({
+			url: jsRoutes.controllers.StatsController.saveHostelClick(),
+			dataType: 'application/x-www-form-urlencoded',
+			type: route.type,
+			data: {hostelId: this.props.result.id, searchId: this.props.searchId},
+			success: function() {
+				console.log("Hostel click saved");
+			},
+			error: function(xhr, status, err) {
+				console.error(route.absoluteURL(), status, err.toString());
+			}.bind(this)
+		});
+	},
 	render: function() {
 		return (
 			<div className="col-md-3">

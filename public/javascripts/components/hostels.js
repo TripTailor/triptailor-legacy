@@ -2,7 +2,7 @@ var HOSTELSTODISPLAY = 16;
 
 var Hostels = React.createClass({displayName: "Hostels",
 	getInitialState: function() {
-		return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: []};
+		return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
 	},
 	componentWillMount: function() {
 		this.getResults(getStringTags(this.state.tags));
@@ -48,7 +48,7 @@ var Hostels = React.createClass({displayName: "Hostels",
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
-				this.setState({results: data.classifiedHostels});
+				this.setState({results: data.classifiedHostels, searchId: data.searchID});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(route.absoluteURL(), status, err.toString());
@@ -84,7 +84,7 @@ var Hostels = React.createClass({displayName: "Hostels",
 			React.createElement("div", null, 
 				React.createElement(TripTailorNavBar, null), 
 				React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag, alsoTags: this.state.alsoTags, addAlsoTag: this.addAlsoTag, removeSpecificAlsoTag: this.removeSpecificAlsoTag}), 
-				React.createElement(Content, {results: this.state.results, displayedResults: this.state.displayedResults, displayMoreResults: this.displayMoreResults}), 
+				React.createElement(Content, {results: this.state.results, displayedResults: this.state.displayedResults, displayMoreResults: this.displayMoreResults, searchId: this.state.searchId}), 
 				React.createElement(TripTailorFooter, null)
 			)
 		);
@@ -211,7 +211,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 		var rows = [];
 		var results = [];
 		for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
-			results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags}));
+			results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
 			if((i + 1) % 4 == 0) {
 				rows.push(
 					React.createElement("div", {key: rows.length, className: "row"}, 
@@ -238,6 +238,20 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 });
 
 var Result = React.createClass({displayName: "Result",
+	handleClick: function() {
+		$.ajax({
+			url: jsRoutes.controllers.StatsController.saveHostelClick(),
+			dataType: 'application/x-www-form-urlencoded',
+			type: route.type,
+			data: {hostelId: this.props.result.id, searchId: this.props.searchId},
+			success: function() {
+				console.log("Hostel click saved");
+			},
+			error: function(xhr, status, err) {
+				console.error(route.absoluteURL(), status, err.toString());
+			}.bind(this)
+		});
+	},
 	render: function() {
 		return (
 			React.createElement("div", {className: "col-md-3"}, 
