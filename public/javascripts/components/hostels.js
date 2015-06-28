@@ -48,7 +48,7 @@ var Hostels = React.createClass({displayName: "Hostels",
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
-				this.setState({results: data});
+				this.setState({results: data.classifiedHostels});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(route.absoluteURL(), status, err.toString());
@@ -242,10 +242,12 @@ var Result = React.createClass({displayName: "Result",
 		return (
 			React.createElement("div", {className: "col-md-3"}, 
 				React.createElement("div", {className: "result"}, 
+					React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#', target: "_blank", className: "result-a"}, 
 					React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
 					React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
-					React.createElement("div", {className: "result-book"}, React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#', target: "_blank", className: "result-a"}, "Book with HostelWorld")), 
+					React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 
 					React.createElement(TagsRow, {tags: this.props.result.tags, more: this.props.moreTags, showMoreTags: this.props.showMoreTags, showLessTags: this.props.showLessTags})
+					)
 				)
 			)
 		);

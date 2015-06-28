@@ -48,7 +48,7 @@ var Hostels = React.createClass({
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
-				this.setState({results: data});
+				this.setState({results: data.classifiedHostels});
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(route.absoluteURL(), status, err.toString());
@@ -242,10 +242,12 @@ var Result = React.createClass({
 		return (
 			<div className="col-md-3">
 				<div className="result">
+					<a href={this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#'} target="_blank" className="result-a">
 					<div className="result-name"><strong>{this.props.result.name}</strong></div>
 					<div className="result-price">{this.props.result.price} USD</div>
-					<div className="result-book"><a href={this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#'} target="_blank" className="result-a">Book with HostelWorld</a></div>
+					<div className="result-book"><div className="info">View in  HostelWorld</div></div>
 					<TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
+					</a>
 				</div>
 			</div>
 		);
