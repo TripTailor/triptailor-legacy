@@ -1,6 +1,6 @@
 name         := """triptailor"""
 version      := "1.0-SNAPSHOT"
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 val dbDependencies = Seq(
   "mysql" % "mysql-connector-java" % "5.1.35",
