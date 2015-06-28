@@ -1,21 +1,19 @@
 package db
 
-import com.google.inject.{ Inject, Singleton }
+import com.google.inject.{Inject, Singleton}
+import db.Tables._
 import org.joda.time.DateTime
-
 import play.api.db.slick._
-
 import slick.driver.MySQLDriver.api._
 import slick.profile.RelationalProfile
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-import db.Tables._
-
 @Singleton
 class StatsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[RelationalProfile] {
   import models.Stats
+
   import scala.annotation.tailrec
 
   type StatsRowResult = (String, Boolean, Option[Int], Int)

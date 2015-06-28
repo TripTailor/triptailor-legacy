@@ -15,7 +15,7 @@ import scala.concurrent.Future
 @Singleton
 class StatsController @Inject() (dbConfigProvider: DatabaseConfigProvider, statsDAO: StatsDAO) extends Controller {
 
-  def saveHostelClick(searchId: Int, hostelId: Int) = Action.async { implicit request =>
+  def saveHostelClick = Action.async { implicit request =>
     statsParamsBinding.bindFromRequest.fold(
       hasErrors = _ => Future(NotFound),
       success   = saveStats
