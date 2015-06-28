@@ -201,10 +201,12 @@ var ResultsGrid = React.createClass({
 	},
 	showMoreTags: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.setState({more: true});
 	},
 	showLessTags: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.setState({more: false});
 	},
 	render: function() {
@@ -239,8 +241,9 @@ var ResultsGrid = React.createClass({
 
 var Result = React.createClass({
 	handleClick: function() {
+		var route = jsRoutes.controllers.StatsController.saveHostelClick();
 		$.ajax({
-			url: jsRoutes.controllers.StatsController.saveHostelClick(),
+			url: route.absoluteURL(),
 			dataType: 'application/x-www-form-urlencoded',
 			type: route.type,
 			data: {hostelId: this.props.result.id, searchId: this.props.searchId},
@@ -256,7 +259,7 @@ var Result = React.createClass({
 		return (
 			<div className="col-md-3">
 				<div className="result">
-					<a href={this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#'} target="_blank" className="result-a">
+					<a href={this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#'} target="_blank" className="result-a" onClick={this.handleClick}>
 					<div className="result-name"><strong>{this.props.result.name}</strong></div>
 					<div className="result-price">{this.props.result.price} USD</div>
 					<div className="result-book"><div className="info">View in  HostelWorld</div></div>

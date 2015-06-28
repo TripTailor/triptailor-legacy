@@ -201,10 +201,12 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 	},
 	showMoreTags: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.setState({more: true});
 	},
 	showLessTags: function(e) {
 		e.preventDefault();
+		e.stopPropagation();
 		this.setState({more: false});
 	},
 	render: function() {
@@ -239,8 +241,9 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 
 var Result = React.createClass({displayName: "Result",
 	handleClick: function() {
+		var route = jsRoutes.controllers.StatsController.saveHostelClick();
 		$.ajax({
-			url: jsRoutes.controllers.StatsController.saveHostelClick(),
+			url: route.absoluteURL(),
 			dataType: 'application/x-www-form-urlencoded',
 			type: route.type,
 			data: {hostelId: this.props.result.id, searchId: this.props.searchId},
@@ -256,7 +259,7 @@ var Result = React.createClass({displayName: "Result",
 		return (
 			React.createElement("div", {className: "col-md-3"}, 
 				React.createElement("div", {className: "result"}, 
-					React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#', target: "_blank", className: "result-a"}, 
+					React.createElement("a", {href: this.props.result.url != 'null' ? this.props.result.url + "?affiliate=triptailor.co" : '#', target: "_blank", className: "result-a", onClick: this.handleClick}, 
 					React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
 					React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
 					React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 
