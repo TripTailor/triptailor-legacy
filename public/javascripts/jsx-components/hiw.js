@@ -57,24 +57,25 @@ var Content = React.createClass({
 				<div className="features-container">
 					<p id="features" className="title">Features</p>
 					<div className="row no-horizontal-margins">
-						<div className="col-md-10 col-md-offset-1">
-						<div className="row">
-						<div className="col-md-4 step">
+						<div className="col-md-3 step">
 							<i className="fa fa-expand fa-3x"></i>
 							<p className="step-title">Exhaustive</p>
-							<p className="step-text">We browsed the web to find information about almost every hostel in the world</p>
+							<p className="step-text">We browsed the web to find what people were saying about almost every hostel in the world</p>
 						</div>
-						<div className="col-md-4 step">
+						<div className="col-md-3 step">
 							<i className="fa fa-magic fa-3x"></i>
 							<p className="step-title">Smart</p>
-							<p className="step-text">We made a Natural Language Processing analysis on this information to get the most relevant keywords (tags) of each hostel</p>
+							<p className="step-text">We made a Natural Language Processing analysis on that information, to get the relevant keywords</p>
 						</div>
-						<div className="col-md-4 step">
+						<div className="col-md-3 step">
+							<i className="fa fa-arrows fa-3x"></i>
+							<p className="step-title">Contextual</p>
+							<p className="step-text">Hostel tags are keywords that people mentioned a lot, in a positive context</p>
+						</div>
+						<div className="col-md-3 step">
 							<i className="fa fa-dot-circle-o fa-3x"></i>
 							<p className="step-title">Intuitive</p>
 							<p className="step-text">We sort the hostels for each search you make, to give you the most relevant hostels</p>
-						</div>
-						</div>
 						</div>
 					</div>
 				</div>

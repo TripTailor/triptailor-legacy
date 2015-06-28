@@ -57,24 +57,25 @@ var Content = React.createClass({displayName: "Content",
 				React.createElement("div", {className: "features-container"}, 
 					React.createElement("p", {id: "features", className: "title"}, "Features"), 
 					React.createElement("div", {className: "row no-horizontal-margins"}, 
-						React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
-						React.createElement("div", {className: "row"}, 
-						React.createElement("div", {className: "col-md-4 step"}, 
+						React.createElement("div", {className: "col-md-3 step"}, 
 							React.createElement("i", {className: "fa fa-expand fa-3x"}), 
 							React.createElement("p", {className: "step-title"}, "Exhaustive"), 
-							React.createElement("p", {className: "step-text"}, "We browsed the web to find information about almost every hostel in the world")
+							React.createElement("p", {className: "step-text"}, "We browsed the web to find what people were saying about almost every hostel in the world")
 						), 
-						React.createElement("div", {className: "col-md-4 step"}, 
+						React.createElement("div", {className: "col-md-3 step"}, 
 							React.createElement("i", {className: "fa fa-magic fa-3x"}), 
 							React.createElement("p", {className: "step-title"}, "Smart"), 
-							React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on this information to get the most relevant keywords (tags) of each hostel")
+							React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on that information, to get the relevant keywords")
 						), 
-						React.createElement("div", {className: "col-md-4 step"}, 
+						React.createElement("div", {className: "col-md-3 step"}, 
+							React.createElement("i", {className: "fa fa-arrows fa-3x"}), 
+							React.createElement("p", {className: "step-title"}, "Contextual"), 
+							React.createElement("p", {className: "step-text"}, "Hostel tags are keywords that people mentioned a lot, in a positive context")
+						), 
+						React.createElement("div", {className: "col-md-3 step"}, 
 							React.createElement("i", {className: "fa fa-dot-circle-o fa-3x"}), 
 							React.createElement("p", {className: "step-title"}, "Intuitive"), 
 							React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make, to give you the most relevant hostels")
-						)
-						)
 						)
 					)
 				)
