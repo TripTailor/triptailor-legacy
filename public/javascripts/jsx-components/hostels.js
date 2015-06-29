@@ -246,8 +246,6 @@ var Result = React.createClass({
       url: route.absoluteURL(),
       type: route.type,
       data: { hostelId: this.props.result.id, searchId: this.props.searchId }
-    }).done( function(data, ts, xhr) {
-      console.log("Hostel click saved")
     }).fail( function(xhr, ts, e) {
       console.error(route.absoluteURL(), ts, e.toString())
     })
