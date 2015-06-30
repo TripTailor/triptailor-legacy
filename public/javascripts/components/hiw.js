@@ -4,8 +4,6 @@ var Header = React.createClass({displayName: "Header",
 			React.createElement("div", {className: "jumbotron"}, 
 				React.createElement("div", {className: "container-fluid"}, 
 
-					React.createElement(TripTailorNavBar, null), 
-
 					React.createElement("h1", {className: "header"}, "To travel is to live"), 
 					React.createElement("p", {className: "subheader"}, "Hans Christian Andersen")
 
@@ -96,4 +94,4 @@ var HIW = React.createClass({displayName: "HIW",
 	}
 });
 
-React.render(React.createElement(HIW, null), document.body);
+React.render(React.createElement(HIW, null), document.getElementById("content"));

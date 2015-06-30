@@ -82,7 +82,6 @@ var Hostels = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<TripTailorNavBar />
 				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} />
 				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} searchId={this.state.searchId} />
 			</div>
@@ -298,4 +297,4 @@ var Tag = React.createClass({
 	}
 });
 
-React.render(<Hostels />, document.body);
+React.render(<Hostels />, document.getElementById("content"));

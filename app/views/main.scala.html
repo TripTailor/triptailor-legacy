@@ -48,6 +48,32 @@
         <script type='text/javascript'src="@routes.Assets.at("javascripts/helper.js")"></script>
         <script type="text/javascript" src="@routes.Assets.at("javascripts/components/components.js")"></script>
 
+				<nav class="navbar navbar-triptailor">
+					<div class="container-fluid">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="@routes.ApplicationController.index"><span className="medium">TripTailor</span> Hostels</a>
+						</div>
+
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+							<ul class="nav navbar-nav navbar-right">
+								<li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
+								<!-- <li><a href="#">About us</a></li> -->
+								<li><a class="a-addthis" href="#"><div class="addthis_sharing_toolbox addthis_top"></div></a></li>
+								<!-- <li>
+								<a className="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-20.png").absoluteURL()}></img></a>
+								<a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-20.png").absoluteURL()}></img></a>
+								</li> -->
+							</ul>
+						</div>
+					</div>
+				</nav>
+
         @content
 
 				<div class="container-fluid footer">

@@ -82,7 +82,6 @@ var Hostels = React.createClass({displayName: "Hostels",
 	render: function() {
 		return (
 			React.createElement("div", null, 
-				React.createElement(TripTailorNavBar, null), 
 				React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag, alsoTags: this.state.alsoTags, addAlsoTag: this.addAlsoTag, removeSpecificAlsoTag: this.removeSpecificAlsoTag}), 
 				React.createElement(Content, {results: this.state.results, displayedResults: this.state.displayedResults, displayMoreResults: this.displayMoreResults, searchId: this.state.searchId})
 			)
@@ -298,4 +297,4 @@ var Tag = React.createClass({displayName: "Tag",
 	}
 });
 
-React.render(React.createElement(Hostels, null), document.body);
+React.render(React.createElement(Hostels, null), document.getElementById("content"));

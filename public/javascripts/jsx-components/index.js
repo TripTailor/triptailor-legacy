@@ -4,8 +4,6 @@ var Header = React.createClass({
 			<div className="jumbotron">
 				<div className="container-fluid">
 
-					<TripTailorNavBar />
-
 					<div className="row">
 						<div className="col-md-10 col-md-offset-1 text-center">
 							<h1 className="header">Looking for a hostel?</h1>
@@ -178,4 +176,4 @@ render: function() {
 				}
 });
 
-							React.render(<Index />, document.body);
+							React.render(<Index />, document.getElementById("content"));

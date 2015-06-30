@@ -4,8 +4,6 @@ var Header = React.createClass({
 			<div className="jumbotron">
 				<div className="container-fluid">
 
-					<TripTailorNavBar />
-
 					<h1 className="header">To travel is to live</h1>
 					<p className="subheader">Hans Christian Andersen</p>
 
@@ -96,4 +94,4 @@ var HIW = React.createClass({
 	}
 });
 
-React.render(<HIW />, document.body);
+React.render(<HIW />, document.getElementById("content"));

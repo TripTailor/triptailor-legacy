@@ -4,8 +4,6 @@ var Header = React.createClass({displayName: "Header",
 			React.createElement("div", {className: "jumbotron"}, 
 				React.createElement("div", {className: "container-fluid"}, 
 
-					React.createElement(TripTailorNavBar, null), 
-
 					React.createElement("div", {className: "row"}, 
 						React.createElement("div", {className: "col-md-10 col-md-offset-1 text-center"}, 
 							React.createElement("h1", {className: "header"}, "Looking for a hostel?"), 
@@ -178,4 +176,4 @@ render: function() {
 				}
 });
 
-							React.render(React.createElement(Index, null), document.body);
+							React.render(React.createElement(Index, null), document.getElementById("content"));
