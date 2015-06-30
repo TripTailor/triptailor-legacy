@@ -84,8 +84,7 @@ var Hostels = React.createClass({displayName: "Hostels",
 			React.createElement("div", null, 
 				React.createElement(TripTailorNavBar, null), 
 				React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag, alsoTags: this.state.alsoTags, addAlsoTag: this.addAlsoTag, removeSpecificAlsoTag: this.removeSpecificAlsoTag}), 
-				React.createElement(Content, {results: this.state.results, displayedResults: this.state.displayedResults, displayMoreResults: this.displayMoreResults, searchId: this.state.searchId}), 
-				React.createElement(TripTailorFooter, null)
+				React.createElement(Content, {results: this.state.results, displayedResults: this.state.displayedResults, displayMoreResults: this.displayMoreResults, searchId: this.state.searchId})
 			)
 		);
 	}

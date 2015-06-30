@@ -112,8 +112,7 @@ var Index = React.createClass({displayName: "Index",
 		return (
 			React.createElement("div", null, 
 				React.createElement(Header, null), 
-				React.createElement(Content, null), 
-				React.createElement(TripTailorFooter, null)
+				React.createElement(Content, null)
 			)
 		);
 	}

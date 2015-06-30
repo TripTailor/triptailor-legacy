@@ -91,7 +91,6 @@ var HIW = React.createClass({
 				<Header />
 				<Menu />
 				<Content />
-				<TripTailorFooter />
 			</div>
 		);
 	}

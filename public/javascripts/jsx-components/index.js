@@ -113,7 +113,6 @@ var Index = React.createClass({
 			<div>
 				<Header />
 				<Content />
-				<TripTailorFooter />
 			</div>
 		);
 	}

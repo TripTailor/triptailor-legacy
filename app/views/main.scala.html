@@ -42,8 +42,7 @@
             routes.javascript.StatsController.saveHostelClick
         )
 
-        <!-- Addthis -->
-				<!-- <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script> -->
+        
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("react.min.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
         <script type='text/javascript'src="@routes.Assets.at("javascripts/helper.js")"></script>
@@ -51,9 +50,38 @@
 
         @content
 
-				<div id="fb-root"></div>
-				<script src="@routes.Assets.at("javascripts/share-sdks.js")"></script>
+				<div class="container-fluid footer">
+					<div class="row">
+						<div class="col-sm-4">
+							<p class="footer-header">Company</p>
+							<ul class="list-unstyled footer-list">
+								<li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
+								<!-- <li>About Us</li>
+								<li>Contact</li> -->
+							</ul>
+						</div>
+						<div class="col-sm-4 love">
+							<p class="footer-header">Spread the love</p>
+							<div class="addthis_sharing_toolbox"></div>
+							<!-- <ul class="list-inline">
+								<li><a class="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-25.png").absoluteURL()}></img></a></li>
+								<li><a class="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-25.png").absoluteURL()}></img></a></li>
+						</ul> -->
+						</div>
+					</div>
+					<div class="row disclaimer">
+						<div class="col-sm-12">
+							<p>&copy; TripTailor</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Manual share -->
+				<!-- <div id="fb-root"></div>
+				<script src="@routes.Assets.at("javascripts/share-sdks.js")"></script> -->
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>
+				<!-- Addthis -->
+				<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
 				<script src="@routes.Assets.at("javascripts/uservoice.js")"></script>
     </body>
 </html>

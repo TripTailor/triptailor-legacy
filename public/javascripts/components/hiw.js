@@ -90,8 +90,7 @@ var HIW = React.createClass({displayName: "HIW",
 			React.createElement("div", null, 
 				React.createElement(Header, null), 
 				React.createElement(Menu, null), 
-				React.createElement(Content, null), 
-				React.createElement(TripTailorFooter, null)
+				React.createElement(Content, null)
 			)
 		);
 	}
