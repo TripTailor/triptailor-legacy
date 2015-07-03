@@ -38,6 +38,14 @@ val consoleCommands =
     | import play.api.{ Play, DefaultApplication, Mode }
   """.stripMargin
 
+/** Docker settings **/
+maintainer in Docker := "Samuel Heaney <sheaney@gmail.com>"
+dockerRepository     :=  Some("sheaney")
+dockerBaseImage      :=  "anapsix/docker-oracle-java8"
+dockerExposedPorts   :=  Seq(9000)
+dockerEntrypoint     :=  Seq(s"bin/${executableScriptName.value}", "-J-Xmx384m", "-J-server")
+/***/
+
 libraryDependencies ++= Seq(
   jdbc,
   cache,
