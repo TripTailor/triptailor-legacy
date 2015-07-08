@@ -140,40 +140,40 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 	submit: function(e) {
 		/*if(cityVal == "")
 			city.style.border = "2px solid #5F2B25"; */
-						if(this.state.location == '') {
-							e.preventDefault();
-							return;
-						}
-						var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-						if(this.state.tags.length > 0) {
-							url += "&tags=" + this.state.tags[0];
-							for(var i = 1; i < this.state.tags.length; i++)
-								url += "-" + this.state.tags[i];
-						}
-						React.findDOMNode(this.refs.submit).href = url + adVariables();
-					},
-enterSubmit: function() {
-							 React.findDOMNode(this.refs.submit).click();
-						 },
-render: function() {
-					return (
-							React.createElement("div", {className: "row"}, 
-							React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
-							React.createElement("div", {className: "row form-row"}, 
-							React.createElement("div", {className: "col-md-5 form-col-left"}, 
+		if(this.state.location == '') {
+			e.preventDefault();
+			return;
+		}
+		var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+		if(this.state.tags.length > 0) {
+			url += "&tags=" + this.state.tags[0];
+			for(var i = 1; i < this.state.tags.length; i++)
+			url += "-" + this.state.tags[i];
+		}
+		React.findDOMNode(this.refs.submit).href = url + adVariables();
+	},
+	enterSubmit: function() {
+		React.findDOMNode(this.refs.submit).click();
+	},
+	render: function() {
+		return (
+			React.createElement("div", {className: "row"}, 
+				React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
+					React.createElement("div", {className: "row form-row"}, 
+						React.createElement("div", {className: "col-md-5 form-col-left"}, 
 							React.createElement(TripTailorAutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.state.location, updateValue: this.updateLocationValue, submit: this.enterSubmit})
-							), 
-							React.createElement("div", {className: "col-md-5 form-col-center"}, 
-							React.createElement(TripTailorAutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.state.query, updateValue: this.updateQueryValue, submit: this.enterSubmit, tags: this.state.tags, addTag: this.addTag, removeTag: this.removeTag})
-							), 
-							React.createElement("div", {className: "col-md-2 a-col"}, 
+						), 
+						React.createElement("div", {className: "col-md-5 form-col-center"}, 
+							React.createElement(TripTailorAutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.state.query, updateValue: this.updateQueryValue, submit: this.enterSubmit, tags: this.state.tags, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag})
+						), 
+						React.createElement("div", {className: "col-md-2 a-col"}, 
 							React.createElement("a", {ref: "submit", className: "submit", href: "", onClick: this.submit}, "Search")
-							)
-							)
-							)
-							)
-							);
-				}
+						)
+					)
+				)
+			)
+		);
+	}
 });
 
-							React.render(React.createElement(Index, null), document.getElementById("content"));
+React.render(React.createElement(Index, null), document.getElementById("content"));
