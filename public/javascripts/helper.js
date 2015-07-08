@@ -1,3 +1,6 @@
+var SCREEN_WIDTH = $(window).width();
+var WIDTH_BREAKPOINT = 992;
+
 var adVariables = function() {
 	var adVariable = getQueryVariable("gclid");
 	if(adVariable.length > 0)

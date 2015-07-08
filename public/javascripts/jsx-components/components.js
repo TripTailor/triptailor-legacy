@@ -266,7 +266,7 @@ var TripTailorInputTag = React.createClass({
 	},
 	render: function() {
 		return (
-			<div className="input-tag">{this.props.value}<span className="close-tag" onClick={this.remove}><strong>x</strong></span></div>
+			<div className="input-tag" onClick={SCREEN_WIDTH < WIDTH_BREAKPOINT ? this.remove : ''}>{this.props.value}<span className="close-tag" onClick={this.remove}><strong>x</strong></span></div>
 		);
 	}
 });
