@@ -195,6 +195,19 @@ var TripTailorAutoCompleteRow = React.createClass({
 
 var TripTailorAutoCompleteTags = React.createClass({
 	mixins: [AutoCompleteMixin],
+	componentDidUpdate: function() {
+		var input = React.findDOMNode(this.refs.query);
+		if($(input).width() < 36)
+			input.setAttribute("readonly", true);
+		else
+			input.removeAttribute("readonly");
+
+		var size = 30;
+		for(var i = 0; i < this.props.tags.length; i++)
+			size += $(React.findDOMNode(this.refs["tag-" + i])).width() + 10;
+		if(size > $(React.findDOMNode(this.refs["tags-container"])).width())
+			this.props.removeTag();
+	},
 	elementClick: function(elementValue) {
 		this.props.addTag(elementValue);
 		this.props.updateValue("");
@@ -242,12 +255,12 @@ var TripTailorAutoCompleteTags = React.createClass({
 	render: function() {
 		var tags = $.map(this.props.tags, function(value, i) {
 			return (
-				<TripTailorInputTag key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
+				<TripTailorInputTag ref={"tag-" + i} key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
 			);
 		}.bind(this));
 
 		return (
-			<div className="autocomplete-tags-container">
+			<div ref="tags-container" className="autocomplete-tags-container">
 				<div className="tag-search-container">
 					{tags}
 					<div className="tag-search-input">

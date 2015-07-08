@@ -30,10 +30,7 @@ body {
 	border-right: 1px solid #DBDFE5;
 }
 .tag-search-container {
-	display: table;
-	width: 100%;
 	border-spacing: 10px 4px;
-	padding: 0 5px;
 }
 .also {
 	margin-top: 25px;

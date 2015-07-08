@@ -187,10 +187,11 @@ body {
 	border-radius: 5px;
 }
 .tag-search-container {
-	display: table;
 	width: 100%;
 	border-spacing: 10px 6px;
-	padding: 0 5px;
+	padding-left: 5px;
+	padding-right: 15px;
+	overflow: hidden;
 }
 .tag-search-input {
 	display: table-cell;
@@ -200,6 +201,9 @@ body {
 	padding: 0;
 	height: 30px;
 	border: none !important;
+}
+.input-tags[readonly] {
+	background-color: transparent;
 }
 .input-tag {
 	display: table-cell;
