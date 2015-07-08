@@ -25,7 +25,6 @@
 	border-radius: 0;
 }
 
-
 /*** General style ***/
 
 body {
@@ -102,7 +101,6 @@ body {
 	border: none;
 }
 
-
 /*** Footer ***/
 
 .footer {
@@ -137,6 +135,7 @@ body {
 }
 
 /** Jumbotron **/
+
 .jumbotron {
 	padding-bottom: 156px;
 	padding-left: 0;
@@ -265,6 +264,11 @@ body {
   .navbar-triptailor .navbar-collapse {
     padding: 0;
   }
+
+	.jumbotron {
+		padding-top: 50px;
+		margin-top: -50px;
+	}
 
 	.form-col-left, .form-col-center, .a-col {
 		margin-top: 0;
