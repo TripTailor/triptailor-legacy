@@ -66,11 +66,9 @@ body {
 	color: #000;
 	margin-bottom: 0;
 }
-.tip-a {
+.tip-a:link, .tip-a:visited, .tip-a:hover, .tip-a:active  {
 	color: inherit;
-}
-.tip-a:hover, .tip-a:active, .tip-a:link {
-	color: inherit;
+	text-decoration: none;
 }
 .tip-big {
 	height: 300px;
