@@ -1,15 +1,5 @@
 .jumbotron {
-	padding-bottom: 156px;
-	padding-left: 0;
-	padding-right: 0;
-	margin-bottom: 0;
 	background: url(../images/hiw.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-	padding-top: 151px;
-	margin-top: -151px;
 }
 .navbar-brand {
 	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;

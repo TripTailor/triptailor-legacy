@@ -25,23 +25,10 @@ body {
 
 /*** Header ***/
 .jumbotron {
-	padding-bottom: 114px;
-	padding-left: 0;
-	padding-right: 0;
-	margin-bottom: 0;
 	background: url(../images/sf.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
-	padding-top: 151px;
-	margin-top: -151px;
 }
 .navbar-brand {
 	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-}
-.nav .navbar-nav {
-	margin-top: 10px;
 }
 .navbar-triptailor .navbar-nav>li>a {
 	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
