@@ -47,8 +47,10 @@ var TripTailorAutoCompleteInput = React.createClass({
 		this.setState({hints: [], selectedItem: -1});
 	},
 	handleKeyUp: function(e) {
-		if(e.keyCode == 27)
+		if(e.keyCode == 27) {
+			this.props.updateValue(this.state.hints[this.state.selectedItem]);
 			this.setState({hints: [], selectedItem: -1});
+		}
 		else if(e.keyCode == 13) {
 			if(this.state.selectedItem >= 0) {
 				this.props.updateValue(this.state.hints[this.state.selectedItem]);
@@ -74,6 +76,87 @@ var TripTailorAutoCompleteInput = React.createClass({
 		return (
 			<div>
 				<input ref="query" type="text" className="form-control inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
+			</div>
+		);
+	}
+});
+
+var TripTailorAutoCompleteTags = React.createClass({
+	mixins: [AutoCompleteMixin],
+	componentDidUpdate: function() {
+		var input = React.findDOMNode(this.refs.query);
+		if($(input).width() < 36)
+			input.setAttribute("readonly", true);
+		else
+			input.removeAttribute("readonly");
+
+		var size = 30;
+		for(var i = 0; i < this.props.tags.length; i++)
+			size += $(React.findDOMNode(this.refs["tag-" + i])).width() + 10;
+		if(size > $(React.findDOMNode(this.refs["tags-container"])).width())
+			this.props.removeTag();
+	},
+	elementClick: function(elementValue) {
+		this.props.addTag(elementValue);
+		this.props.updateValue("");
+		this.setState({hints: [], selectedItem: -1});
+	},
+	handleKeyUp: function(e) {
+		if(e.keyCode == 27) {
+			var value = React.findDOMNode(this.refs.query).value;
+			if(value.length > 0)
+				this.props.addTag(value.toLowerCase());
+			this.props.updateValue("");
+			this.setState({hints: [], selectedItem: -1});
+		}
+		else if(e.keyCode == 13) {
+			if(this.state.selectedItem >= 0) {
+				this.props.addTag(this.state.hints[this.state.selectedItem]);
+				this.props.updateValue("");
+				this.setState({hints: [], selectedItem: -1});
+			}
+			else
+				this.props.submit();
+		}
+		else if(e.keyCode == 32) {
+			if(this.props.value.trim().length > 0)
+				this.props.addTag(this.props.value.trim().toLowerCase());
+			this.props.updateValue("");
+		}
+	},
+	handleKeyDown: function(e) {
+		if(e.keyCode == 40 && this.state.selectedItem < this.state.hints.length - 1) {
+			this.setState({selectedItem: this.state.selectedItem + 1});
+		}
+		else if(e.keyCode == 38 && this.state.selectedItem > 0) {
+			this.setState({selectedItem: this.state.selectedItem - 1});
+		}
+		else if(e.keyCode == 9 && this.state.selectedItem >= 0) {
+			e.preventDefault();
+			this.props.addTag(this.state.hints[this.state.selectedItem]);
+			this.props.updateValue("");
+			this.setState({hints: [], selectedItem: -1});
+		}
+		else if(e.keyCode == 8 && this.props.value == "") {
+			this.props.removeTag();
+		}
+	},
+	render: function() {
+		var tags = $.map(this.props.tags, function(value, i) {
+			return (
+				<TripTailorInputTag ref={"tag-" + i} key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
+			);
+		}.bind(this));
+
+		return (
+			<div ref="tags-container" className="autocomplete-tags-container">
+				<div className="tag-search-container">
+					{tags}
+					<div className="tag-search-input">
+						<input ref="query" type="text" className="form-control input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+					</div>
+				</div>
 				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
 			</div>
 		);
@@ -128,89 +211,6 @@ var TripTailorAutoCompleteRow = React.createClass({
 	}
 });
 
-var TripTailorAutoCompleteTags = React.createClass({
-	mixins: [AutoCompleteMixin],
-	componentDidUpdate: function() {
-		var input = React.findDOMNode(this.refs.query);
-		if($(input).width() < 36)
-			input.setAttribute("readonly", true);
-		else
-			input.removeAttribute("readonly");
-
-		var size = 30;
-		for(var i = 0; i < this.props.tags.length; i++)
-			size += $(React.findDOMNode(this.refs["tag-" + i])).width() + 10;
-		if(size > $(React.findDOMNode(this.refs["tags-container"])).width())
-			this.props.removeTag();
-	},
-	elementClick: function(elementValue) {
-		this.props.addTag(elementValue);
-		this.props.updateValue("");
-		this.setState({hints: [], selectedItem: -1});
-	},
-	handleKeyUp: function(e) {
-		if(e.keyCode == 27) {
-			var value = React.findDOMNode(this.refs.query).value;
-			if(value.length > 0)
-				this.props.addTag(value.toLowerCase());
-			this.props.updateValue("");
-			this.setState({hints: [], selectedItem: -1});
-		}
-		else if(e.keyCode == 13) {
-			if(this.state.selectedItem >= 0) {
-				this.props.addTag(this.state.hints[this.state.selectedItem]);
-				this.props.updateValue("");
-				this.setState({hints: [], selectedItem: -1});
-			}
-			else
-				this.props.submit();
-		}
-		else if(e.keyCode == 32) {
-			if(this.props.value.trim().length > 0)
-				this.props.addTag(this.props.value.trim().toLowerCase());
-			this.props.updateValue("");
-		}
-	},
-	handleKeyDown: function(e) {
-		if(e.keyCode == 40 && this.state.selectedItem < this.state.hints.length - 1) {
-			e.preventDefault();
-			this.setState({selectedItem: this.state.selectedItem + 1});
-		}
-		else if(e.keyCode == 38 && this.state.selectedItem > 0) {
-			e.preventDefault();
-			this.setState({selectedItem: this.state.selectedItem - 1});
-		}
-		else if(e.keyCode == 9 && this.state.selectedItem >= 0) {
-			e.preventDefault();
-			this.props.addTag(this.state.hints[this.state.selectedItem]);
-			this.props.updateValue("");
-			this.setState({hints: [], selectedItem: -1});
-		}
-		else if(e.keyCode == 8 && this.props.value == "") {
-			this.props.removeTag();
-		}
-	},
-	render: function() {
-		var tags = $.map(this.props.tags, function(value, i) {
-			return (
-				<TripTailorInputTag ref={"tag-" + i} key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
-			);
-		}.bind(this));
-
-		return (
-			<div ref="tags-container" className="autocomplete-tags-container">
-				<div className="tag-search-container">
-					{tags}
-					<div className="tag-search-input">
-						<input ref="query" type="text" className="form-control input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
-					</div>
-				</div>
-				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
-			</div>
-		);
-	}
-});
-
 var TripTailorInputTag = React.createClass({
 	remove: function() {
 		this.props.removeSpecificTag(this.props.index);
@@ -218,16 +218,6 @@ var TripTailorInputTag = React.createClass({
 	render: function() {
 		return (
 			<div className="input-tag" onClick={SCREEN_WIDTH < WIDTH_BREAKPOINT ? this.remove : ''}>{this.props.value}<span className="close-tag" onClick={this.remove}><strong>x</strong></span></div>
-		);
-	}
-});
-
-var TripTailorLoader = React.createClass({
-	render: function() {
-		return (
-			<div className="loader">
-				<img src="../images/loader.gif" />
-			</div>
 		);
 	}
 });
