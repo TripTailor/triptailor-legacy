@@ -74,7 +74,7 @@ var AutoCompleteMixin = {
 		var input = React.findDOMNode(this.refs.query);
 		var value = input.value;
 		setTimeout(function() {
-			if(value.trim().length > 0  && value == input.value) {
+			if(value.trim().length > 0 && $(input).is(":focus") && value == input.value) {
 				$.ajax({
 					url: this.props.url + this.props.value.trim().replace(/ /g, "-"),
 					dataType: 'json',
