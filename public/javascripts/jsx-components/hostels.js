@@ -46,7 +46,7 @@ var Hostels = React.createClass({
 	getSuggestions: function() {
 		var route = jsRoutes.controllers.HintsController.tagSuggestions();
 		$.ajax({
-			url: route.absoluteURL() + "?location=" + city + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
+			url: route.absoluteURL() + "?location=" + city.replace(", ", ",") + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
@@ -110,8 +110,6 @@ var AutoCompleteSearch = React.createClass({
 
 var AlsoTry = React.createClass({
 	submit: function(e) {
-		/*if(cityVal == "")
-			city.style.border = "2px solid #5F2B25"; */
 		if(this.props.location == '') {
 			e.preventDefault();
 			return;

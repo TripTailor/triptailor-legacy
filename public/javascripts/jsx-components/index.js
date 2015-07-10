@@ -122,8 +122,6 @@ var AutoCompleteSearch = React.createClass({
 		return {location: '', query: '', tags: []};
 	},
 	submit: function(e) {
-		/*if(cityVal == "")
-			city.style.border = "2px solid #5F2B25"; */
 		if(this.state.location == '') {
 			e.preventDefault();
 			return;
