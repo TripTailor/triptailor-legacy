@@ -1,22 +1,22 @@
 var HOSTELSTODISPLAY = 16;
 
 var Hostels = React.createClass({
-	mixins: [AutoCompleteMixin],
+	mixins: [AutoCompleteContainerMixin],
 	getInitialState: function() {
 		return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
 	},
 	componentWillMount: function() {
-		this.getResults(getStringTags(this.state.tags));
-		this.getSuggestions();
+		this.getResults(this.state.location, this.state.tags);
+		this.getSuggestions(this.state.location);
 	},
 	hostelsAddTag: function(value) {
-		this.getResults(getStringTags(this.addTag(value)));
+		this.getResults(this.state.location, this.addTag(value));
 	},
 	hostelsRemoveTag: function() {
-		this.getResults(getStringTags(this.removeTag()));
+		this.getResults(this.state.location, this.removeTag());
 	},
 	hostelsRemoveSpecificTag: function(i) {
-		this.getResults(getStringTags(this.removeSpecificTag(i)));
+		this.getResults(this.state.location, this.removeSpecificTag(i));
 	},
 	removeSpecificAlsoTag: function(i) {
 		this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
@@ -24,13 +24,13 @@ var Hostels = React.createClass({
 	displayMoreResults: function() {
 		this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
 	},
-	getResults: function(tags) {
+	getResults: function(location, tags) {
 		var route;
-		var location = city.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-		if (tags === "")
+		location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+		if (tags.length == 0)
 			route = jsRoutes.controllers.SearchController.displayAll(location);
 		else
-			route = jsRoutes.controllers.SearchController.classify(location, tags);
+			route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags));
 		$.ajax({
 			url: route.absoluteURL(),
 			dataType: 'json',
@@ -43,10 +43,10 @@ var Hostels = React.createClass({
 			}.bind(this)
 		});
 	},
-	getSuggestions: function() {
+	getSuggestions: function(location) {
 		var route = jsRoutes.controllers.HintsController.tagSuggestions();
 		$.ajax({
-			url: route.absoluteURL() + "?location=" + city.replace(", ", ",") + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
+			url: route.absoluteURL() + "?location=" + location.replace(", ", ",") + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {
@@ -70,7 +70,7 @@ var Hostels = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.hostelsAddTag} removeTag={this.hostelsRemoveTag} removeSpecificTag={this.hostelsRemoveSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} />
+				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.hostelsAddTag} removeTag={this.hostelsRemoveTag} removeSpecificTag={this.hostelsRemoveSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} getResults={this.getResults} />
 				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} searchId={this.state.searchId} />
 			</div>
 		);
@@ -78,13 +78,10 @@ var Hostels = React.createClass({
 });
 
 var SearchHeader = React.createClass({
-	enterSubmit: function() {
-		this.refs.also.enterSubmit();
-	},
 	render: function() {
 		return (
 			<div className="container-fluid header">
-				<AutoCompleteSearch {...this.props} enterSubmit={this.enterSubmit} />
+				<AutoCompleteSearch {...this.props} />
 				<AlsoTry ref="also" location={this.props.location} tags={this.props.tags} alsoTags={this.props.alsoTags} addTag={this.props.addTag} removeSpecificAlsoTag={this.props.removeSpecificAlsoTag} />
 			</div>
 		);
@@ -97,12 +94,40 @@ var AutoCompleteSearch = React.createClass({
 			<div className="row no-horizontal-margins">
 				<div className="col-md-4 form-col-left">
 					<p className="header-label" ><strong>Location</strong></p>
-					<TripTailorAutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} submit={this.props.enterSubmit} />
+					<AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} getResults={this.props.getResults} tags={this.props.tags} />
 				</div>
 				<div className="col-md-8 form-col-center">
 					<p className="header-label" ><strong>Tags</strong></p>
-					<TripTailorAutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.props.query} updateValue={this.props.updateQueryValue} submit={this.props.enterSubmit} tags={this.props.tags} addTag={this.props.addTag} removeTag={this.props.removeTag} removeSpecificTag={this.props.removeSpecificTag} />
+					<TripTailorAutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.props.query} updateValue={this.props.updateQueryValue} tags={this.props.tags} addTag={this.props.addTag} removeTag={this.props.removeTag} removeSpecificTag={this.props.removeSpecificTag} />
 				</div>
+			</div>
+		);
+	}
+});
+
+var AutoCompleteInput = React.createClass({
+	mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
+	hostelsElementClick: function(elementValue) {
+		this.elementClick(elementValue);
+		this.props.getResults(elementValue, this.props.tags);
+	},
+	hostelsHandleKeyUp: function(e) {
+		this.handleKeyUp(e);
+		if(e.keyCode == 13 && this.state.selectedItem >= 0)
+			this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags);
+	},
+	hostelsHandleKeyDown: function(e) {
+		this.handleKeyDown(e);
+		if(e.keyCode == 9 && this.state.selectedItem >= 0) {
+			e.preventDefault();
+			this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags);
+		}
+	},
+	render: function() {
+		return (
+			<div>
+				<input ref="query" type="text" className="form-control inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.hostelsHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.hostelsHandleKeyDown} />
+				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.hostelsElementClick} elementHover={this.updateSelectedItem} /> : ''}
 			</div>
 		);
 	}
@@ -121,9 +146,6 @@ var AlsoTry = React.createClass({
 			url += "-" + this.props.tags[i];
 		}
 		React.findDOMNode(this.refs.submit).href = url + adVariables();
-	},
-	enterSubmit: function() {
-		React.findDOMNode(this.refs.submit).click();
 	},
 	render: function() {
 		var tags = $.map(this.props.alsoTags, function(value, i) {

@@ -117,7 +117,7 @@ var Index = React.createClass({displayName: "Index",
 });
 
 var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
-	mixins: [AutoCompleteMixin],
+	mixins: [AutoCompleteContainerMixin],
 	getInitialState: function() {
 		return {location: '', query: '', tags: []};
 	},
@@ -143,7 +143,7 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 				React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
 					React.createElement("div", {className: "row form-row"}, 
 						React.createElement("div", {className: "col-md-5 form-col-left"}, 
-							React.createElement(TripTailorAutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.state.location, updateValue: this.updateLocationValue, submit: this.enterSubmit})
+							React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.state.location, updateValue: this.updateLocationValue, submit: this.enterSubmit})
 						), 
 						React.createElement("div", {className: "col-md-5 form-col-center"}, 
 							React.createElement(TripTailorAutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.state.query, updateValue: this.updateQueryValue, submit: this.enterSubmit, tags: this.state.tags, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag})
@@ -153,6 +153,18 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 						)
 					)
 				)
+			)
+		);
+	}
+});
+
+var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
+	mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
+	render: function() {
+		return (
+			React.createElement("div", null, 
+				React.createElement("input", {ref: "query", type: "text", className: "form-control inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
+				this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''
 			)
 		);
 	}

@@ -2,7 +2,7 @@ var BASEURL    = jsRoutes.controllers.ApplicationController.index().absoluteURL(
 var SEARCHURL  = jsRoutes.controllers.SearchController.search().absoluteURL();
 var TIMEOUT    = 200;
 
-var AutoCompleteMixin = {
+var AutoCompleteContainerMixin = {
 	updateLocationValue: function(value) {
 		this.setState({location: value});
 	},
@@ -27,7 +27,7 @@ var AutoCompleteMixin = {
 	}
 };
 
-var AutoCompleteInputMixin = {
+var AutoCompleteMixin = {
 	getInitialState: function() {
 		return {hints: [], selectedItem: -1};
 	},
@@ -65,8 +65,7 @@ var AutoCompleteInputMixin = {
 	}
 };
 
-var TripTailorAutoCompleteInput = React.createClass({
-	mixins: [AutoCompleteInputMixin],
+var AutoCompleteInputMixin = {
 	elementClick: function(elementValue) {
 		this.props.updateValue(elementValue);
 		this.setState({hints: [], selectedItem: -1});
@@ -96,19 +95,11 @@ var TripTailorAutoCompleteInput = React.createClass({
 			this.props.updateValue(this.state.hints[this.state.selectedItem]);
 			this.setState({hints: [], selectedItem: -1});
 		}
-	},
-	render: function() {
-		return (
-			<div>
-				<input ref="query" type="text" className="form-control inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
-				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
-			</div>
-		);
 	}
-});
+};
 
 var TripTailorAutoCompleteTags = React.createClass({
-	mixins: [AutoCompleteInputMixin],
+	mixins: [AutoCompleteMixin],
 	componentDidUpdate: function() {
 		var input = React.findDOMNode(this.refs.query);
 		if($(input).width() < 36)
