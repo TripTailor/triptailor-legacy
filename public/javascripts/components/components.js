@@ -267,7 +267,7 @@ var TripTailorAutoCompleteTags = React.createClass({displayName: "TripTailorAuto
 				React.createElement("div", {className: "tag-search-container"}, 
 					tags, 
 					React.createElement("div", {className: "tag-search-input"}, 
-						React.createElement("input", {ref: "query", type: "text", className: "form-control input-tags", placeholder: "Write some tags", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown})
+						React.createElement("input", {ref: "query", type: "text", className: "form-control input-tags", placeholder: this.props.tags.length == 0 ? "Write some tags" : "", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown})
 					)
 				), 
 				this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''
