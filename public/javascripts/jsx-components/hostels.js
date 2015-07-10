@@ -134,19 +134,6 @@ var AutoCompleteInput = React.createClass({
 });
 
 var AlsoTry = React.createClass({
-	submit: function(e) {
-		if(this.props.location == '') {
-			e.preventDefault();
-			return;
-		}
-		var url = SEARCHURL + "?location=" + this.props.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-		if(this.props.tags.length > 0) {
-			url += "&tags=" + this.props.tags[0];
-			for(var i = 1; i < this.props.tags.length; i++)
-			url += "-" + this.props.tags[i];
-		}
-		React.findDOMNode(this.refs.submit).href = url + adVariables();
-	},
 	render: function() {
 		var tags = $.map(this.props.alsoTags, function(value, i) {
 			return (
@@ -156,14 +143,11 @@ var AlsoTry = React.createClass({
 
 		return (
 			<div className="row also">
-				<div className="col-md-10">
+				<div className="col-md-12">
 					<p className="header-label"><strong>Also Try</strong></p>
 					<div className="also-tags-div">
 						{tags}
 					</div>
-				</div>
-				<div className="col-md-2 submit-col">
-					<a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
 				</div>
 			</div>
 		);
