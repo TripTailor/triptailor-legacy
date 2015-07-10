@@ -130,7 +130,6 @@ var TripTailorAutoCompleteInput = React.createClass({
 			this.setState({selectedItem: this.state.selectedItem - 1});
 		}
 		else if(e.keyCode == 9 && this.state.selectedItem >= 0) {
-			e.preventDefault();
 			this.props.updateValue(this.state.hints[this.state.selectedItem]);
 			this.setState({hints: [], selectedItem: -1});
 		}
