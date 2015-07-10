@@ -2,7 +2,7 @@ var HOSTELSTODISPLAY = 16;
 
 var Hostels = React.createClass({
 	getInitialState: function() {
-		return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
+		return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
 	},
 	componentWillMount: function() {
 		this.getResults(getStringTags(this.state.tags));
@@ -38,7 +38,7 @@ var Hostels = React.createClass({
 	},
 	getResults: function(tags) {
 		var route;
-		var location = (city + "," + country).replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
+		var location = city.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
 		if (tags === "")
 			route = jsRoutes.controllers.SearchController.displayAll(location);
 		else
@@ -58,7 +58,7 @@ var Hostels = React.createClass({
 	getSuggestions: function() {
 		var route = jsRoutes.controllers.HintsController.tagSuggestions();
 		$.ajax({
-			url: route.absoluteURL() + "?location=" + (city + "," + country) + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
+			url: route.absoluteURL() + "?location=" + city + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
 			dataType: 'json',
 			type: route.type,
 			success: function(data) {

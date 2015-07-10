@@ -5,11 +5,9 @@
 } {
   <script type="text/javascript">
     @locationOpt.fold {
-      var city    = undefined;
-      var country = undefined;
+      var city    = getQueryValue("location");
     } { location =>
-      var city    = "@location.city";
-      var country = "@location.country";
+      var city    = "@location.city, @location.country";
     }
   </script>
   <script type="text/javascript" src="@routes.Assets.at("javascripts/components/hostels.js")"></script>
