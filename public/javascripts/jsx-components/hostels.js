@@ -1,6 +1,7 @@
 var HOSTELSTODISPLAY = 16;
 
 var Hostels = React.createClass({
+	mixins: [AutoCompleteMixin],
 	getInitialState: function() {
 		return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
 	},
@@ -8,27 +9,14 @@ var Hostels = React.createClass({
 		this.getResults(getStringTags(this.state.tags));
 		this.getSuggestions();
 	},
-	updateLocationValue: function(value) {
-		this.setState({location: value});
+	hostelsAddTag: function(value) {
+		this.getResults(getStringTags(this.addTag(value)));
 	},
-	updateQueryValue: function(value) {
-		this.setState({query: value});
+	hostelsRemoveTag: function() {
+		this.getResults(getStringTags(this.removeTag()));
 	},
-	addTag: function(value) {
-		var tags = this.state.tags.slice(0, this.state.tags.length);
-		tags.push(value);
-		this.setState({tags: tags});
-		this.getResults(getStringTags(tags));
-	},
-	removeTag: function() {
-		var tags = this.state.tags.slice(0, this.state.tags.length - 1);
-		this.setState({tags: tags});
-		this.getResults(getStringTags(tags));
-	},
-	removeSpecificTag: function(i) {
-		var tags = this.state.tags.slice(0, i).concat(this.state.tags.slice(i + 1, this.state.tags.length));
-		this.setState({tags: tags});
-		this.getResults(getStringTags(tags));
+	hostelsRemoveSpecificTag: function(i) {
+		this.getResults(getStringTags(this.removeSpecificTag(i)));
 	},
 	removeSpecificAlsoTag: function(i) {
 		this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
@@ -82,7 +70,7 @@ var Hostels = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} />
+				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.hostelsAddTag} removeTag={this.hostelsRemoveTag} removeSpecificTag={this.hostelsRemoveSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} />
 				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} searchId={this.state.searchId} />
 			</div>
 		);

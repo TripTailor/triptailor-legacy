@@ -3,6 +3,31 @@ var SEARCHURL  = jsRoutes.controllers.SearchController.search().absoluteURL();
 var TIMEOUT    = 200;
 
 var AutoCompleteMixin = {
+	updateLocationValue: function(value) {
+		this.setState({location: value});
+	},
+	updateQueryValue: function(value) {
+		this.setState({query: value});
+	},
+	addTag: function(value) {
+		var tags = this.state.tags.slice(0, this.state.tags.length);
+		tags.push(value);
+		this.setState({tags: tags});
+		return tags;
+	},
+	removeTag: function() {
+		var tags = this.state.tags.slice(0, this.state.tags.length - 1);
+		this.setState({tags: tags});
+		return tags;
+	},
+	removeSpecificTag: function(i) {
+		var tags = this.state.tags.slice(0, i).concat(this.state.tags.slice(i + 1, this.state.tags.length));
+		this.setState({tags: tags});
+		return tags;
+	}
+};
+
+var AutoCompleteInputMixin = {
 	getInitialState: function() {
 		return {hints: [], selectedItem: -1};
 	},
@@ -41,7 +66,7 @@ var AutoCompleteMixin = {
 };
 
 var TripTailorAutoCompleteInput = React.createClass({displayName: "TripTailorAutoCompleteInput",
-	mixins: [AutoCompleteMixin],
+	mixins: [AutoCompleteInputMixin],
 	elementClick: function(elementValue) {
 		this.props.updateValue(elementValue);
 		this.setState({hints: [], selectedItem: -1});
@@ -83,7 +108,7 @@ var TripTailorAutoCompleteInput = React.createClass({displayName: "TripTailorAut
 });
 
 var TripTailorAutoCompleteTags = React.createClass({displayName: "TripTailorAutoCompleteTags",
-	mixins: [AutoCompleteMixin],
+	mixins: [AutoCompleteInputMixin],
 	componentDidUpdate: function() {
 		var input = React.findDOMNode(this.refs.query);
 		if($(input).width() < 36)

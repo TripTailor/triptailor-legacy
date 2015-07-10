@@ -117,25 +117,9 @@ var Index = React.createClass({displayName: "Index",
 });
 
 var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
+	mixins: [AutoCompleteMixin],
 	getInitialState: function() {
 		return {location: '', query: '', tags: []};
-	},
-	updateLocationValue: function(value) {
-		this.setState({location: value});
-	},
-	updateQueryValue: function(value) {
-		this.setState({query: value});
-	},
-	addTag: function(value) {
-		var tags = this.state.tags.slice(0, this.state.tags.length);
-		tags.push(value);
-		this.setState({tags: tags});
-	},
-	removeTag: function() {
-		this.setState({tags: this.state.tags.slice(0, this.state.tags.length - 1)});
-	},
-	removeSpecificTag: function(i) {
-		this.setState({tags: this.state.tags.slice(0, i).concat(this.state.tags.slice(i + 1, this.state.tags.length))});
 	},
 	submit: function(e) {
 		/*if(cityVal == "")
