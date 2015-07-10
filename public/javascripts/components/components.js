@@ -74,7 +74,7 @@ var AutoCompleteMixin = {
 		var input = React.findDOMNode(this.refs.query);
 		var value = input.value;
 		setTimeout(function() {
-			if(value != '' && value == input.value) {
+			if(value.trim().length > 0  && value == input.value) {
 				$.ajax({
 					url: this.props.url + this.props.value.trim().replace(/ /g, "-"),
 					dataType: 'json',
@@ -215,7 +215,9 @@ var TripTailorAutoCompleteTags = React.createClass({displayName: "TripTailorAuto
 	},
 	handleKeyUp: function(e) {
 		if(e.keyCode == 27) {
-			this.props.addTag(React.findDOMNode(this.refs.query).value.toLowerCase());
+			var value = React.findDOMNode(this.refs.query).value;
+			if(value.length > 0)
+				this.props.addTag(value.toLowerCase());
 			this.props.updateValue("");
 			this.setState({hints: [], selectedItem: -1});
 		}
@@ -229,7 +231,8 @@ var TripTailorAutoCompleteTags = React.createClass({displayName: "TripTailorAuto
 				this.props.submit();
 		}
 		else if(e.keyCode == 32) {
-			this.props.addTag(this.props.value.trim().toLowerCase());
+			if(this.props.value.trim().length > 0)
+				this.props.addTag(this.props.value.trim().toLowerCase());
 			this.props.updateValue("");
 		}
 	},
