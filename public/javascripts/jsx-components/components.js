@@ -80,8 +80,6 @@ var AutoCompleteInputMixin = {
 				this.props.updateValue(this.state.hints[this.state.selectedItem]);
 				this.setState({hints: [], selectedItem: -1});
 			}
-			else
-				this.props.submit();
 		}
 	},
 	handleKeyDown: function(e) {

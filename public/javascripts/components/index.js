@@ -157,10 +157,15 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 
 var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
 	mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
+	indexHandleKeyUp: function(e) {
+		this.handleKeyUp(e);
+		if(e.keyCode == 13 && this.state.selectedItem < 0)
+			this.props.submit();
+	},
 	render: function() {
 		return (
 			React.createElement("div", null, 
-				React.createElement("input", {ref: "query", type: "text", className: "form-control inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
+				React.createElement("input", {ref: "query", type: "text", className: "form-control inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.indexHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
 				this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''
 			)
 		);
