@@ -3,7 +3,7 @@ var HOSTELSTODISPLAY = 16;
 var Hostels = React.createClass({
 	mixins: [AutoCompleteContainerMixin],
 	getInitialState: function() {
-		return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], displayedResults: HOSTELSTODISPLAY, alsoTags: [], searchId: -1};
+		return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], alsoTags: [], searchId: -1};
 	},
 	componentWillMount: function() {
 		this.getResults(this.state.location, this.state.tags);
@@ -21,9 +21,7 @@ var Hostels = React.createClass({
 	removeSpecificAlsoTag: function(i) {
 		this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
 	},
-	displayMoreResults: function() {
-		this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
-	},
+	
 	getResults: function(location, tags) {
 		var route;
 		location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
@@ -71,7 +69,7 @@ var Hostels = React.createClass({
 		return (
 			<div>
 				<SearchHeader location={this.state.location} query={this.state.query} tags={this.state.tags} updateLocationValue={this.updateLocationValue} updateQueryValue={this.updateQueryValue} addTag={this.hostelsAddTag} removeTag={this.hostelsRemoveTag} removeSpecificTag={this.hostelsRemoveSpecificTag} alsoTags={this.state.alsoTags} addAlsoTag={this.addAlsoTag} removeSpecificAlsoTag={this.removeSpecificAlsoTag} getResults={this.getResults} />
-				<Content results={this.state.results} displayedResults={this.state.displayedResults} displayMoreResults={this.displayMoreResults} searchId={this.state.searchId} />
+				<Content results={this.state.results} searchId={this.state.searchId} />
 			</div>
 		);
 	}
@@ -187,7 +185,10 @@ var NumberResults = React.createClass({
 
 var ResultsGrid = React.createClass({
 	getInitialState: function() {
-		return {more: false};
+		return {displayedResults: HOSTELSTODISPLAY, more: false};
+	},
+	displayMoreResults: function() {
+		this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
 	},
 	showMoreTags: function(e) {
 		e.preventDefault();
@@ -202,7 +203,7 @@ var ResultsGrid = React.createClass({
 	render: function() {
 		var rows = [];
 		var results = [];
-		for(var i = 0; i < this.props.results.length && i < this.props.displayedResults; i++) {
+		for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
 			results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
 			if((i + 1) % 4 == 0) {
 				rows.push(
@@ -223,7 +224,7 @@ var ResultsGrid = React.createClass({
 		return (
 			<div>
 				{rows}
-				{this.props.results.length > this.props.displayedResults ? <button className="submit more-results" onClick={this.props.displayMoreResults}>Show more results</button> : ''}
+				{this.props.results.length > this.state.displayedResults ? <button className="submit more-results" onClick={this.displayMoreResults}>Show more results</button> : ''}
 			</div>
 		);
 	}
