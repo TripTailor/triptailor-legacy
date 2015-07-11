@@ -196,12 +196,9 @@ var TripTailorAutoCompleteRow = React.createClass({displayName: "TripTailorAutoC
 	handleClick: function() {
 		this.props.elementClick(this.props.value);
 	},
-	handleMouseOver: function() {
-		this.props.elementHover(this.props.index);
-	},
 	render: function() {
 		return (
-			React.createElement("p", {className: this.props.selectedItem == this.props.index ? "autocomplete-element selected" : "autocomplete-element", onClick: this.handleClick, onMouseOver: this.handleMouseOver}, this.props.value)
+			React.createElement("p", {className: this.props.selectedItem == this.props.index ? "autocomplete-element selected" : "autocomplete-element", onClick: this.handleClick}, this.props.value)
 		);
 	}
 });

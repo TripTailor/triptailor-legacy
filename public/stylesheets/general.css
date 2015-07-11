@@ -152,6 +152,9 @@ body {
 	padding: 6px 15px;
 	font-size: 14px;
 }
+.autocomplete p:hover {
+	background-color: #f0f0f0;
+}
 .autocomplete-element {
 	cursor: pointer;
 	background-color: white;
