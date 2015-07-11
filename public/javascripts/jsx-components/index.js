@@ -143,7 +143,7 @@ var AutoCompleteSearch = React.createClass({
 							<AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.state.location} updateValue={this.updateLocationValue} submit={this.enterSubmit} />
 						</div>
 						<div className="col-md-5 form-col-center">
-							<TripTailorAutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.state.query} updateValue={this.updateQueryValue} submit={this.enterSubmit} tags={this.state.tags} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} />
+							<AutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.state.query} updateValue={this.updateQueryValue} submit={this.enterSubmit} tags={this.state.tags} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} />
 						</div>
 						<div className="col-md-2 a-col">
 							<a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
@@ -166,6 +166,29 @@ var AutoCompleteInput = React.createClass({
 		return (
 			<div>
 				<input ref="query" type="text" className="form-control inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.indexHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
+			</div>
+		);
+	}
+});
+
+var AutoCompleteTags = React.createClass({
+	mixins: [AutoCompleteTagsMixin],
+	render: function() {
+		var tags = $.map(this.props.tags, function(value, i) {
+			return (
+				<TripTailorInputTag ref={"tag-" + i} key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
+			);
+		}.bind(this));
+
+		return (
+			<div ref="tags-container" className="autocomplete-tags-container">
+				<div className="tag-search-container">
+					{tags}
+					<div className="tag-search-input">
+						<input ref="query" type="text" className="form-control input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+					</div>
+				</div>
 				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
 			</div>
 		);

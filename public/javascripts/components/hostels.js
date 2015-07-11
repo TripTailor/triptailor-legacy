@@ -95,7 +95,7 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 				), 
 				React.createElement("div", {className: "col-md-8 form-col-center"}, 
 					React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Tags")), 
-					React.createElement(TripTailorAutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.props.query, updateValue: this.props.updateQueryValue, tags: this.props.tags, addTag: this.props.addTag, removeTag: this.props.removeTag, removeSpecificTag: this.props.removeSpecificTag})
+					React.createElement(AutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.props.query, updateValue: this.props.updateQueryValue, tags: this.props.tags, addTag: this.props.addTag, removeTag: this.props.removeTag, removeSpecificTag: this.props.removeSpecificTag})
 				)
 			)
 		);
@@ -125,6 +125,29 @@ var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
 			React.createElement("div", null, 
 				React.createElement("input", {ref: "query", type: "text", className: "form-control inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.hostelsHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.hostelsHandleKeyDown}), 
 				this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.hostelsElementClick, elementHover: this.updateSelectedItem}) : ''
+			)
+		);
+	}
+});
+
+var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
+	mixins: [AutoCompleteTagsMixin],
+	render: function() {
+		var tags = $.map(this.props.tags, function(value, i) {
+			return (
+				React.createElement(TripTailorInputTag, {ref: "tag-" + i, key: i, index: i, value: value, removeSpecificTag: this.props.removeSpecificTag})
+			);
+		}.bind(this));
+
+		return (
+			React.createElement("div", {ref: "tags-container", className: "autocomplete-tags-container"}, 
+				React.createElement("div", {className: "tag-search-container"}, 
+					tags, 
+					React.createElement("div", {className: "tag-search-input"}, 
+						React.createElement("input", {ref: "query", type: "text", className: "form-control input-tags", placeholder: this.props.tags.length == 0 ? "Write some tags" : "", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.handleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown})
+					)
+				), 
+				this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''
 			)
 		);
 	}

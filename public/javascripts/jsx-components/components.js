@@ -96,7 +96,7 @@ var AutoCompleteInputMixin = {
 	}
 };
 
-var TripTailorAutoCompleteTags = React.createClass({
+var AutoCompleteTagsMixin = {
 	mixins: [AutoCompleteMixin],
 	componentDidUpdate: function() {
 		var input = React.findDOMNode(this.refs.query);
@@ -155,27 +155,8 @@ var TripTailorAutoCompleteTags = React.createClass({
 		else if(e.keyCode == 8 && this.props.value == "") {
 			this.props.removeTag();
 		}
-	},
-	render: function() {
-		var tags = $.map(this.props.tags, function(value, i) {
-			return (
-				<TripTailorInputTag ref={"tag-" + i} key={i} index={i} value={value} removeSpecificTag={this.props.removeSpecificTag} />
-			);
-		}.bind(this));
-
-		return (
-			<div ref="tags-container" className="autocomplete-tags-container">
-				<div className="tag-search-container">
-					{tags}
-					<div className="tag-search-input">
-						<input ref="query" type="text" className="form-control input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.handleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
-					</div>
-				</div>
-				{this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
-			</div>
-		);
 	}
-});
+};
 
 var TripTailorAutoCompleteResults = React.createClass({
 	cancelParentBlur: function(e) {
