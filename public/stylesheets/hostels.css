@@ -1,11 +1,18 @@
+/*** General ***/
+
 body {
 	color: #5A5B5B;
 }
+
+/*** navbar ***/
 
 .navbar-triptailor {
 	background: #4A5667;
 }
 
+/*** Header ***/
+
+/* Basic */
 .header {
 	background: #EDF2F5;
 	padding-top: 25px;
@@ -14,6 +21,12 @@ body {
 .header-label {
 	margin-bottom: 15px;
 	font-size: 12px;
+}
+/* Search */
+.form-col-left, .form-col-center, .a-col {
+	padding-left: 0;
+	padding-right: 0;
+	margin-top: 10px;
 }
 .inline-input-left, .autocomplete-tags-container {
 	border-top: 1px solid #DBDFE5;
@@ -32,6 +45,7 @@ body {
 .tag-search-container {
 	border-spacing: 10px 4px;
 }
+/* Also try */
 .also {
 	margin-top: 25px;
 }
@@ -41,12 +55,8 @@ body {
 .tag-also {
 	cursor: pointer;
 }
-.submit-col {
-	text-align: center;
-}
-.submit {
-	margin-top: 35px;
-}
+
+/*** Results ***/
 
 .content {
 	padding-bottom: 120px;
@@ -88,7 +98,6 @@ body {
 	border-radius: 3px;
 	display: block;
 }
-
 .result-tags {
 	padding-top: 15px;
 	margin-bottom: 5px;
@@ -122,4 +131,13 @@ body {
 	outline: none;
 	width: 100%;
 	margin-top: 40px;
+	border-radius: 5px;
+  height: 40px;
+	background-color: #f66a52;
+	padding: 10px 12px;
+	color: white;
+	line-height: 20px;
+	display: block;
+	text-align: center;
+	margin-top: 35px;
 }

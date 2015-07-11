@@ -22,7 +22,7 @@ var Header = React.createClass({displayName: "Header",
 var Content = React.createClass({displayName: "Content",
 	render: function() {
 		return (
-			React.createElement("div", {className: "container-fluid content"}, 
+			React.createElement("div", {className: "container-fluid"}, 
 				React.createElement("div", {className: "row tips-header-container"}, 
 					React.createElement("div", {className: "col-md-10 col-md-offset-1 text-center"}, 
 						React.createElement("h2", {className: "tips-header"}, "Popular Searches"), 

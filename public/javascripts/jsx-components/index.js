@@ -22,7 +22,7 @@ var Header = React.createClass({
 var Content = React.createClass({
 	render: function() {
 		return (
-			<div className="container-fluid content">
+			<div className="container-fluid">
 				<div className="row tips-header-container">
 					<div className="col-md-10 col-md-offset-1 text-center">
 						<h2 className="tips-header">Popular Searches</h2>

@@ -36,28 +36,6 @@ body {
 	padding-left: 30px;
 	padding-right: 30px;
 }
-.content {
-	background: white;
-}
-.form-col-left, .form-col-center, .a-col {
-	padding-left: 0;
-	padding-right: 0;
-	margin-top: 10px;
-}
-.submit {
-	border-radius: 5px;
-  height: 40px;
-	background-color: #f66a52;
-	padding: 10px 12px;
-	color: white;
-	line-height: 20px;
-	display: block;
-	text-align: center;
-}
-.submit:link, .submit:visited, .submit:hover, .submit:active {
-	text-decoration: none;
-	color: white;
-}
 
 /*** TripTailor Navbar ***/
 

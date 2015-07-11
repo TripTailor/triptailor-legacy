@@ -229,7 +229,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 			results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
 			if((i + 1) % 4 == 0) {
 				rows.push(
-					React.createElement("div", {key: rows.length, className: "row"}, 
+					React.createElement("div", {key: rows.length, className: "row results-row"}, 
 						results
 					)
 				);
@@ -238,7 +238,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 		};
 		if(results.length > 0) {
 			rows.push(
-				React.createElement("div", {key: rows.length, className: "row"}, 
+				React.createElement("div", {key: rows.length, className: "row results-row"}, 
 					results
 				)
 			);
@@ -246,7 +246,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 		return (
 			React.createElement("div", null, 
 				rows, 
-				this.props.results.length > this.state.displayedResults ? React.createElement("button", {className: "submit more-results", onClick: this.displayMoreResults}, "Show more results") : ''
+				this.props.results.length > this.state.displayedResults ? React.createElement("button", {className: "more-results", onClick: this.displayMoreResults}, "Show more results") : ''
 			)
 		);
 	}

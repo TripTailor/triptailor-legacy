@@ -229,7 +229,7 @@ var ResultsGrid = React.createClass({
 			results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
 			if((i + 1) % 4 == 0) {
 				rows.push(
-					<div key={rows.length} className="row">
+					<div key={rows.length} className="row results-row">
 						{results}
 					</div>
 				);
@@ -238,7 +238,7 @@ var ResultsGrid = React.createClass({
 		};
 		if(results.length > 0) {
 			rows.push(
-				<div key={rows.length} className="row">
+				<div key={rows.length} className="row results-row">
 					{results}
 				</div>
 			);
@@ -246,7 +246,7 @@ var ResultsGrid = React.createClass({
 		return (
 			<div>
 				{rows}
-				{this.props.results.length > this.state.displayedResults ? <button className="submit more-results" onClick={this.displayMoreResults}>Show more results</button> : ''}
+				{this.props.results.length > this.state.displayedResults ? <button className="more-results" onClick={this.displayMoreResults}>Show more results</button> : ''}
 			</div>
 		);
 	}
