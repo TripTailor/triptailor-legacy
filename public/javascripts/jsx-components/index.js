@@ -127,11 +127,8 @@ var AutoCompleteSearch = React.createClass({
 			return;
 		}
 		var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-		if(this.state.tags.length > 0) {
-			url += "&tags=" + this.state.tags[0];
-			for(var i = 1; i < this.state.tags.length; i++)
-			url += "-" + this.state.tags[i];
-		}
+		if(this.state.tags.length > 0)
+			url += "&tags=" + getStringTags(this.state.tags);
 		React.findDOMNode(this.refs.submit).href = url + adVariables();
 	},
 	enterSubmit: function() {

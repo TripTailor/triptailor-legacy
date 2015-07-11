@@ -21,7 +21,6 @@ var Hostels = React.createClass({
 	removeSpecificAlsoTag: function(i) {
 		this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
 	},
-	
 	getResults: function(location, tags) {
 		var route;
 		location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
