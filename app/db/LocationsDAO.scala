@@ -5,7 +5,7 @@ import models.TagHolder
 
 import play.api.db.slick._
 
-import slick.driver.MySQLDriver.api._
+import slick.driver.PostgresDriver.api._
 import slick.profile.RelationalProfile
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -43,19 +43,20 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
        SELECT   l.id, l.city, l.country, a.name
        FROM     hostel h, attribute a, hostel_attribute ha, location l
        WHERE    l.city = $city and h.id = ha.hostel_id and a.id = ha.attribute_id and h.location_id = l.id
-       GROUP BY a.name
+       GROUP BY a.name, l.id, ha.rating
        ORDER BY rating DESC LIMIT $LocationsLimit
     """.as[LocationResult]
   }
 
   def locationWithCountryQuery(city: String, country: String) = {
     val LocationsLimit = 10
+    println(city, country)
 
     sql"""
        SELECT   l.id, l.city, l.country, a.name
        FROM     hostel h, attribute a, hostel_attribute ha, location l
        WHERE    l.city = $city and l.country = $country and h.id = ha.hostel_id and a.id = ha.attribute_id and h.location_id = l.id
-       GROUP BY a.name
+       GROUP BY a.name, l.id, ha.rating
        ORDER BY rating DESC LIMIT $LocationsLimit
     """.as[LocationResult]
   }
@@ -70,7 +71,7 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
   private def hintsQuery(query: String) =
     for {
-      l ← Location if (l.city like query) || (l.country like query)
+      l ← Location if (l.city.toLowerCase like query.toLowerCase) || (l.country.toLowerCase like query.toLowerCase)
     } yield (l.city, l.country)
 
   private def buildLocationOpt(locationResults: Seq[LocationResult]): Option[models.Location] = {

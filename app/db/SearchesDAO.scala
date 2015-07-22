@@ -5,7 +5,7 @@ import javax.inject.{Inject, Singleton}
 import org.joda.time.DateTime
 import play.api.db.slick._
 
-import slick.driver.MySQLDriver.api._
+import slick.driver.PostgresDriver.api._
 import slick.profile.RelationalProfile
 
 import scala.concurrent.ExecutionContext.Implicits.global
