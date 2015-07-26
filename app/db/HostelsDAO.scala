@@ -33,23 +33,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
     f.map(_.headOption getOrElse models.Hostel.empty)
   }
 
-  def getHostelHints(query: String): Future[Map[String, Seq[String]]] = {
-    val Limit = 10
-
-    val sanitizedQuery = query.toLowerCase.replace("-", " ")
-
-    val hostelNameCity = hostelNameAndCityQuery(s"%$sanitizedQuery%") take Limit
-    val attributes     = attributesQuery(s"${sanitizedQuery.split(" ").last}%") take Limit
-
-    val f1 = db.run(hostelNameCity.result)
-    val f2 = db.run(attributes.result)
-
-    for {
-      r1 ← f1
-      r2 ← f2
-    } yield groupHostelsAndAttributes(r1, r2)
-  }
-
   private def hostelQuery(name: String) =
     for {
       hostel ← Hostel if hostel.name === name
@@ -72,17 +55,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
     db.run(sql).map(createHostel(hostelRow, _))
   }
 
-  private def hostelNameAndCityQuery(query: String) =
-    for {
-      (h, l) ← Hostel join Location on (_.locationId === _.id)
-      if (l.city like query) || (h.name like query)
-    } yield (h.name, l.city)
-
-  private def attributesQuery(possibleTag: String): Query[Rep[String],String,Seq] =
-    for {
-      attr ← Attribute if attr.name like possibleTag
-    } yield attr.name
-
   private def createHostel(hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
     models.Hostel(
       id = hr.id,
@@ -99,11 +71,5 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       attributes + (name -> (cfreq / n) * (rating / freq))
     }
   }
-
-  private def groupHostelsAndAttributes(hostelsNamesCities: Seq[(String,String)], attributes: Seq[String]): Map[String, Seq[String]] =
-    Map(
-      "hostels" -> hostelsNamesCities.map(tuple => tuple._1 + "," + tuple._2),
-      "tags"    -> attributes
-    )
 
 }
