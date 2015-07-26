@@ -3,7 +3,6 @@ version      := "1.0-SNAPSHOT"
 scalaVersion := "2.11.7"
 
 val dbDependencies = Seq(
-  /*"mysql" % "mysql-connector-java" % "5.1.35",*/
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
   "com.typesafe.slick" %% "slick-codegen" % "3.0.0",
@@ -48,7 +47,6 @@ dockerEntrypoint     :=  Seq(s"bin/${executableScriptName.value}", "-J-Xmx384m",
 /***/
 
 libraryDependencies ++= Seq(
-  /*jdbc,*/
   cache,
   ws
 ) ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
