@@ -50,7 +50,6 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
 
   def locationWithCountryQuery(city: String, country: String) = {
     val LocationsLimit = 10
-    println(city, country)
 
     sql"""
        SELECT   l.id, l.city, l.country, a.name
