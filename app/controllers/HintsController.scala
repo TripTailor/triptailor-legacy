@@ -26,7 +26,7 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
         case HintsParams(Some(tags), None) =>
           tagsDAO.tagsQuery(tags)
         case HintsParams(None, Some(locations)) =>
-          locationsDAO.locationHints(locations)
+          locationsDAO.locationHints(locations.replaceAll("-", " "))
       }
 
     results.map(r => Ok(Json.toJson(r)))
