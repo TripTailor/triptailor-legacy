@@ -30,11 +30,10 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
 
     (for {
       m                      ← (H +: model).toStream
-      nameWords              = m.name.split("\\s+").map(_.toLowerCase)
       (shared_har, diff_har) = H.attributes.partition(har => m.attributes contains har._1)
       unique_mar             = m.attributes -- H.attributes.keys
-      sharedTags             = createTags(shared_har, TagHolder.SharedType, nameWords, m).sorted take TotalTags
-      uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (TotalTags - sharedTags.size)
+      sharedTags             = createTags(shared_har, TagHolder.SharedType, m).sorted take TotalTags
+      uniqueTags             = createTags(unique_mar, TagHolder.UniqueType, m).sorted take (TotalTags - sharedTags.size)
       orderedTags            = (sharedTags ++ uniqueTags).sorted
       rating                 = computeRating(shared_har, m) + computeRating(diff_har, m)
       penalizedRating        = computeHostelPenalizedRating(m, highestNoReviews + 1, rating)
@@ -57,19 +56,18 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
 
     (for {
       m               ← model.toStream
-      nameWords       = m.name.split("\\s+").map(_.toLowerCase)
       shared_tar      = m.attributes.filter(mar => tags contains mar._1)
       unique_mar      = m.attributes -- tags
-      sharedTags      = createTags(shared_tar, TagHolder.SharedType, nameWords, m).sorted take TotalTags
-      uniqueTags      = createTags(unique_mar, TagHolder.UniqueType, nameWords, m).sorted take (TotalTags - sharedTags.size)
+      sharedTags      = createTags(shared_tar, TagHolder.SharedType, m).sorted take TotalTags
+      uniqueTags      = createTags(unique_mar, TagHolder.UniqueType, m).sorted take (TotalTags - sharedTags.size)
       orderedTags     = (sharedTags ++ uniqueTags).sorted
       rating          = shared_tar.values.sum / tags.size
       penalizedRating = computeTagPenalizedRating(m, averageNoReviews + 1, rating)
     } yield ClassifiedHostel(m, penalizedRating, orderedTags)).filter(_.orderedTags.nonEmpty).sorted
   }
 
-  private def createTags(ar: Map[String,Double], tagType: Int, nameWords: Seq[String], m: Hostel): Seq[TagHolder] = {
-    def condition(attr: String) = !clicheTags.contains(attr) && !nameWords.contains(attr)
+  private def createTags(ar: Map[String,Double], tagType: Int, m: Hostel): Seq[TagHolder] = {
+    def condition(attr: String) = !clicheTags.contains(attr)
 
     ar.toSeq.flatMap { case (a, r) =>
       if (condition(a))
