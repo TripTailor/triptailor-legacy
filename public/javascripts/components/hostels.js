@@ -22,6 +22,7 @@ var Hostels = React.createClass({displayName: "Hostels",
     this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
   },
   getResults: function(location, tags) {
+    this.setState({searchId: -1});
     var route;
     location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if (tags.length == 0)
@@ -190,8 +191,8 @@ var Content = React.createClass({displayName: "Content",
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid content"}, 
-        React.createElement(NumberResults, {results: this.props.results.length}), 
-        React.createElement(ResultsGrid, React.__spread({},  this.props))
+        this.props.searchId >= 0 ? React.createElement(NumberResults, {results: this.props.results.length}) : React.createElement("div", {className: "spinner"}, React.createElement("img", {src: "../assets/images/spinner.gif"})), 
+        this.props.searchId >= 0 ? React.createElement(ResultsGrid, React.__spread({},  this.props)) : ""
       )
     );
   }

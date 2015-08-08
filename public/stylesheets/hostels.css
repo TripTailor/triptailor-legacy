@@ -68,6 +68,10 @@ body {
 .results-number {
 	margin: 25px 0;
 }
+.spinner {
+  margin-top: 25px;
+  text-align: center;
+}
 .result {
 	border: 1px solid #DBDFE5;
 	padding: 0 15px;

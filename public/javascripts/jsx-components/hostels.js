@@ -22,6 +22,7 @@ var Hostels = React.createClass({
     this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
   },
   getResults: function(location, tags) {
+    this.setState({searchId: -1});
     var route;
     location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if (tags.length == 0)
@@ -190,8 +191,8 @@ var Content = React.createClass({
   render: function() {
     return (
       <div className="container-fluid content">
-        <NumberResults results={this.props.results.length} />
-        <ResultsGrid {...this.props} />
+        {this.props.searchId >= 0 ? <NumberResults results={this.props.results.length} /> : <div className="spinner"><img src="../assets/images/spinner.gif" /></div>}
+        {this.props.searchId >= 0 ? <ResultsGrid {...this.props} /> : ""}
       </div>
     );
   }
