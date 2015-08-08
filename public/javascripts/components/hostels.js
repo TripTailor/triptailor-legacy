@@ -264,15 +264,10 @@ var Result = React.createClass({displayName: "Result",
     })
   },
   render: function() {
-    var url = this.props.result.url;
-    var uris = url.split("/");
-    if(uris[uri.length - 1] == "null")
-      url = "#";
-
     return (
       React.createElement("div", {className: "col-md-3"}, 
         React.createElement("div", {className: "result"}, 
-          React.createElement("a", {href: url, target: "_blank", className: "result-a", onClick: this.handleClick}, 
+          React.createElement("a", {href: this.props.result.url != null ? this.props.result.url : "", target: this.props.result.url != null ? "_blank" : "", className: "result-a", onClick: this.handleClick}, 
             React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
             React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
             React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 

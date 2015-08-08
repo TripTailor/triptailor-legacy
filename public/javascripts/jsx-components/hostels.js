@@ -264,15 +264,10 @@ var Result = React.createClass({
     })
   },
   render: function() {
-    var url = this.props.result.url;
-    var uris = url.split("/");
-    if(uris[uri.length - 1] == "null")
-      url = "#";
-
     return (
       <div className="col-md-3">
         <div className="result">
-          <a href={url} target="_blank" className="result-a" onClick={this.handleClick}>
+          <a href={this.props.result.url != null ? this.props.result.url : ""} target={this.props.result.url != null ? "_blank" : ""} className="result-a" onClick={this.handleClick}>
             <div className="result-name"><strong>{this.props.result.name}</strong></div>
             <div className="result-price">{this.props.result.price} USD</div>
             <div className="result-book"><div className="info">View in  HostelWorld</div></div>
