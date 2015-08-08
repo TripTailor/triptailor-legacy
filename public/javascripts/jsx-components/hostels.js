@@ -164,10 +164,10 @@ var AlsoTry = React.createClass({
     return (
       <div className="row also">
         <div className="col-md-12">
-          <p className="header-label"><strong>Also Try</strong></p>
-          <div className="also-tags-div">
+          {tags.length > 0 ? <p className="header-label"><strong>Also Try</strong></p> : <p className="header-empty">Try adding more tags yourself</p>}
+          {tags.length > 0 ? <div className="also-tags-div">
             {tags}
-          </div>
+          </div> : ""}
         </div>
       </div>
     );

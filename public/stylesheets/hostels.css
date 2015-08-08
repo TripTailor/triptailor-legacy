@@ -22,6 +22,10 @@ body {
 	margin-bottom: 15px;
 	font-size: 12px;
 }
+.header-empty {
+	margin-bottom: 15px;
+	font-size: 13px;
+}
 /* Search */
 .form-col-left, .form-col-center, .a-col {
 	padding-left: 0;

@@ -164,10 +164,10 @@ var AlsoTry = React.createClass({displayName: "AlsoTry",
     return (
       React.createElement("div", {className: "row also"}, 
         React.createElement("div", {className: "col-md-12"}, 
-          React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")), 
-          React.createElement("div", {className: "also-tags-div"}, 
+          tags.length > 0 ? React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")) : React.createElement("p", {className: "header-empty"}, "Try adding more tags yourself"), 
+          tags.length > 0 ? React.createElement("div", {className: "also-tags-div"}, 
             tags
-          )
+          ) : ""
         )
       )
     );
