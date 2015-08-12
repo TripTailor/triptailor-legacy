@@ -226,16 +226,20 @@ var ResultsGrid = React.createClass({
   render: function() {
     var rows = [];
     var results = [];
-    for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
-      results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
-      if((i + 1) % 4 == 0) {
-        rows.push(
-          <div key={rows.length} className="row results-row">
-            {results}
-          </div>
-        );
-        results = [];
-      }
+    for(var i = 0, j = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
+			if(this.props.results[i].url != null) {
+      	results.push(<Result key={j} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
+      	if((j + 1) % 4 == 0) {
+      	  rows.push(
+      	    <div key={rows.length} className="row results-row">
+      	      {results}
+      	    </div>
+      	  );
+      	  results = [];
+      	}
+
+				j++;
+			}
     };
     if(results.length > 0) {
       rows.push(
@@ -268,7 +272,7 @@ var Result = React.createClass({
     return (
       <div className="col-md-3">
         <div className="result">
-          <a href={this.props.result.url != null ? this.props.result.url : ""} target={this.props.result.url != null ? "_blank" : ""} className="result-a" onClick={this.handleClick}>
+          <a href={this.props.result.url} target="_blank" className="result-a" onClick={this.handleClick}>
             <div className="result-name"><strong>{this.props.result.name}</strong></div>
             <div className="result-price">{this.props.result.price} USD</div>
             <div className="result-book"><div className="info">View in  HostelWorld</div></div>

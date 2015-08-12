@@ -226,16 +226,20 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
   render: function() {
     var rows = [];
     var results = [];
-    for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
-      results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
-      if((i + 1) % 4 == 0) {
-        rows.push(
-          React.createElement("div", {key: rows.length, className: "row results-row"}, 
-            results
-          )
-        );
-        results = [];
-      }
+    for(var i = 0, j = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
+			if(this.props.results[i].url != null) {
+      	results.push(React.createElement(Result, {key: j, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
+      	if((j + 1) % 4 == 0) {
+      	  rows.push(
+      	    React.createElement("div", {key: rows.length, className: "row results-row"}, 
+      	      results
+      	    )
+      	  );
+      	  results = [];
+      	}
+
+				j++;
+			}
     };
     if(results.length > 0) {
       rows.push(
@@ -268,7 +272,7 @@ var Result = React.createClass({displayName: "Result",
     return (
       React.createElement("div", {className: "col-md-3"}, 
         React.createElement("div", {className: "result"}, 
-          React.createElement("a", {href: this.props.result.url != null ? this.props.result.url : "", target: this.props.result.url != null ? "_blank" : "", className: "result-a", onClick: this.handleClick}, 
+          React.createElement("a", {href: this.props.result.url, target: "_blank", className: "result-a", onClick: this.handleClick}, 
             React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
             React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
             React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 
