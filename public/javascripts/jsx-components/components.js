@@ -107,7 +107,7 @@ var AutoCompleteTagsMixin = {
 
     var size = 30;
     for(var i = 0; i < this.props.tags.length; i++)
-    size += $(React.findDOMNode(this.refs["tag-" + i])).width() + 10;
+      size += $(React.findDOMNode(this.refs["tag-" + i])).width() + 20;
     if(size > $(React.findDOMNode(this.refs["tags-container"])).width())
       this.props.removeTag();
   },

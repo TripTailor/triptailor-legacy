@@ -171,7 +171,6 @@ body {
   border-spacing: 10px 6px;
   padding-left: 5px;
   padding-right: 15px;
-  overflow: hidden;
 }
 .tag-search-input {
   display: table-cell;
