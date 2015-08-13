@@ -138,14 +138,14 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
     return (
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
-          React.createElement("div", {className: "row form-row"}, 
-            React.createElement("div", {className: "col-md-5 form-col-left"}, 
+          React.createElement("div", {className: "row autocomplete-row"}, 
+            React.createElement("div", {className: "col-md-5 autocomplete-col-left"}, 
               React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.state.location, updateValue: this.updateLocationValue, submit: this.enterSubmit})
             ), 
-            React.createElement("div", {className: "col-md-5 form-col-center"}, 
+            React.createElement("div", {className: "col-md-5 autocomplete-col-center"}, 
               React.createElement(AutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.state.query, updateValue: this.updateQueryValue, submit: this.enterSubmit, tags: this.state.tags, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag})
             ), 
-            React.createElement("div", {className: "col-md-2 a-col"}, 
+            React.createElement("div", {className: "col-md-2 autocomplete-a-col"}, 
               React.createElement("a", {ref: "submit", className: "submit", href: "", onClick: this.submit}, "Search")
             )
           )
@@ -165,7 +165,7 @@ var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement("input", {ref: "query", type: "text", className: "form-control inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.indexHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
+        React.createElement("input", {ref: "query", type: "text", className: "triptailor-input inline-input-left", placeholder: "Pick a city", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.indexHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown}), 
         this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''
       )
     );
@@ -191,7 +191,7 @@ var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
         React.createElement("div", {className: "tag-search-container"}, 
           tags, 
           React.createElement("div", {className: "tag-search-input"}, 
-            React.createElement("input", {ref: "query", type: "text", className: "form-control input-tags", placeholder: this.props.tags.length == 0 ? "Write some tags" : "", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.indexHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown})
+            React.createElement("input", {ref: "query", type: "text", className: "triptailor-input input-tags", placeholder: this.props.tags.length == 0 ? "Write some tags" : "", autoComplete: "off", value: this.props.value, onChange: this.handleValueChanged, onKeyUp: this.indexHandleKeyUp, onBlur: this.handleBlur, onKeyDown: this.handleKeyDown})
           )
         ), 
         this.state.hints.length > 0 ? React.createElement(TripTailorAutoCompleteResults, {hints: this.state.hints, selectedItem: this.state.selectedItem, elementClick: this.elementClick, elementHover: this.updateSelectedItem}) : ''

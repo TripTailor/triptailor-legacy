@@ -1,151 +1,148 @@
 /*** General ***/
 
 body {
-	color: #5A5B5B;
+  color: #5A5B5B;
 }
 
 /*** navbar ***/
 
 .navbar-triptailor {
-	background: #4A5667;
+  background: #4A5667;
 }
 
 /*** Header ***/
 
 /* Basic */
 .header {
-	background: #EDF2F5;
-	padding-top: 25px;
-	padding-bottom: 25px;
+  background: #EDF2F5;
+  padding-top: 25px;
+  padding-bottom: 25px;
 }
 .header-label {
-	margin-bottom: 15px;
-	font-size: 12px;
+  margin-bottom: 15px;
+  font-size: 12px;
 }
 .header-empty {
-	margin-bottom: 15px;
-	font-size: 13px;
+  margin-bottom: 15px;
+  font-size: 13px;
 }
 /* Search */
-.form-col-left, .form-col-center, .a-col {
-	padding-left: 0;
-	padding-right: 0;
-	margin-top: 10px;
+.location-input, .autocomplete-tags-container {
+  border: 1px solid #DBDFE5;
+  margin-bottom: 25px;
 }
-.inline-input-left, .autocomplete-tags-container {
-	border-top: 1px solid #DBDFE5;
-	border-bottom: 1px solid #DBDFE5;
-	border-left: 1px solid #DBDFE5;
+.location-input:focus {
+  border: 1px solid #DBDFE5;
 }
-.inline-input-left:focus {
-	border-top: 1px solid #DBDFE5;
-	border-bottom: 1px solid #DBDFE5;
-	border-left: 1px solid #DBDFE5;
+.location-input {
+  margin-bottom: 25px;
 }
 .autocomplete-tags-container {
-	height: 40px;
-	border-right: 1px solid #DBDFE5;
+  height: 40px;
+  border-right: 1px solid #DBDFE5;
 }
 .tag-search-container {
-	border-spacing: 10px 4px;
+  border-spacing: 10px 4px;
 }
-/* Also try */
-.also {
-	margin-top: 25px;
-}
-.also-tags-div {
-	padding-top: 5px;
-}
-.tag-also {
-	cursor: pointer;
-}
+
 
 /*** Results ***/
 
+/* Also try */
+.also {
+  margin: 25px 0;
+}
+.also-tags-div {
+  padding-top: 5px;
+}
+.tag-also {
+  cursor: pointer;
+}
+/* Hostels */
 .content {
-	padding-bottom: 120px;
+  padding-bottom: 120px;
 }
 .results-number {
-	margin: 25px 0;
+  margin: 25px 0;
 }
 .spinner {
   margin-top: 25px;
   text-align: center;
 }
 .result {
-	border: 1px solid #DBDFE5;
-	padding: 0 15px;
-	margin-bottom: 40px;
+  border: 1px solid #DBDFE5;
+  padding: 0 15px;
+  margin-bottom: 40px;
 }
 .result-a:link, .result-a:visited, .result-a:hover, .result-a:active {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 .result-name, .result-price, .result-book {
-	border-bottom: 1px solid #DBDFE5;
+  border-bottom: 1px solid #DBDFE5;
 }
 .result-name {
-	padding-top: 25px;
-	padding-bottom: 15px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
+  padding-top: 25px;
+  padding-bottom: 15px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .result-price {
-	padding: 15px 0;
-	font-size: 12px;
+  padding: 15px 0;
+  font-size: 12px;
 }
 .result-book {
-	padding: 15px 0;
-	text-align: center;
+  padding: 15px 0;
+  text-align: center;
 }
 .info {
-	background: #dbdfe5;
-	color: #637079;
-	padding: 7px 10px;
-	border-radius: 3px;
-	display: block;
+  background: #dbdfe5;
+  color: #637079;
+  padding: 7px 10px;
+  border-radius: 3px;
+  display: block;
 }
 .result-tags {
-	padding-top: 15px;
-	margin-bottom: 5px;
-	overflow: hidden;
+  padding-top: 15px;
+  margin-bottom: 5px;
+  overflow: hidden;
 }
 .tags-less {
-	max-height: 95px;
+  max-height: 95px;
 }
 .tag {
-	color: white;
-	display: inline-block;
-	margin-right: 10px;
-	margin-bottom: 10px;
-	padding: 5px 10px;
-	border-radius: 3px;
+  color: white;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 3px;
 }
 .more-tags {
-	border: none;
-	outline: none;
-	background: #dbdfe5;
-	color: #637079;
+  border: none;
+  outline: none;
+  background: #dbdfe5;
+  color: #637079;
 }
 .tag-selected {
-	background: #5C87D1;
+  background: #5C87D1;
 }
 .tag-unselected {
-	background: #637079;
+  background: #637079;
 }
 .more-results {
-	border: none;
-	outline: none;
-	width: 100%;
-	margin-top: 40px;
-	border-radius: 5px;
+  border: none;
+  outline: none;
+  width: 100%;
+  margin-top: 40px;
+  border-radius: 5px;
   height: 40px;
-	background-color: #f66a52;
-	padding: 10px 12px;
-	color: white;
-	line-height: 20px;
-	display: block;
-	text-align: center;
-	margin-top: 35px;
+  background-color: #f66a52;
+  padding: 10px 12px;
+  color: white;
+  line-height: 20px;
+  display: block;
+  text-align: center;
+  margin-top: 35px;
 }
