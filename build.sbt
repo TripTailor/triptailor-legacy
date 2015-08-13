@@ -35,7 +35,13 @@ val consoleCommands =
     | import scala.concurrent.{ Await, Future }
     | import play.api.libs.concurrent.Execution.defaultContext
     | import play.api.libs.json._
-    | import play.api.{ Play, DefaultApplication, Mode }
+    | import play.api.{ Environment, ApplicationLoader, Play, Mode }
+    | val env = Environment(new java.io.File("."), this.getClass.getClassLoader, Mode.Dev)
+    | val context = ApplicationLoader.createContext(env)
+    | val loader = ApplicationLoader(context)
+    | val app = loader.load(context)
+    | Play.start(app)
+    | import Play.current
   """.stripMargin
 
 /** Docker settings **/
