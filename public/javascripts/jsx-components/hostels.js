@@ -133,7 +133,7 @@ var Content = React.createClass({
             {this.props.searchId >= 0 ? <ResultsGrid {...this.props} /> : ""}
           </div>
           <div className="col-md-3">
-            <AlsoTry ref="also" location={this.props.location} tags={this.props.tags} alsoTags={this.props.alsoTags} addTag={this.props.addTag} />
+            <Filters {...this.props} />
           </div>
         </div>
       </div>
@@ -256,6 +256,28 @@ var Tag = React.createClass({
   }
 });
 
+var Filters = React.createClass({
+  render: function() {
+    return(
+      <div>
+        <TagsHint />
+        <AlsoTry location={this.props.location} tags={this.props.tags} alsoTags={this.props.alsoTags} addTag={this.props.addTag} /> 
+      </div>
+    );
+  }
+});
+
+var TagsHint = React.createClass({
+  render: function() {
+    return (
+      <div className="filter">
+        <p className="filter-label"><i className="fa fa-rocket fa-1x"></i><strong>Hint</strong></p>
+        <div>Tags are keywords that people who reviewed the hostels mentioned a lot, in a positive context.</div>
+      </div>
+    );
+  }
+});
+
 var AlsoTry = React.createClass({
   getInitialState: function() {
     return {alsoTags: []};
@@ -288,9 +310,9 @@ var AlsoTry = React.createClass({
     }.bind(this));
 
     return (
-      <div className="also">
-        {tags.length > 0 ? <p className="header-label"><strong>Also Try</strong></p> : <p className="header-empty">Try adding more tags yourself</p>}
-        {tags.length > 0 ? <div className="also-tags-div">
+      <div className="also-try filter">
+        {tags.length > 0 ? <p className="filter-label"><strong>Also Try</strong></p> : <p className="filter-label">Try adding more tags yourself</p>}
+        {tags.length > 0 ? <div>
           {tags}
         </div> : ""}
       </div>
