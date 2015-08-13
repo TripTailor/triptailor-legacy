@@ -128,12 +128,12 @@ var Content = React.createClass({displayName: "Content",
     return (
       React.createElement("div", {className: "container-fluid content"}, 
         React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-md-3"}, 
+            React.createElement(Filters, React.__spread({},  this.props))
+          ), 
           React.createElement("div", {className: "col-md-9"}, 
             this.props.searchId >= 0 ? React.createElement(NumberResults, {results: this.props.results.length}) : React.createElement("div", {className: "spinner"}, React.createElement("img", {src: "../assets/images/spinner.gif"})), 
             this.props.searchId >= 0 ? React.createElement(ResultsGrid, React.__spread({},  this.props)) : ""
-          ), 
-          React.createElement("div", {className: "col-md-3"}, 
-            React.createElement(Filters, React.__spread({},  this.props))
           )
         )
       )
@@ -260,19 +260,8 @@ var Filters = React.createClass({displayName: "Filters",
   render: function() {
     return(
       React.createElement("div", null, 
-        React.createElement(TagsHint, null), 
-        React.createElement(AlsoTry, {location: this.props.location, tags: this.props.tags, alsoTags: this.props.alsoTags, addTag: this.props.addTag})
-      )
-    );
-  }
-});
-
-var TagsHint = React.createClass({displayName: "TagsHint",
-  render: function() {
-    return (
-      React.createElement("div", {className: "filter"}, 
-        React.createElement("p", {className: "filter-label"}, React.createElement("i", {className: "fa fa-rocket fa-1x"}), React.createElement("strong", null, "Hint")), 
-        React.createElement("div", null, "Tags are keywords that people who reviewed the hostels mentioned a lot, in a positive context.")
+        React.createElement(AlsoTry, {location: this.props.location, tags: this.props.tags, alsoTags: this.props.alsoTags, addTag: this.props.addTag}), 
+        React.createElement(TagsHint, null)
       )
     );
   }
@@ -310,11 +299,22 @@ var AlsoTry = React.createClass({displayName: "AlsoTry",
     }.bind(this));
 
     return (
-      React.createElement("div", {className: "also-try filter"}, 
-        tags.length > 0 ? React.createElement("p", {className: "filter-label"}, React.createElement("strong", null, "Also Try")) : React.createElement("p", {className: "filter-label"}, "Try adding more tags yourself"), 
+      React.createElement("div", {className: "filter"}, 
+        tags.length > 0 ? React.createElement("p", {className: "filter-label"}, React.createElement("strong", null, "Also Try")) : React.createElement("p", {className: "filter-label"}, "Try adding more tags yourself."), 
         tags.length > 0 ? React.createElement("div", null, 
           tags
         ) : ""
+      )
+    );
+  }
+});
+
+var TagsHint = React.createClass({displayName: "TagsHint",
+  render: function() {
+    return (
+      React.createElement("div", {className: "tags-hint filter"}, 
+        React.createElement("p", {className: "filter-label"}, React.createElement("i", {className: "fa fa-rocket fa-1x"}), React.createElement("strong", null, "Hint")), 
+        React.createElement("div", null, "Tags are keywords that people who reviewed the hostels mentioned a lot, in a positive context.")
       )
     );
   }
