@@ -1,13 +1,12 @@
-var HOSTELSTODISPLAY = 16;
+var HOSTELSTODISPLAY = 12;
 
 var Hostels = React.createClass({displayName: "Hostels",
   mixins: [AutoCompleteContainerMixin],
   getInitialState: function() {
-    return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], alsoTags: [], searchId: -1};
+    return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1};
   },
   componentWillMount: function() {
     this.getResults(this.state.location, this.state.tags);
-    this.getSuggestions(this.state.location);
   },
   hostelsAddTag: function(value) {
     this.getResults(this.state.location, this.addTag(value));
@@ -17,9 +16,6 @@ var Hostels = React.createClass({displayName: "Hostels",
   },
   hostelsRemoveSpecificTag: function(i) {
     this.getResults(this.state.location, this.removeSpecificTag(i));
-  },
-  removeSpecificAlsoTag: function(i) {
-    this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
   },
   getResults: function(location, tags) {
     this.setState({searchId: -1});
@@ -41,20 +37,6 @@ var Hostels = React.createClass({displayName: "Hostels",
       }.bind(this)
     });
   },
-  getSuggestions: function(location) {
-    var route = jsRoutes.controllers.HintsController.tagSuggestions();
-    $.ajax({
-      url: route.absoluteURL() + "?location=" + location.replace(", ", ",") + (this.state.tags.length > 0 ? "&tags=" + getStringTags(this.state.tags) : ""),
-      dataType: 'json',
-      type: route.type,
-      success: function(data) {
-        this.setState({alsoTags: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(route.absoluteURL(), status, err.toString());
-      }.bind(this)
-    });
-  },
   getArrayTags: function(tagsString) {
     var tags = [];
     var split = tagsString.split("-");
@@ -68,8 +50,8 @@ var Hostels = React.createClass({displayName: "Hostels",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.hostelsAddTag, removeTag: this.hostelsRemoveTag, removeSpecificTag: this.hostelsRemoveSpecificTag, alsoTags: this.state.alsoTags, addAlsoTag: this.addAlsoTag, removeSpecificAlsoTag: this.removeSpecificAlsoTag, getResults: this.getResults}), 
-        React.createElement(Content, {results: this.state.results, searchId: this.state.searchId})
+        React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.hostelsAddTag, removeTag: this.hostelsRemoveTag, removeSpecificTag: this.hostelsRemoveSpecificTag, getResults: this.getResults}), 
+        React.createElement(Content, {results: this.state.results, searchId: this.state.searchId, location: this.state.location, tags: this.state.tags, alsoTags: this.state.alsoTags, addTag: this.hostelsAddTag})
       )
     );
   }
@@ -83,7 +65,6 @@ var SearchHeader = React.createClass({displayName: "SearchHeader",
         React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.props.location, updateValue: this.props.updateLocationValue, getResults: this.props.getResults, tags: this.props.tags}), 
         React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Tags")), 
         React.createElement(AutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.props.query, updateValue: this.props.updateQueryValue, tags: this.props.tags, addTag: this.props.addTag, removeTag: this.props.removeTag, removeSpecificTag: this.props.removeSpecificTag})
-        /*<AlsoTry ref="also" location={this.props.location} tags={this.props.tags} alsoTags={this.props.alsoTags} addTag={this.props.addTag} removeSpecificAlsoTag={this.props.removeSpecificAlsoTag} />*/
       )
     );
   }
@@ -140,45 +121,21 @@ var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
   }
 });
 
-var AlsoTry = React.createClass({displayName: "AlsoTry",
-  render: function() {
-    var tags = $.map(this.props.alsoTags, function(value, i) {
-      return (
-        React.createElement(AlsoTryTag, {key: i, index: i, name: value, add: this.props.addTag, remove: this.props.removeSpecificAlsoTag})
-      );
-    }.bind(this));
 
-    return (
-      React.createElement("div", {className: "row also"}, 
-        React.createElement("div", {className: "col-md-12"}, 
-          tags.length > 0 ? React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")) : React.createElement("p", {className: "header-empty"}, "Try adding more tags yourself"), 
-          tags.length > 0 ? React.createElement("div", {className: "also-tags-div"}, 
-            tags
-          ) : ""
-        )
-      )
-    );
-  }
-});
-
-var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
-  handleClick: function() {
-    this.props.add(this.props.name);
-    this.props.remove(this.props.index);
-  },
-  render: function() {
-    return (
-      React.createElement("div", {className: "tag tag-unselected tag-also", onClick: this.handleClick}, this.props.name)
-    );
-  }
-});
 
 var Content = React.createClass({displayName: "Content",
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid content"}, 
-        this.props.searchId >= 0 ? React.createElement(NumberResults, {results: this.props.results.length}) : React.createElement("div", {className: "spinner"}, React.createElement("img", {src: "../assets/images/spinner.gif"})), 
-        this.props.searchId >= 0 ? React.createElement(ResultsGrid, React.__spread({},  this.props)) : ""
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-md-9"}, 
+            this.props.searchId >= 0 ? React.createElement(NumberResults, {results: this.props.results.length}) : React.createElement("div", {className: "spinner"}, React.createElement("img", {src: "../assets/images/spinner.gif"})), 
+            this.props.searchId >= 0 ? React.createElement(ResultsGrid, React.__spread({},  this.props)) : ""
+          ), 
+          React.createElement("div", {className: "col-md-3"}, 
+            React.createElement(AlsoTry, {ref: "also", location: this.props.location, tags: this.props.tags, alsoTags: this.props.alsoTags, addTag: this.props.addTag})
+          )
+        )
       )
     );
   }
@@ -214,7 +171,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
       results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
-      if((i + 1) % 4 == 0) {
+      if((i + 1) % 3 == 0) {
         rows.push(
           React.createElement("div", {key: rows.length, className: "row results-row"}, 
             results
@@ -252,7 +209,7 @@ var Result = React.createClass({displayName: "Result",
   },
   render: function() {
     return (
-      React.createElement("div", {className: "col-md-3"}, 
+      React.createElement("div", {className: "col-md-4"}, 
         React.createElement("div", {className: "result"}, 
           React.createElement("a", {href: this.props.result.url != null ? this.props.result.url : "", target: this.props.result.url != null ? "_blank" : "", className: "result-a", onClick: this.handleClick}, 
             React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
@@ -295,6 +252,60 @@ var Tag = React.createClass({displayName: "Tag",
   render: function() {
     return (
       React.createElement("div", {className: this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}, this.props.name)
+    );
+  }
+});
+
+var AlsoTry = React.createClass({displayName: "AlsoTry",
+  getInitialState: function() {
+    return {alsoTags: []};
+  },
+  componentWillMount: function() {
+    this.getSuggestions();
+  },
+  removeSpecificAlsoTag: function(i) {
+    this.setState({alsoTags: this.state.alsoTags.slice(0, i).concat(this.state.alsoTags.slice(i + 1, this.state.alsoTags.length))});
+  },
+  getSuggestions: function(location) {
+    var route = jsRoutes.controllers.HintsController.tagSuggestions();
+    $.ajax({
+      url: route.absoluteURL() + "?location=" + this.props.location.replace(", ", ",") + (this.props.tags.length > 0 ? "&tags=" + getStringTags(this.props.tags) : ""),
+      dataType: 'json',
+      type: route.type,
+      success: function(data) {
+        this.setState({alsoTags: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(route.absoluteURL(), status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() {
+    var tags = $.map(this.state.alsoTags, function(value, i) {
+      return (
+        React.createElement(AlsoTryTag, {key: i, index: i, name: value, add: this.props.addTag, remove: this.removeSpecificAlsoTag})
+      );
+    }.bind(this));
+
+    return (
+      React.createElement("div", {className: "also"}, 
+        tags.length > 0 ? React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Also Try")) : React.createElement("p", {className: "header-empty"}, "Try adding more tags yourself"), 
+        tags.length > 0 ? React.createElement("div", {className: "also-tags-div"}, 
+          tags
+        ) : ""
+      )
+    );
+  }
+});
+
+var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
+  handleClick: function() {
+    this.props.add(this.props.name);
+    this.props.remove(this.props.index);
+  },
+  render: function() {
+    return (
+      React.createElement("div", {className: "tag tag-unselected tag-also", onClick: this.handleClick}, this.props.name)
     );
   }
 });

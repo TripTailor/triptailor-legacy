@@ -44,9 +44,13 @@ body {
 .tag-search-container {
   border-spacing: 10px 4px;
 }
+
+
+/*** Results ***/
+
 /* Also try */
 .also {
-  margin-top: 25px;
+  margin: 25px 0;
 }
 .also-tags-div {
   padding-top: 5px;
@@ -54,9 +58,7 @@ body {
 .tag-also {
   cursor: pointer;
 }
-
-/*** Results ***/
-
+/* Hostels */
 .content {
   padding-bottom: 120px;
 }
