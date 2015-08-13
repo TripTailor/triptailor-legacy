@@ -130,8 +130,6 @@ var AutoCompleteTagsMixin = {
         this.props.updateValue("");
         this.setState({hints: [], selectedItem: -1});
       }
-      else
-        this.props.submit();
     }
     else if(e.keyCode == 32) {
       if(this.props.value.trim().length > 0)
