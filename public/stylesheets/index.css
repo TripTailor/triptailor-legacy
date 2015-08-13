@@ -5,176 +5,179 @@ body {
 
 /*** Header inputs ***/
 
-.form-row {
-	margin: auto 0;
+.autocomplete-row {
+  margin: auto 0;
 }
-.a-col {
-	text-align: center;
-	padding-left: 0;
-	padding-right: 0;
+.autocomplete-a-col {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 .inline-input-left, .input-tags {
-	border-radius: 5px;
+  border-radius: 5px;
 }
 .autocomplete-input-container {
-	border-radius: 5px;
+  border-radius: 5px;
 }
 .tag-search-container {
-	border-spacing: 10px 5px;
+  border-spacing: 10px 5px;
 }
 
 /*** Header ***/
 .jumbotron {
-	background: url(../images/sf.jpg) no-repeat center center;
+  background: url(../images/sf.jpg) no-repeat center center;
 }
 .navbar-brand {
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .navbar-triptailor .navbar-nav>li>a {
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .jumbotron .header {
-	font-family: 'Ubuntu', sans-serif;
-	font-size: 38px;
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-	color: white;
-	margin-top: 80px;
-	margin-bottom: 8px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 38px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  color: white;
+  margin-top: 80px;
+  margin-bottom: 8px;
 }
 .jumbotron .subheader {
-	font-size: 18px;
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-	color: white;
-	margin-bottom: 52px;
+  font-size: 18px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  color: white;
+  margin-bottom: 52px;
 }
-.form-col-left, .form-col-center, .a-col {
-	padding-left: 0;
-	padding-right: 0;
-	margin-top: 10px;
+.autocomplete-col-left, .autocomplete-col-center, .autocomplete-a-col {
+  padding-left: 0;
+  padding-right: 0;
+  margin-top: 10px;
 }
 .submit {
-	border-radius: 5px;
+  border-radius: 5px;
   height: 40px;
-	background-color: #f66a52;
-	padding: 10px 12px;
-	color: white;
-	line-height: 20px;
-	display: block;
-	text-align: center;
+  background-color: #f66a52;
+  padding: 10px 12px;
+  color: white;
+  line-height: 20px;
+  display: block;
+  text-align: center;
 }
 .submit:link, .submit:visited, .submit:hover, .submit:active {
-	text-decoration: none;
-	color: white;
+  text-decoration: none;
+  color: white;
 }
 
 /*** Tips ***/
 
 .tips-header-container {
-	padding-top: 40px;
-	padding-bottom: 32px;
+  padding-top: 40px;
+  padding-bottom: 32px;
 }
 .tips-header {
-	font-family: 'Ubuntu', sans-serif;
-	font-size: 30px;
-	color: #000;
-	margin-top: 0;
-	margin-bottom: 8px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 30px;
+  color: #000;
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 .tips-subheader {
-	color: #000;
-	margin-bottom: 0;
+  color: #000;
+  margin-bottom: 0;
 }
 .tip-a:link, .tip-a:visited, .tip-a:hover, .tip-a:active  {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 .tip-big {
-	height: 300px;
-	background: url(../images/istanbul.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  height: 300px;
+  background: url(../images/istanbul.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .tip {
-	height: 300px;
+  height: 300px;
 }
 .bangkok {
-	background: url(../images/bangkok.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  background: url(../images/bangkok.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .amsterdam {
-	background: url(../images/amsterdam.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  background: url(../images/amsterdam.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .rio {
-	background: url(../images/rio.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  background: url(../images/rio.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .ny {
-	background: url(../images/ny.jpg) no-repeat center center;
-	-webkit-background-size: cover;
-	-moz-background-size: cover;
-	-o-background-size: cover;
-	background-size: cover;
+  background: url(../images/ny.jpg) no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 .tip-content-container {
-	display: table;
-	width: 100%;
-	height: 100%;
+  display: table;
+  width: 100%;
+  height: 100%;
 }
 .tip-content {
-	vertical-align: middle;
-	display: table-cell;
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  vertical-align: middle;
+  display: table-cell;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .tip-content h3 {
-	margin-top: 0;
-	font-family: 'Ubuntu', sans-serif;
-	font-size: 24px;
+  margin-top: 0;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 24px;
 }
 .tip-content p {
-	color: inherit;
+  color: inherit;
 }
 .tip-results {
-	display: inline-block;
-	background-color: #ff5a5f;
-	padding: 10px 8px;
-	border-radius: 3px;
-	color: inherit;
+  display: inline-block;
+  background-color: #ff5a5f;
+  padding: 10px 8px;
+  border-radius: 3px;
+  color: inherit;
 }
 .bottom-tips {
-	margin-top: 30px;
-	margin-bottom: 100px;
+  margin-top: 30px;
+  margin-bottom: 100px;
 }
 
 /*** Media queries ***/
 
 @media (min-width: 992px) {
-	.form-col-left {
-		border-right: 1px solid #ccc;
-	}
-	.inline-input-left {
-		border-radius: 5px 0 0 5px;
-	}
-	.inline-input-center {
-		border-radius: 0;
-	}
-	.submit {
-		border-radius: 0 5px 5px 0;
+  .autocomplete-col-left {
+    border-right: 1px solid #ccc;
+  }
+  .autocomplete-col-left, .autocomplete-col-center, .autocomplete-a-col {
+    margin-top: 0;
+  }
+  .inline-input-left {
+    border-radius: 5px 0 0 5px;
+  }
+  .inline-input-center {
+    border-radius: 0;
+  }
+  .submit {
+    border-radius: 0 5px 5px 0;
     width: 100%;
-	}
+  }
 
-	.autocomplete-input-container {
-		border-radius: 0;
-	}
+  .autocomplete-input-container {
+    border-radius: 0;
+  }
 }

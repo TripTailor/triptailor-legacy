@@ -138,14 +138,14 @@ var AutoCompleteSearch = React.createClass({
     return (
       <div className="row">
         <div className="col-md-10 col-md-offset-1">
-          <div className="row form-row">
-            <div className="col-md-5 form-col-left">
+          <div className="row autocomplete-row">
+            <div className="col-md-5 autocomplete-col-left">
               <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.state.location} updateValue={this.updateLocationValue} submit={this.enterSubmit} />
             </div>
-            <div className="col-md-5 form-col-center">
+            <div className="col-md-5 autocomplete-col-center">
               <AutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.state.query} updateValue={this.updateQueryValue} submit={this.enterSubmit} tags={this.state.tags} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} />
             </div>
-            <div className="col-md-2 a-col">
+            <div className="col-md-2 autocomplete-a-col">
               <a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
             </div>
           </div>
@@ -165,7 +165,7 @@ var AutoCompleteInput = React.createClass({
   render: function() {
     return (
       <div>
-        <input ref="query" type="text" className="form-control inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.indexHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+        <input ref="query" type="text" className="triptailor-input inline-input-left" placeholder="Pick a city" autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.indexHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
         {this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}
       </div>
     );
@@ -191,7 +191,7 @@ var AutoCompleteTags = React.createClass({
         <div className="tag-search-container">
           {tags}
           <div className="tag-search-input">
-            <input ref="query" type="text" className="form-control input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.indexHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
+            <input ref="query" type="text" className="triptailor-input input-tags" placeholder={this.props.tags.length == 0 ? "Write some tags" : ""} autoComplete="off" value={this.props.value} onChange={this.handleValueChanged} onKeyUp={this.indexHandleKeyUp} onBlur={this.handleBlur} onKeyDown={this.handleKeyDown} />
           </div>
         </div>
         {this.state.hints.length > 0 ? <TripTailorAutoCompleteResults hints={this.state.hints} selectedItem={this.state.selectedItem} elementClick={this.elementClick} elementHover={this.updateSelectedItem} /> : ''}

@@ -67,19 +67,19 @@ body {
 
 /*** Bootstrapn form controls ***/
 
-.form-control {
+.triptailor-input {
   outline: none;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
   border: none;
   height: 40px;
   color: #565a5c;
   font-size: 14px;
   border-radius: 0;
   padding: 6px 15px;
+  display: block;
+  width: 100%;
+  line-height: 1.42857143;
 }
-.form-control:focus {
+.triptailor-input:focus {
   border: none;
 }
 
@@ -252,10 +252,7 @@ body {
     padding-top: 50px;
     margin-top: -50px;
   }
-
-  .form-col-left, .form-col-center, .a-col {
-    margin-top: 0;
-  }
+  
   .autocomplete-tags-container {
     border-radius: 0;
   }
