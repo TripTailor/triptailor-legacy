@@ -130,8 +130,6 @@ var AutoCompleteTagsMixin = {
         this.props.updateValue("");
         this.setState({hints: [], selectedItem: -1});
       }
-      else
-        this.props.submit();
     }
     else if(e.keyCode == 32) {
       if(this.props.value.trim().length > 0)
@@ -146,11 +144,15 @@ var AutoCompleteTagsMixin = {
     else if(e.keyCode == 38 && this.state.selectedItem > 0) {
       this.setState({selectedItem: this.state.selectedItem - 1});
     }
-    else if(e.keyCode == 9 && this.state.selectedItem >= 0) {
+    else if(e.keyCode == 9) {
       e.preventDefault();
-      this.props.addTag(this.state.hints[this.state.selectedItem]);
+      if(this.state.selectedItem >= 0) {
+        this.props.addTag(this.state.hints[this.state.selectedItem]);
+        this.setState({hints: [], selectedItem: -1});
+      }
+      else
+        this.props.addTag(this.props.value.toLowerCase());
       this.props.updateValue("");
-      this.setState({hints: [], selectedItem: -1});
     }
     else if(e.keyCode == 8 && this.props.value == "") {
       this.props.removeTag();
