@@ -51,8 +51,9 @@ body {
 .filter-label {
   margin-bottom: 25px;
 }
-.also-try {
+.tags-hint {
   border-top: 1px solid #DBDFE5;
+  border-bottom: 1px solid #DBDFE5;
 }
 .fa-rocket {
   margin-right: 10px; 
@@ -147,4 +148,10 @@ body {
   display: block;
   text-align: center;
   margin-top: 35px;
+}
+
+@media (min-width: 992px) {
+  .tags-hint {
+    border-bottom: 0;
+  }
 }
