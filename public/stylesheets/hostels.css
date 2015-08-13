@@ -22,10 +22,6 @@ body {
   margin-bottom: 15px;
   font-size: 12px;
 }
-.header-empty {
-  margin-bottom: 15px;
-  font-size: 13px;
-}
 /* Search */
 .location-input, .autocomplete-tags-container {
   border: 1px solid #DBDFE5;
@@ -48,12 +44,18 @@ body {
 
 /*** Results ***/
 
-/* Also try */
-.also {
-  margin: 25px 0;
+/* Filters */
+.filter {
+  padding: 25px 0;
 }
-.also-tags-div {
-  padding-top: 5px;
+.filter-label {
+  margin-bottom: 25px;
+}
+.also-try {
+  border-top: 1px solid #DBDFE5;
+}
+.fa-rocket {
+  margin-right: 10px; 
 }
 .tag-also {
   cursor: pointer;
