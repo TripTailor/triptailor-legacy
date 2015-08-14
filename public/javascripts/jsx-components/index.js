@@ -7,7 +7,7 @@ var Header = React.createClass({
           <div className="row">
             <div className="col-md-10 col-md-offset-1 text-center">
               <h1 className="header">Looking for a hostel?</h1>
-              <p className="subheader">Pick a city and write some tags, and we will find the perfect match for you</p>
+              <p className="subheader">TripTailor helps you find hostels by analysing reviews for you</p>
             </div>
           </div>
 
