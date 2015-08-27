@@ -16,3 +16,6 @@ dist
 target/
 conf/db.conf
 public/javascripts/components/.module-cache
+.classpath
+.project
+.settings
