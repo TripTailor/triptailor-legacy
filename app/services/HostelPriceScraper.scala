@@ -1,3 +1,6 @@
+import javax.inject.Inject
+
+import play.api.Configuration
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.JsValue
@@ -7,7 +10,9 @@ import scala.concurrent.Future
 
 case class HostelPricingInfo(id: String, price: Option[BigDecimal])
 
-object HostelPricingScrapper {
+class HostelPriceScrapper @Inject() (config: Configuration) {
+  val timeout = config.getMilliseconds("scraper.pricingInfo.timeout").get
+
   def pricingInfo(city: String, country: String, from: String, to: String): Future[Seq[HostelPricingInfo]] =
     for {
       response ← hostelWorldRequest("city" -> city, "country" -> country, "date_from" -> from, "date_to" -> to)
@@ -21,6 +26,6 @@ object HostelPricingScrapper {
     )
 
   private def hostelWorldRequest(queryParams: (String, String)*) =
-    WS.url("http://www.hostelworld.com/search").withQueryString(queryParams: _*).get()
+    WS.url("http://www.hostelworld.com/search").withQueryString(queryParams: _*).withRequestTimeout(timeout).get()
 
 }
