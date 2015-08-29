@@ -2,6 +2,10 @@ name         := """triptailor"""
 version      := "1.0-SNAPSHOT"
 scalaVersion := "2.11.7"
 
+val scraperDepencncies = Seq(
+  "org.jsoup" % "jsoup" % "1.8.3"
+)
+
 val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
   "com.typesafe.play" %% "play-slick" % "1.0.0",
@@ -55,7 +59,7 @@ dockerEntrypoint     :=  Seq(s"bin/${executableScriptName.value}", "-J-Xmx384m",
 libraryDependencies ++= Seq(
   cache,
   ws
-) ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
+) ++ scraperDepencncies ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
 
 initialCommands in console := consoleCommands
 
