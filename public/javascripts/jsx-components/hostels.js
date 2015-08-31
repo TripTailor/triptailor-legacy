@@ -228,14 +228,14 @@ var TagsRow = React.createClass({
     var tags = [];
     var i = 0;
     for(; i < 4 && i < this.props.tags.length; i++) {
-      tags.push(<TripTailorTag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
+      tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
     }
     if (!this.props.more) {
       tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showMoreTags}>More</button>);
     }
     else {
       for(; i < this.props.tags.length; i++) {
-        tags.push(<TripTailorTag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
+        tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
       }
       tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showLessTags}>Less</button>);
     }
@@ -244,6 +244,14 @@ var TagsRow = React.createClass({
       <div className={this.props.more ? "result-tags" : "result-tags tags-less"}>
         {tags}
       </div>
+    );
+  }
+});
+
+var Tag = React.createClass({
+  render: function() {
+    return (
+      <div className={this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}>{this.props.name}</div>
     );
   }
 });

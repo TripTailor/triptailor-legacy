@@ -46,9 +46,9 @@ var Tags = React.createClass({
   render: function() {
     var tags = $.map(this.props.tags, function(tag, i) {
       return (
-        <TripTailorTag key={i} name={tag.name} type={tag.type} />
+        <Tag key={i} index={i} name={tag.name} type={tag.type} toggleTag={this.props.toggleTag} />
       );
-    });
+    }.bind(this));
     return (
       <div className="tags">
         <p className="tags-label"><strong>Tags</strong></p>
@@ -56,6 +56,17 @@ var Tags = React.createClass({
           {tags}
         </div>
       </div>
+    );
+  }
+});
+
+var Tag = React.createClass({
+  handleClick: function() {
+    this.props.toggleTag(this.props.index);
+  },
+  render: function() {
+    return (
+      <div className={this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"} onClick={this.handleClick}>{this.props.name}</div>
     );
   }
 });
@@ -143,10 +154,15 @@ var ReviewsSection = React.createClass({
       }.bind(this)
     });
   },
+  toggleTag: function(i) {
+    var tags = this.state.tags.slice();
+    tags[i].type = 1 - tags[i].type;
+    this.setState(tags);
+  },
   render: function() {
     return (
       <div>
-        <Tags tags={this.state.tags} />
+        <Tags tags={this.state.tags} toggleTag={this.toggleTag} />
         <Reviews tags={this.state.tags} />
       </div>
     );

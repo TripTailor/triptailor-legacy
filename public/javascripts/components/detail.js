@@ -46,9 +46,9 @@ var Tags = React.createClass({displayName: "Tags",
   render: function() {
     var tags = $.map(this.props.tags, function(tag, i) {
       return (
-        React.createElement(TripTailorTag, {key: i, name: tag.name, type: tag.type})
+        React.createElement(Tag, {key: i, index: i, name: tag.name, type: tag.type, toggleTag: this.props.toggleTag})
       );
-    });
+    }.bind(this));
     return (
       React.createElement("div", {className: "tags"}, 
         React.createElement("p", {className: "tags-label"}, React.createElement("strong", null, "Tags")), 
@@ -56,6 +56,17 @@ var Tags = React.createClass({displayName: "Tags",
           tags
         )
       )
+    );
+  }
+});
+
+var Tag = React.createClass({displayName: "Tag",
+  handleClick: function() {
+    this.props.toggleTag(this.props.index);
+  },
+  render: function() {
+    return (
+      React.createElement("div", {className: this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected", onClick: this.handleClick}, this.props.name)
     );
   }
 });
@@ -143,10 +154,15 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
       }.bind(this)
     });
   },
+  toggleTag: function(i) {
+    var tags = this.state.tags.slice();
+    tags[i].type = 1 - tags[i].type;
+    this.setState(tags);
+  },
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Tags, {tags: this.state.tags}), 
+        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag}), 
         React.createElement(Reviews, {tags: this.state.tags})
       )
     );
