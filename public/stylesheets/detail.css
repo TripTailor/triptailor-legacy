@@ -1,0 +1,73 @@
+/*** General ***/
+
+body {
+  color: #5A5B5B;
+}
+
+/*** navbar ***/
+
+.navbar-triptailor {
+  background: #4A5667;
+}
+
+/*** Header ***/
+.header {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background: #EDF2F5;
+}
+.header-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.currency {
+  font-size: 10px;
+  vertical-align: top;
+}
+.book-span {
+  margin-left: 60px;
+}
+.book-link {
+  border-radius: 5px;
+  background-color: #f66a52;
+  color: white;
+  font-size: 12px;
+  padding: 10px 60px;
+}
+
+/*** Main Content ***/
+
+.content {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+/*** Photos ***/
+
+.main-photo {
+  height: 600px;
+  background: #EDF2F5;
+  border: 1px solid #DBDFE5;
+}
+
+/*** Description ***/
+
+.description-label {
+  margin-bottom: 25px;
+  font-size: 16px;
+}
+
+/*** Tags ***/
+
+.tags {
+  margin-top: 25px;
+}
+.tags-label {
+  margin-bottom: 25px;
+}
+
+/*** Reviews ***/
+
+.reviews-label {
+  margin-bottom: 15px;
+}

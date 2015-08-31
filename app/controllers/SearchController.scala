@@ -86,6 +86,10 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
+  
+  def detail = Action { implicit request =>
+    Ok(views.html.detail())
+  }
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =
     Ok(Json.obj("searchID" -> searchIDResults._1, "classifiedHostels" -> Json.toJson(searchIDResults._2)))
