@@ -65,9 +65,15 @@ body {
 .tags-label {
   margin-bottom: 25px;
 }
+.tag {
+  cursor: pointer;
+}
 
 /*** Reviews ***/
 
+.reviews {
+  margin-top: 30px;
+}
 .reviews-label {
   margin-bottom: 15px;
 }

@@ -215,3 +215,11 @@ var TripTailorInputTag = React.createClass({displayName: "TripTailorInputTag",
     );
   }
 });
+
+var TripTailorTag = React.createClass({displayName: "TripTailorTag",
+  render: function() {
+    return (
+      React.createElement("div", {className: this.props.type == 0 ? "tag tag-selected" : "tag tag-unselected"}, this.props.name)
+    );
+  }
+});

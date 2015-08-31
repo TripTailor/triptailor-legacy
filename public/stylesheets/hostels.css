@@ -114,25 +114,11 @@ body {
 .tags-less {
   max-height: 95px;
 }
-.tag {
-  color: white;
-  display: inline-block;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 5px 10px;
-  border-radius: 3px;
-}
 .more-tags {
   border: none;
   outline: none;
   background: #dbdfe5;
   color: #637079;
-}
-.tag-selected {
-  background: #5C87D1;
-}
-.tag-unselected {
-  background: #637079;
 }
 .more-results {
   border: none;

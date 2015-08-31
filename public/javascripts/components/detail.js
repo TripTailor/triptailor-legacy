@@ -44,11 +44,16 @@ var Photos = React.createClass({displayName: "Photos",
 
 var Tags = React.createClass({displayName: "Tags",
   render: function() {
+    var tags = $.map(this.props.tags, function(tag, i) {
+      return (
+        React.createElement(TripTailorTag, {key: i, name: tag.name, type: tag.type})
+      );
+    });
     return (
       React.createElement("div", {className: "tags"}, 
         React.createElement("p", {className: "tags-label"}, React.createElement("strong", null, "Tags")), 
-        React.createElement("div", {className: "tags"}
-
+        React.createElement("div", {className: "tags"}, 
+          tags
         )
       )
     );
@@ -58,7 +63,7 @@ var Tags = React.createClass({displayName: "Tags",
 var Reviews = React.createClass({displayName: "Reviews",
   render: function() {
     return (
-      React.createElement("div", null, 
+      React.createElement("div", {className: "reviews"}, 
         React.createElement("p", {className: "reviews-label"}, React.createElement("strong", null, "Reviews")), 
         React.createElement("div", {className: "reviews"}
 
@@ -69,10 +74,29 @@ var Reviews = React.createClass({displayName: "Reviews",
 });
 
 var ReviewsSection = React.createClass({displayName: "ReviewsSection",
+  getInitialState: function() {
+    return {tags: []};
+  },
+  componentWillMount: function() {
+    this.getTags();
+  },
+  getTags: function() {
+    $.ajax({
+      url: "../assets/test/tags.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({tags: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Tags test", status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Tags, null), 
+        React.createElement(Tags, {tags: this.state.tags}), 
         React.createElement(Reviews, null)
       )
     );

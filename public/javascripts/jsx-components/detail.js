@@ -44,11 +44,16 @@ var Photos = React.createClass({
 
 var Tags = React.createClass({
   render: function() {
+    var tags = $.map(this.props.tags, function(tag, i) {
+      return (
+        <TripTailorTag key={i} name={tag.name} type={tag.type} />
+      );
+    });
     return (
       <div className="tags">
         <p className="tags-label"><strong>Tags</strong></p>
         <div className="tags">
-
+          {tags}
         </div>
       </div>
     );
@@ -58,7 +63,7 @@ var Tags = React.createClass({
 var Reviews = React.createClass({
   render: function() {
     return (
-      <div>
+      <div className="reviews">
         <p className="reviews-label"><strong>Reviews</strong></p>
         <div className="reviews">
 
@@ -69,10 +74,29 @@ var Reviews = React.createClass({
 });
 
 var ReviewsSection = React.createClass({
+  getInitialState: function() {
+    return {tags: []};
+  },
+  componentWillMount: function() {
+    this.getTags();
+  },
+  getTags: function() {
+    $.ajax({
+      url: "../assets/test/tags.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({tags: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Tags test", status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
     return (
       <div>
-        <Tags />
+        <Tags tags={this.state.tags} />
         <Reviews />
       </div>
     );
