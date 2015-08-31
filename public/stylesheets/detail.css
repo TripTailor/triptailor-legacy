@@ -39,7 +39,7 @@ body {
 
 .content {
   padding-top: 25px;
-  padding-bottom: 25px;
+  padding-bottom: 60px;
 }
 
 /*** Photos ***/
@@ -76,4 +76,11 @@ body {
 }
 .reviews-label {
   margin-bottom: 15px;
+}
+.reviews-copy {
+  margin-bottom: 15px;
+}
+.review {
+  padding: 25px 0;
+  border-top: 1px solid #DBDFE5;
 }

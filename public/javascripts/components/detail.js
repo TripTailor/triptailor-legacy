@@ -61,13 +61,63 @@ var Tags = React.createClass({displayName: "Tags",
 });
 
 var Reviews = React.createClass({displayName: "Reviews",
+  getInitialState: function() {
+    return {reviews: []}
+  },
+  componentWillMount: function() {
+    this.getReviews();
+  },
+  getReviews: function() {
+    $.ajax({
+      url: "../assets/test/reviews.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({reviews: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Reviews test", status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
+    var reviews = [];
+    var selectedString = "";
+    var selectedTags = $.map(this.props.tags, function(tag, i) {
+      if(tag.type == 0) {
+        selectedString += tag.name + " ";
+        return tag.name;
+      }
+    });
+    $.each(this.state.reviews, function(i, review) {
+      if(selectedTags.length == 0)
+        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
+      else
+        for(var j = 0; j <  selectedTags.length; j++) {
+          if(review.tags.indexOf(selectedTags[j]) != -1) {
+            reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
+            break;
+          }
+        }
+    });
     return (
       React.createElement("div", {className: "reviews"}, 
         React.createElement("p", {className: "reviews-label"}, React.createElement("strong", null, "Reviews")), 
-        React.createElement("div", {className: "reviews"}
-
+        React.createElement("p", {className: "reviews-copy"}, "Showing ", React.createElement("strong", null, reviews.length), " (of ", this.state.reviews.length, " total reviews) ", selectedTags.length > 0 ? React.createElement("span", null, "related with ", React.createElement("strong", null, selectedString)) : ""), 
+        React.createElement("div", null, 
+          reviews
         )
+      )
+    );
+  }
+});
+
+var Review = React.createClass({displayName: "Review",
+  render: function() {
+    return (
+      React.createElement("div", {className: "review"}, 
+        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer), " (", React.createElement("i", null, this.props.date), ")"), 
+        React.createElement("p", null, this.props.review)
       )
     );
   }
@@ -97,7 +147,7 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     return (
       React.createElement("div", null, 
         React.createElement(Tags, {tags: this.state.tags}), 
-        React.createElement(Reviews, null)
+        React.createElement(Reviews, {tags: this.state.tags})
       )
     );
   }

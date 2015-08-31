@@ -61,13 +61,63 @@ var Tags = React.createClass({
 });
 
 var Reviews = React.createClass({
+  getInitialState: function() {
+    return {reviews: []}
+  },
+  componentWillMount: function() {
+    this.getReviews();
+  },
+  getReviews: function() {
+    $.ajax({
+      url: "../assets/test/reviews.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({reviews: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Reviews test", status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
+    var reviews = [];
+    var selectedString = "";
+    var selectedTags = $.map(this.props.tags, function(tag, i) {
+      if(tag.type == 0) {
+        selectedString += tag.name + " ";
+        return tag.name;
+      }
+    });
+    $.each(this.state.reviews, function(i, review) {
+      if(selectedTags.length == 0)
+        reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
+      else
+        for(var j = 0; j <  selectedTags.length; j++) {
+          if(review.tags.indexOf(selectedTags[j]) != -1) {
+            reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
+            break;
+          }
+        }
+    });
     return (
       <div className="reviews">
         <p className="reviews-label"><strong>Reviews</strong></p>
-        <div className="reviews">
-
+        <p className="reviews-copy">Showing <strong>{reviews.length}</strong> (of {this.state.reviews.length} total reviews) {selectedTags.length > 0 ? <span>related with <strong>{selectedString}</strong></span> : ""}</p>
+        <div>
+          {reviews}
         </div>
+      </div>
+    );
+  }
+});
+
+var Review = React.createClass({
+  render: function() {
+    return (
+      <div className="review">
+        <p className="review-label"><strong>{this.props.reviewer}</strong> (<i>{this.props.date}</i>)</p>
+        <p>{this.props.review}</p>
       </div>
     );
   }
@@ -97,7 +147,7 @@ var ReviewsSection = React.createClass({
     return (
       <div>
         <Tags tags={this.state.tags} />
-        <Reviews />
+        <Reviews tags={this.state.tags} />
       </div>
     );
   }
