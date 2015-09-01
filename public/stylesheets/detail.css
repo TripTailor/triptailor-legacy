@@ -17,53 +17,66 @@ body {
   background: #EDF2F5;
 }
 .header-title {
-  font-size: 20px;
-  margin-bottom: 10px;
+  font-size: 24px;
+  font-family: 'Ubuntu', sans-serif;
+}
+.hostel-address {
+  font-color: #333333;
 }
 .currency {
-  font-size: 10px;
+  font-size: 14px;
   vertical-align: top;
 }
 .book-span {
-  margin-left: 60px;
+  margin-left: 25px;
 }
 .book-link {
   border-radius: 5px;
   background-color: #f66a52;
   color: white;
-  font-size: 12px;
-  padding: 10px 60px;
+  width: 120px;
+  height: 30px;
+  line-height: 30px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
 }
 
 /*** Main Content ***/
 
 .content {
   padding-top: 25px;
-  padding-bottom: 60px;
+  padding-bottom: 150px;
 }
 
 /*** Photos ***/
 
 .main-photo {
-  height: 600px;
+  height: 410px;
   background: #EDF2F5;
   border: 1px solid #DBDFE5;
 }
 
 /*** Description ***/
 
+.description {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 18px;
+}
 .description-label {
   margin-bottom: 25px;
-  font-size: 16px;
 }
 
 /*** Tags ***/
 
 .tags {
-  margin-top: 25px;
+  margin-top: 30px;
 }
 .tags-label {
-  margin-bottom: 25px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 .tag {
   cursor: pointer;
@@ -72,10 +85,11 @@ body {
 /*** Reviews ***/
 
 .reviews {
-  margin-top: 30px;
+  margin-top: 50px;
 }
 .reviews-label {
-  margin-bottom: 15px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 18px;
 }
 .reviews-copy {
   margin-bottom: 15px;
