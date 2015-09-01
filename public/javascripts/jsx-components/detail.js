@@ -28,14 +28,52 @@ var Description = React.createClass({
 });
 
 var Photos = React.createClass({
+  getInitialState: function() {
+    return {photos: [], mainPhoto: -1, showMore: false};
+  },
+  componentWillMount: function() {
+    this.getPhotos();
+  },
+  getPhotos: function() {
+    $.ajax({
+      url: "../assets/test/photos.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({photos: data, mainPhoto: 0});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Reviews test", status, err.toString());
+      }.bind(this)
+    });
+  },
+  selectPhoto: function(i) {
+    this.setState({mainPhoto: i});
+  },
+  showMore: function() {
+    this.setState({showMore: true});
+  },
+  showLess: function() {
+    this.setState({showMore: false});
+  },
   render: function() {
+    var mainPhoto = this.state.mainPhoto >= 0 ? <div className="main-photo" style={{background: "url(" + this.state.photos[this.state.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}></div> : <div className="main-photo"></div>;
+
+    var photos = [];
+    for(var i = 0; i < this.state.photos.length && (this.state.showMore || i < 6); i++) {
+      if(this.state.mainPhoto != i)
+        photos.push(<div key={i} className="other-photo" style={{background: "url(" + this.state.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.selectPhoto.bind(this, i)}></div>);
+    }
+    if(!this.state.showMore)
+      photos.push(<div className="other-photo more-photos" onClick={this.showMore}>View More</div>);
+    else
+      photos.push(<div className="other-photo more-photos" onClick={this.showLess}>View Less</div>);
+
     return (
       <div>
-        <div className="main-photo">
-
-        </div>
-        <div className="other-photos">
-
+        {mainPhoto}
+        <div>
+          {photos}
         </div>
       </div>
     );

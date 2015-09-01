@@ -54,8 +54,22 @@ body {
 
 .main-photo {
   height: 410px;
-  background: #EDF2F5;
-  border: 1px solid #DBDFE5;
+  margin-bottom: 20px;
+}
+.other-photo {
+  height: 82px;
+  width: 165px;
+  display: inline-block;
+  cursor: pointer;
+}
+.more-photos {
+  background: #2b2d2e;
+  color: white;
+  vertical-align: top;
+  text-align: center;
+  line-height: 82px;
+}
+.more-text {
 }
 
 /*** Description ***/

@@ -28,14 +28,52 @@ var Description = React.createClass({displayName: "Description",
 });
 
 var Photos = React.createClass({displayName: "Photos",
+  getInitialState: function() {
+    return {photos: [], mainPhoto: -1, showMore: false};
+  },
+  componentWillMount: function() {
+    this.getPhotos();
+  },
+  getPhotos: function() {
+    $.ajax({
+      url: "../assets/test/photos.json",
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({photos: data, mainPhoto: 0});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("Reviews test", status, err.toString());
+      }.bind(this)
+    });
+  },
+  selectPhoto: function(i) {
+    this.setState({mainPhoto: i});
+  },
+  showMore: function() {
+    this.setState({showMore: true});
+  },
+  showLess: function() {
+    this.setState({showMore: false});
+  },
   render: function() {
+    var mainPhoto = this.state.mainPhoto >= 0 ? React.createElement("div", {className: "main-photo", style: {background: "url(" + this.state.photos[this.state.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}) : React.createElement("div", {className: "main-photo"});
+
+    var photos = [];
+    for(var i = 0; i < this.state.photos.length && (this.state.showMore || i < 6); i++) {
+      if(this.state.mainPhoto != i)
+        photos.push(React.createElement("div", {key: i, className: "other-photo", style: {background: "url(" + this.state.photos[i] + ") no-repeat center center", backgroundSize: "cover"}, onClick: this.selectPhoto.bind(this, i)}));
+    }
+    if(!this.state.showMore)
+      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.showMore}, "View More"));
+    else
+      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.showLess}, "View Less"));
+
     return (
       React.createElement("div", null, 
-        React.createElement("div", {className: "main-photo"}
-
-        ), 
-        React.createElement("div", {className: "other-photos"}
-
+        mainPhoto, 
+        React.createElement("div", null, 
+          photos
         )
       )
     );
