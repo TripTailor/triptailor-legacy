@@ -29,7 +29,7 @@ var Description = React.createClass({displayName: "Description",
 
 var Photos = React.createClass({displayName: "Photos",
   getInitialState: function() {
-    return {photos: [], mainPhoto: -1, showMore: false};
+    return {photos: [], mainPhoto: -1, more: false};
   },
   componentWillMount: function() {
     this.getPhotos();
@@ -51,30 +51,47 @@ var Photos = React.createClass({displayName: "Photos",
     this.setState({mainPhoto: i});
   },
   showMore: function() {
-    this.setState({showMore: true});
+    this.setState({more: true});
   },
   showLess: function() {
-    this.setState({showMore: false});
+    this.setState({more: false});
   },
   render: function() {
-    var mainPhoto = this.state.mainPhoto >= 0 ? React.createElement("div", {className: "main-photo", style: {background: "url(" + this.state.photos[this.state.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}) : React.createElement("div", {className: "main-photo"});
-
-    var photos = [];
-    for(var i = 0; i < this.state.photos.length && (this.state.showMore || i < 6); i++) {
-      if(this.state.mainPhoto != i)
-        photos.push(React.createElement("div", {key: i, className: "other-photo", style: {background: "url(" + this.state.photos[i] + ") no-repeat center center", backgroundSize: "cover"}, onClick: this.selectPhoto.bind(this, i)}));
-    }
-    if(!this.state.showMore)
-      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.showMore}, "View More"));
-    else
-      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.showLess}, "View Less"));
-
     return (
       React.createElement("div", null, 
-        mainPhoto, 
-        React.createElement("div", null, 
-          photos
+        React.createElement(MainPhoto, {photos: this.state.photos, mainPhoto: this.state.mainPhoto}), 
+        React.createElement(OtherPhotos, {photos: this.state.photos, mainPhoto: this.state.mainPhoto, more: this.state.more, selectPhoto: this.selectPhoto, showMore: this.showMore, showLess: this.showLess})
+      )
+    );
+  }
+});
+
+var MainPhoto = React.createClass({displayName: "MainPhoto",
+  render: function() {
+    return (
+      this.props.mainPhoto >= 0 ?
+        React.createElement("div", {className: "main-photo", style: {background: "url(" + this.props.photos[this.props.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}
+        
         )
+      : React.createElement("div", {className: "main-photo"})
+    );
+  }
+});
+
+var OtherPhotos = React.createClass({displayName: "OtherPhotos",
+  render: function() {
+    var photos = [];
+    for(var i = 0; i < this.props.photos.length && (this.props.more || i < 6); i++) {
+      if(this.props.mainPhoto != i)
+        photos.push(React.createElement("div", {key: i, className: "other-photo", style: {background: "url(" + this.props.photos[i] + ") no-repeat center center", backgroundSize: "cover"}, onClick: this.props.selectPhoto.bind(this, i)}));
+    }
+    if(this.props.photos.length > 0 && !this.props.more)
+      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.props.showMore}, "View More"));
+    else if(this.props.photos.length > 0)
+      photos.push(React.createElement("div", {className: "other-photo more-photos", onClick: this.props.showLess}, "View Less"));
+    return (
+      React.createElement("div", null, 
+        photos
       )
     );
   }

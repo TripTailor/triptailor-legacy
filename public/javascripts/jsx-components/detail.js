@@ -29,7 +29,7 @@ var Description = React.createClass({
 
 var Photos = React.createClass({
   getInitialState: function() {
-    return {photos: [], mainPhoto: -1, showMore: false};
+    return {photos: [], mainPhoto: -1, more: false};
   },
   componentWillMount: function() {
     this.getPhotos();
@@ -51,30 +51,47 @@ var Photos = React.createClass({
     this.setState({mainPhoto: i});
   },
   showMore: function() {
-    this.setState({showMore: true});
+    this.setState({more: true});
   },
   showLess: function() {
-    this.setState({showMore: false});
+    this.setState({more: false});
   },
   render: function() {
-    var mainPhoto = this.state.mainPhoto >= 0 ? <div className="main-photo" style={{background: "url(" + this.state.photos[this.state.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}></div> : <div className="main-photo"></div>;
-
-    var photos = [];
-    for(var i = 0; i < this.state.photos.length && (this.state.showMore || i < 6); i++) {
-      if(this.state.mainPhoto != i)
-        photos.push(<div key={i} className="other-photo" style={{background: "url(" + this.state.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.selectPhoto.bind(this, i)}></div>);
-    }
-    if(!this.state.showMore)
-      photos.push(<div className="other-photo more-photos" onClick={this.showMore}>View More</div>);
-    else
-      photos.push(<div className="other-photo more-photos" onClick={this.showLess}>View Less</div>);
-
     return (
       <div>
-        {mainPhoto}
-        <div>
-          {photos}
+        <MainPhoto photos={this.state.photos} mainPhoto={this.state.mainPhoto} />
+        <OtherPhotos photos={this.state.photos} mainPhoto={this.state.mainPhoto} more={this.state.more} selectPhoto={this.selectPhoto} showMore={this.showMore} showLess={this.showLess} />
+      </div>
+    );
+  }
+});
+
+var MainPhoto = React.createClass({
+  render: function() {
+    return (
+      this.props.mainPhoto >= 0 ?
+        <div className="main-photo" style={{background: "url(" + this.props.photos[this.props.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}>
+        
         </div>
+      : <div className="main-photo"></div>
+    );
+  }
+});
+
+var OtherPhotos = React.createClass({
+  render: function() {
+    var photos = [];
+    for(var i = 0; i < this.props.photos.length && (this.props.more || i < 6); i++) {
+      if(this.props.mainPhoto != i)
+        photos.push(<div key={i} className="other-photo" style={{background: "url(" + this.props.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.props.selectPhoto.bind(this, i)}></div>);
+    }
+    if(this.props.photos.length > 0 && !this.props.more)
+      photos.push(<div className="other-photo more-photos" onClick={this.props.showMore}>View More</div>);
+    else if(this.props.photos.length > 0)
+      photos.push(<div className="other-photo more-photos" onClick={this.props.showLess}>View Less</div>);
+    return (
+      <div>
+        {photos}
       </div>
     );
   }
