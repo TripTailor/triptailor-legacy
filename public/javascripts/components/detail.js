@@ -57,7 +57,6 @@ var Photos = React.createClass({displayName: "Photos",
     if(i >= this.state.photos.length)
       i = 0;
     this.setState({mainPhoto: i});
-		console.log(i);
   },
   selectLeft: function() {
     var i = this.state.mainPhoto;
