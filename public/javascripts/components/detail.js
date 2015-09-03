@@ -40,7 +40,8 @@ var Photos = React.createClass({displayName: "Photos",
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.setState({photos: data, mainPhoto: 0});
+        var i = data.length > 0 ? 0 : -1;
+        this.setState({photos: data, mainPhoto: i});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error("Reviews test", status, err.toString());
@@ -48,6 +49,20 @@ var Photos = React.createClass({displayName: "Photos",
     });
   },
   selectPhoto: function(i) {
+    this.setState({mainPhoto: i});
+  },
+  selectRight: function() {
+    var i = this.state.mainPhoto;
+    i++;
+    if(i >= this.state.photos.length)
+      i = 0;
+    this.setState({mainPhoto: i});
+  },
+  selectLeft: function() {
+    var i = this.state.mainPhoto;
+    i--;
+    if(i < 0)
+      i = this.state.photos.length - 1;
     this.setState({mainPhoto: i});
   },
   showMore: function() {
@@ -70,8 +85,9 @@ var MainPhoto = React.createClass({displayName: "MainPhoto",
   render: function() {
     return (
       this.props.mainPhoto >= 0 ?
-        React.createElement("div", {className: "main-photo", style: {background: "url(" + this.props.photos[this.props.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}
-        
+        React.createElement("div", {className: "main-photo", style: {background: "url(" + this.props.photos[this.props.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}, 
+          React.createElement("div", {className: "photo-left-arrow"}, React.createElement("i", {className: "fa fa-arrow-circle-left fa-3x"})), 
+          React.createElement("div", {className: "photo-right-arrow"}, React.createElement("i", {className: "fa fa-arrow-circle-right fa-3x"}))
         )
       : React.createElement("div", {className: "main-photo"})
     );

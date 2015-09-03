@@ -40,7 +40,8 @@ var Photos = React.createClass({
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.setState({photos: data, mainPhoto: 0});
+        var i = data.length > 0 ? 0 : -1;
+        this.setState({photos: data, mainPhoto: i});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error("Reviews test", status, err.toString());
@@ -48,6 +49,20 @@ var Photos = React.createClass({
     });
   },
   selectPhoto: function(i) {
+    this.setState({mainPhoto: i});
+  },
+  selectRight: function() {
+    var i = this.state.mainPhoto;
+    i++;
+    if(i >= this.state.photos.length)
+      i = 0;
+    this.setState({mainPhoto: i});
+  },
+  selectLeft: function() {
+    var i = this.state.mainPhoto;
+    i--;
+    if(i < 0)
+      i = this.state.photos.length - 1;
     this.setState({mainPhoto: i});
   },
   showMore: function() {
@@ -71,7 +86,8 @@ var MainPhoto = React.createClass({
     return (
       this.props.mainPhoto >= 0 ?
         <div className="main-photo" style={{background: "url(" + this.props.photos[this.props.mainPhoto] + ") no-repeat center center", backgroundSize: "contain"}}>
-        
+          <div className="photo-left-arrow"><i className="fa fa-arrow-circle-left fa-3x"></i></div>
+          <div className="photo-right-arrow"><i className="fa fa-arrow-circle-right fa-3x"></i></div>
         </div>
       : <div className="main-photo"></div>
     );

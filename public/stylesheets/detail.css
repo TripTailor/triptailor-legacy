@@ -55,6 +55,23 @@ body {
 .main-photo {
   height: 410px;
   margin-bottom: 20px;
+  position: relative;
+}
+.photo-left-arrow {
+  left: 0;
+  height: 100%;
+  position: absolute;
+}
+.photo-right-arrow{
+  right: 36px;
+  height: 100%;
+  position: absolute;
+}
+.fa {
+  position: absolute;
+  top: 50%;
+  margin-top: -21px;
+  cursor: pointer;
 }
 .other-photo {
   height: 82px;
