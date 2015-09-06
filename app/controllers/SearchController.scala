@@ -87,8 +87,8 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
   
-  def detail = Action { implicit request =>
-    Ok(views.html.detail())
+  def detail(name: String) = Action.async { implicit request =>
+    hostelsDAO.loadHostel(name) map (hostel => Ok(views.html.detail(hostel)))
   }
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =
