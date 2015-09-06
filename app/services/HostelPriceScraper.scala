@@ -9,7 +9,13 @@ import play.api.libs.ws.WS
 import scala.concurrent.Future
 import org.jsoup.Jsoup
 
-case class HostelPricingInfo(id: String, price: Option[BigDecimal])
+sealed trait DormType
+case object PublicDorm extends DormType
+case object PrivateDorm extends DormType
+case object UnknownDorm extends DormType
+
+case class PricingInfo(price: Option[BigDecimal], dormType: DormType, currency: Option[String])
+case class HostelPricingInfo(id: String, pricingInfo: PricingInfo)
 
 class HostelPriceScraper @Inject() (config: Configuration) {
   val timeout = config.getMilliseconds("scraper.pricingInfo.timeout").get
@@ -31,10 +37,19 @@ class HostelPriceScraper @Inject() (config: Configuration) {
 
   private def parseHostelPricingInfo(info: JsValue) =
     HostelPricingInfo(
-      id    = (info \ "pid").as[String],
-      price = (info \ "dpr").asOpt[String].orElse((info \ "ppr").asOpt[String]).map(BigDecimal.apply)
+      id          = (info \ "pid").as[String],
+      pricingInfo = parsePricingInfo(info)
     )
-    
+
+  private def parsePricingInfo(info: JsValue) =
+    (info \ "dpr").asOpt[String].fold {
+      (info \ "ppr").asOpt[String].map { value =>
+        PricingInfo(Some(BigDecimal(value)), PrivateDorm, (info \ "c").asOpt[String])
+      }.getOrElse(PricingInfo(None, UnknownDorm, None))
+    } { value =>
+      PricingInfo(Some(BigDecimal(value)), PublicDorm, (info \ "c").asOpt[String])
+    }
+
   private def retrieveToken(html: String): String =
     Jsoup.parse(html).select("#jsnResKey").first().attr("value")
 
