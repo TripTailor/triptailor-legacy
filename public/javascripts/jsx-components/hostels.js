@@ -1,4 +1,4 @@
-var HOSTELSTODISPLAY = 12;
+var HOSTELSTODISPLAY = 10;
 
 var Hostels = React.createClass({
   mixins: [AutoCompleteContainerMixin],
@@ -151,45 +151,19 @@ var NumberResults = React.createClass({
 
 var ResultsGrid = React.createClass({
   getInitialState: function() {
-    return {displayedResults: HOSTELSTODISPLAY, more: false};
+    return {displayedResults: HOSTELSTODISPLAY};
   },
   displayMoreResults: function() {
     this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
   },
-  showMoreTags: function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({more: true});
-  },
-  showLessTags: function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({more: false});
-  },
   render: function() {
-    var rows = [];
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
       results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
-      if((i + 1) % 3 == 0) {
-        rows.push(
-          <div key={rows.length} className="row results-row">
-            {results}
-          </div>
-        );
-        results = [];
-      }
     };
-    if(results.length > 0) {
-      rows.push(
-        <div key={rows.length} className="row results-row">
-          {results}
-        </div>
-      );
-    }
     return (
       <div>
-        {rows}
+        {results}
         {this.props.results.length > this.state.displayedResults ? <button className="more-results" onClick={this.displayMoreResults}>Show more results</button> : ''}
       </div>
     );
@@ -209,41 +183,28 @@ var Result = React.createClass({
   },
   render: function() {
     var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /, "-"));
-    return (
-      <div className="col-md-4">
-        <div className="result">
-          <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
-            <div className="result-name"><strong>{this.props.result.name}</strong></div>
-            <div className="result-price">{this.props.result.price} USD</div>
-            <div className="result-book"><div className="info">View in  HostelWorld</div></div>
-            <TagsRow tags={this.props.result.tags} more={this.props.moreTags} showMoreTags={this.props.showMoreTags} showLessTags={this.props.showLessTags} />
-          </a>
-        </div>
-      </div>
-    );
-  }
-});
-
-var TagsRow = React.createClass({
-  render: function() {
     var tags = [];
-    var i = 0;
-    for(; i < 4 && i < this.props.tags.length; i++) {
-      tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
+    for(var i = 0; i < 8 && i < this.props.result.tags.length; i++) {
+      tags.push(<Tag key={i} name={this.props.result.tags[i].name} type={this.props.result.tags[i].type} />);
     }
-    if (!this.props.more) {
-      tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showMoreTags}>More</button>);
-    }
-    else {
-      for(; i < this.props.tags.length; i++) {
-        tags.push(<Tag key={i} name={this.props.tags[i].name} type={this.props.tags[i].type} />);
-      }
-      tags.push(<button key={this.props.tags.length + 1} className="tag more-tags" onClick={this.props.showLessTags}>Less</button>);
-    }
-
     return (
-      <div className={this.props.more ? "result-tags" : "result-tags tags-less"}>
-        {tags}
+      <div className="result">
+        <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
+          <div className="row">
+            <div className="col-xs-3">
+              <div className="result-photo" style={{background: "url(http://placehold.it/600x600) no-repeat center top", backgroundSize: "contain"}}></div>
+            </div>
+            <div className="col-xs-9">
+              <div className="result-name">
+                <div className="result-price">{this.props.result.price} USD</div>
+                <strong>{this.props.result.name}</strong>
+              </div>
+              <div className="result-tags">
+                {tags}
+              </div>
+            </div>
+          </div>
+        </a>
       </div>
     );
   }
