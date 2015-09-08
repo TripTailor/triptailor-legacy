@@ -7,13 +7,13 @@ import classification.HostelsClassifier
 import db.{HostelsDAO, LocationsDAO, SearchesDAO, TagsDAO}
 import extensions.FutureO
 import models.{ClassifiedHostel, TagHolder}
+import play.api.{Logger, Play}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import play.api.{Logger, Play}
 
 import scala.concurrent.Future
 
@@ -88,14 +88,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
   
   def detail(name: String) = Action.async { implicit request =>
-
-    val classifiedHostels =
-      for {
-        hostel     ← hostelsDAO.loadHostel(name.replaceAll("-", " "))
-        classified = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags).classify(Seq(hostel), hostel)
-      } yield classified
-
-    classifiedHostels.map(classifiedHostels => Ok(views.html.detail(classifiedHostels.head)))
+    hostelsDAO.loadHostel(name.replaceAll("-", " ")) map (hostel => Ok(views.html.detail(hostel)))
   }
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =
