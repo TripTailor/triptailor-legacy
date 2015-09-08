@@ -1,80 +1,77 @@
 /*** Header ***/
 
 .jumbotron {
-	background: url(../images/hiw.jpg) no-repeat center center;
+  background: url(../images/hiw.jpg) no-repeat center center;
 }
 .navbar-brand {
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .navbar-triptailor .navbar-nav>li>a {
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .jumbotron .header {
-	margin-top: 130px;
-	margin-bottom: 8px;
-	font-family: 'Ubuntu', sans-serif;
-	color: white;
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-	text-align: center;
-	font-size: 38px;
+  margin-top: 130px;
+  margin-bottom: 8px;
+  font-family: 'Ubuntu', sans-serif;
+  color: white;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-align: center;
+  font-size: 38px;
 }
 .jumbotron .subheader {
-	margin-bottom: 0;
-	font-family: 'Ubuntu', sans-serif;
-	color: white;
-	text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
-	text-align: center;
-	font-size: 18px;
+  margin-bottom: 0;
+  font-family: 'Ubuntu', sans-serif;
+  color: white;
+  text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
+  text-align: center;
+  font-size: 18px;
 }
 
 /*** Menu ***/
 
 .menu {
-	text-align: center;
-	font-family: 'Ubuntu', sans-serif;
-	background: #5c87d1;
-	padding: 17px 0;
-	margin-bottom: 30px;
+  text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  background: #5c87d1;
+  padding: 17px 0;
+  margin-bottom: 30px;
 }
 .menu a:link, .menu a:visited, .menu a:hover, .menu a:active {
-	text-decoration: none;
-	color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /*** Content ***/
 
-.row-container {
-	max-width: 1170px;
-	margin: 0 auto;
-}
 .title {
-	font-family: 'Ubuntu', sans-serif;
-	font-size: 30px;
-	color: #5a5b5b;
-	margin-bottom: 60px;
-	text-align: center;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 30px;
+  color: #5a5b5b;
+  margin-bottom: 60px;
+  text-align: center;
 }
 .step {
-	text-align: center;
+  text-align: center;
 }
 .fa {
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 .step-title {
-	color: #5a5b5b;
-	font-weight: 500;
-	margin-bottom: 15px;
+  color: #5a5b5b;
+  font-weight: 500;
+  margin-bottom: 15px;
 }
 .step-text {
-	color: #a8a8a8;
-	font-family: 'Ubuntu', sans-serif;
-	margin-bottom: 0;
-	margin-bottom: 30px;
+  color: #a8a8a8;
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 0;
+  margin-bottom: 30px;
 }
 .features-container {
-	margin-top: 30px;
-	background: #edf2f5;
-	padding: 30px;
-	margin-left: -30px;
-	margin-right: -30px;
+  margin-top: 30px;
+  background: #edf2f5;
+  padding: 30px;
+  padding-bottom: 60px;
+  margin-left: -30px;
+  margin-right: -30px;
 }

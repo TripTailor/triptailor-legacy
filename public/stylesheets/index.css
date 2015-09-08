@@ -26,6 +26,7 @@ body {
 /*** Header ***/
 .jumbotron {
   background: url(../images/barbados.jpg) no-repeat center center;
+  background-size: cover;
 }
 .navbar-brand {
   text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
@@ -40,12 +41,14 @@ body {
   color: white;
   margin-top: 80px;
   margin-bottom: 8px;
+  font-weight: normal;
 }
 .jumbotron .subheader {
   font-size: 18px;
   text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
   color: white;
   margin-bottom: 52px;
+  font-weight: normal;
 }
 .autocomplete-col-left, .autocomplete-col-center, .autocomplete-a-col {
   padding-left: 0;
@@ -70,7 +73,7 @@ body {
 /*** Tips ***/
 
 .tips-header-container {
-  padding-top: 40px;
+  padding-top: 60px;
   padding-bottom: 32px;
 }
 .tips-header {
@@ -79,6 +82,7 @@ body {
   color: #000;
   margin-top: 0;
   margin-bottom: 8px;
+  font-weight: normal;
 }
 .tips-subheader {
   color: #000;
@@ -155,6 +159,37 @@ body {
 .bottom-tips {
   margin-top: 30px;
   margin-bottom: 100px;
+}
+
+/*** How It Works ***/
+.how-it-works-container {
+  padding: 50px 0;
+  background: #F5F5F5;
+}
+.title {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 30px;
+  color: #5a5b5b;
+  margin-bottom: 60px;
+  text-align: center;
+}
+.step {
+  text-align: center;
+}
+.fa {
+  margin-bottom: 30px;
+  color: #F66A52;
+}
+.step-title {
+  color: #5a5b5b;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.step-text {
+  color: #a8a8a8;
+  font-family: 'Ubuntu', sans-serif;
+  margin-bottom: 0;
+  margin-bottom: 30px;
 }
 
 /*** Media queries ***/

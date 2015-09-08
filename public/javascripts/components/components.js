@@ -216,4 +216,34 @@ var TripTailorInputTag = React.createClass({displayName: "TripTailorInputTag",
   }
 });
 
-
+var TripTailorHowItWorks = React.createClass({displayName: "TripTailorHowItWorks",
+  render: function() {
+    return (
+      React.createElement("div", {className: "how-it-works-container"}, 
+        React.createElement("p", {id: "howItWorks", className: "title"}, "How It Works"), 
+        React.createElement("div", {className: "row no-horizontal-margins"}, 
+          React.createElement("div", {className: "col-md-3 step"}, 
+            React.createElement("i", {className: "fa fa-check-circle fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "1. Pick a city"), 
+            React.createElement("p", {className: "step-text"}, "Pick a city from hundreds of cities around the world")
+          ), 
+          React.createElement("div", {className: "col-md-3 step"}, 
+            React.createElement("i", {className: "fa fa-tags fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "2. Play with tags"), 
+            React.createElement("p", {className: "step-text"}, "Add and remove tags as you filter hostels")
+          ), 
+          React.createElement("div", {className: "col-md-3 step"}, 
+            React.createElement("i", {className: "fa fa-search fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "3. Browse hostels"), 
+            React.createElement("p", {className: "step-text"}, "Hostels where the tags are more relevant will be displayed first")
+          ), 
+          React.createElement("div", {className: "col-md-3 step"}, 
+            React.createElement("i", {className: "fa fa-bookmark fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "4. Book your hostel"), 
+            React.createElement("p", {className: "step-text"}, "Finish your booking with our friends at HostelWorld")
+          )
+        )
+      )
+    );
+  }
+});

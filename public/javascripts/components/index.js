@@ -110,6 +110,7 @@ var Index = React.createClass({displayName: "Index",
     return (
       React.createElement("div", null, 
         React.createElement(Header, null), 
+        React.createElement(TripTailorHowItWorks, null), 
         React.createElement(Content, null)
       )
     );

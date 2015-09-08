@@ -216,4 +216,34 @@ var TripTailorInputTag = React.createClass({
   }
 });
 
-
+var TripTailorHowItWorks = React.createClass({
+  render: function() {
+    return (
+      <div className="how-it-works-container">
+        <p id="howItWorks" className="title">How It Works</p>
+        <div className="row no-horizontal-margins">
+          <div className="col-md-3 step">
+            <i className="fa fa-check-circle fa-3x"></i>
+            <p className="step-title">1. Pick a city</p>
+            <p className="step-text">Pick a city from hundreds of cities around the world</p>
+          </div>
+          <div className="col-md-3 step">
+            <i className="fa fa-tags fa-3x"></i>
+            <p className="step-title">2. Play with tags</p>
+            <p className="step-text">Add and remove tags as you filter hostels</p>
+          </div>
+          <div className="col-md-3 step">
+            <i className="fa fa-search fa-3x"></i>
+            <p className="step-title">3. Browse hostels</p>
+            <p className="step-text">Hostels where the tags are more relevant will be displayed first</p>
+          </div>
+          <div className="col-md-3 step">
+            <i className="fa fa-bookmark fa-3x"></i>
+            <p className="step-title">4. Book your hostel</p>
+            <p className="step-text">Finish your booking with our friends at HostelWorld</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+});

@@ -28,53 +28,38 @@ var Content = React.createClass({displayName: "Content",
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid"}, 
-        React.createElement("p", {id: "howItWorks", className: "title"}, "How It Works"), 
+        React.createElement(TripTailorHowItWorks, null), 
+        React.createElement(Features, null)
+      )
+    );
+  }
+});
+
+var Features = React.createClass({displayName: "Features",
+  render: function() {
+    return(
+      React.createElement("div", {className: "features-container"}, 
+        React.createElement("p", {id: "features", className: "title"}, "Features"), 
         React.createElement("div", {className: "row no-horizontal-margins"}, 
           React.createElement("div", {className: "col-md-3 step"}, 
-            React.createElement("i", {className: "fa fa-check-circle fa-3x"}), 
-            React.createElement("p", {className: "step-title"}, "1. Pick a city"), 
-            React.createElement("p", {className: "step-text"}, "Pick a city from hundreds of cities around the world")
+            React.createElement("i", {className: "fa fa-expand fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "Exhaustive"), 
+            React.createElement("p", {className: "step-text"}, "We browsed the web to find what people were saying about almost every hostel in the world")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
-            React.createElement("i", {className: "fa fa-tags fa-3x"}), 
-            React.createElement("p", {className: "step-title"}, "2. Play with tags"), 
-            React.createElement("p", {className: "step-text"}, "Add and remove tags as you filter hostels")
+            React.createElement("i", {className: "fa fa-magic fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "Smart"), 
+            React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on that information, to get the relevant keywords")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
-            React.createElement("i", {className: "fa fa-search fa-3x"}), 
-            React.createElement("p", {className: "step-title"}, "3. Browse hostels"), 
-            React.createElement("p", {className: "step-text"}, "Hostels where the tags are more relevant will be displayed first")
+            React.createElement("i", {className: "fa fa-arrows fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "Contextual"), 
+            React.createElement("p", {className: "step-text"}, "Hostel tags are keywords that people mentioned a lot, in a positive context")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
-            React.createElement("i", {className: "fa fa-bookmark fa-3x"}), 
-            React.createElement("p", {className: "step-title"}, "4. Book your hostel"), 
-            React.createElement("p", {className: "step-text"}, "Finish your booking with our friends at HostelWorld")
-          )
-        ), 
-
-        React.createElement("div", {className: "features-container"}, 
-          React.createElement("p", {id: "features", className: "title"}, "Features"), 
-          React.createElement("div", {className: "row no-horizontal-margins"}, 
-            React.createElement("div", {className: "col-md-3 step"}, 
-              React.createElement("i", {className: "fa fa-expand fa-3x"}), 
-              React.createElement("p", {className: "step-title"}, "Exhaustive"), 
-              React.createElement("p", {className: "step-text"}, "We browsed the web to find what people were saying about almost every hostel in the world")
-            ), 
-            React.createElement("div", {className: "col-md-3 step"}, 
-              React.createElement("i", {className: "fa fa-magic fa-3x"}), 
-              React.createElement("p", {className: "step-title"}, "Smart"), 
-              React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on that information, to get the relevant keywords")
-            ), 
-            React.createElement("div", {className: "col-md-3 step"}, 
-              React.createElement("i", {className: "fa fa-arrows fa-3x"}), 
-              React.createElement("p", {className: "step-title"}, "Contextual"), 
-              React.createElement("p", {className: "step-text"}, "Hostel tags are keywords that people mentioned a lot, in a positive context")
-            ), 
-            React.createElement("div", {className: "col-md-3 step"}, 
-              React.createElement("i", {className: "fa fa-dot-circle-o fa-3x"}), 
-              React.createElement("p", {className: "step-title"}, "Intuitive"), 
-              React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make, to give you the most relevant hostels")
-            )
+            React.createElement("i", {className: "fa fa-dot-circle-o fa-3x"}), 
+            React.createElement("p", {className: "step-title"}, "Intuitive"), 
+            React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make, to give you the most relevant hostels")
           )
         )
       )

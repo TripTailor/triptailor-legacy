@@ -110,6 +110,7 @@ var Index = React.createClass({
     return (
       <div>
         <Header />
+        <TripTailorHowItWorks />
         <Content />
       </div>
     );
