@@ -88,7 +88,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
   
   def detail(name: String) = Action.async { implicit request =>
-    hostelsDAO.loadHostel(name) map (hostel => Ok(views.html.detail(hostel)))
+    hostelsDAO.loadHostel(name.replaceAll("-", " ")) map (hostel => Ok(views.html.detail(hostel)))
   }
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =

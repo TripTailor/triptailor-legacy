@@ -208,10 +208,11 @@ var Result = React.createClass({displayName: "Result",
     })
   },
   render: function() {
+    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /, "-"));
     return (
       React.createElement("div", {className: "col-md-4"}, 
         React.createElement("div", {className: "result"}, 
-          React.createElement("a", {href: this.props.result.url, target: "_blank", className: "result-a", onClick: this.handleClick}, 
+          React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
             React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
             React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
             React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 

@@ -4,11 +4,11 @@ var Header = React.createClass({displayName: "Header",
       React.createElement("div", {className: "container-fluid header"}, 
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-9"}, 
-            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, "Hostel Name")), 
-            React.createElement("p", {className: "hostel-address"}, "Street and number, Neighborhood, City, Country")
+            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.name))
+            /* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */
           ), 
           React.createElement("div", {className: "col-md-3"}, 
-            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, "$Price", React.createElement("span", {className: "currency"}, "USD")), React.createElement("span", {className: "book-span"}, React.createElement("a", {className: "book-link"}, "Book")))
+            React.createElement("p", {className: "header-title"}, /* <strong>$Price<span className="currency">USD</span></strong> */hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {href: hostel.url, target: "_blank", className: "book-link"}, "Book")) : "")
           )
         )
       )
@@ -248,8 +248,8 @@ var Content = React.createClass({displayName: "Content",
             React.createElement(Photos, null), 
             React.createElement(ReviewsSection, null)
           ), 
-          React.createElement("div", {className: "col-md-3"}, 
-            React.createElement(Description, null)
+          React.createElement("div", {className: "col-md-3"}
+            /* <Description /> */
           )
         )
       )

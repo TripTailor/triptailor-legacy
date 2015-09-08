@@ -4,11 +4,11 @@ var Header = React.createClass({
       <div className="container-fluid header">
         <div className="row">
           <div className="col-md-9">
-            <p className="header-title"><strong>Hostel Name</strong></p>
-            <p className="hostel-address">Street and number, Neighborhood, City, Country</p>
+            <p className="header-title"><strong>{hostel.name}</strong></p>
+            {/* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */}
           </div>
           <div className="col-md-3">
-            <p className="header-title"><strong>$Price<span className="currency">USD</span></strong><span className="book-span"><a className="book-link">Book</a></span></p>
+            <p className="header-title">{/* <strong>$Price<span className="currency">USD</span></strong> */}{hostel.url != null ? <span className="book-span"><a href={hostel.url} target="_blank" className="book-link">Book</a></span> : ""}</p>
           </div>
         </div>
       </div>
@@ -249,7 +249,7 @@ var Content = React.createClass({
             <ReviewsSection />
           </div>
           <div className="col-md-3">
-            <Description />
+            {/* <Description /> */}
           </div>
         </div>
       </div>

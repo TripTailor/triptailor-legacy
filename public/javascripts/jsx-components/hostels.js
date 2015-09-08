@@ -208,10 +208,11 @@ var Result = React.createClass({
     })
   },
   render: function() {
+    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /, "-"));
     return (
       <div className="col-md-4">
         <div className="result">
-          <a href={this.props.result.url} target="_blank" className="result-a" onClick={this.handleClick}>
+          <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
             <div className="result-name"><strong>{this.props.result.name}</strong></div>
             <div className="result-price">{this.props.result.price} USD</div>
             <div className="result-book"><div className="info">View in  HostelWorld</div></div>

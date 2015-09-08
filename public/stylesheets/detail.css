@@ -42,6 +42,10 @@ body {
   vertical-align: middle;
   font-size: 14px;
 }
+.book-link:link, .book-link:visited, .book-link:hover, .book-link:active {
+  text-decoration: none;
+  color: white;
+}
 
 /*** Main Content ***/
 
