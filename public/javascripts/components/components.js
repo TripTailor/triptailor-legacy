@@ -230,7 +230,7 @@ var TripTailorHowItWorks = React.createClass({displayName: "TripTailorHowItWorks
           React.createElement("div", {className: "col-md-3 step"}, 
             React.createElement("i", {className: "fa fa-tags fa-3x"}), 
             React.createElement("p", {className: "step-title"}, "2. Play with tags"), 
-            React.createElement("p", {className: "step-text"}, "Add and remove tags as you filter hostels")
+            React.createElement("p", {className: "step-text"}, "Tags are keywords that people mentioned a lot, in a positive context")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
             React.createElement("i", {className: "fa fa-search fa-3x"}), 
