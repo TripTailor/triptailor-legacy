@@ -1,4 +1,4 @@
-@(hostel: Hostel)(implicit req: RequestHeader)
+@(ch: ClassifiedHostel)(implicit req: RequestHeader)
 
 @main("TripTailor Hostels") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/detail.css")">
@@ -6,10 +6,10 @@
 } {
     <script>
       var hostel = {
-        name: "@hostel.name",
-        url: "@hostel.url"
+        name: "@ch.hostel.name",
+        url: "@ch.hostel.url"
       };
-      console.log("@hostel.attributes");
+      console.log("@ch.orderedTags");
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
 }
