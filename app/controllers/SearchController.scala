@@ -86,13 +86,15 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
-  
-  def detail(name: String) = Action.async { implicit request =>
+
+  def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
 
     val classifiedHostels =
       for {
         hostel     ← hostelsDAO.loadHostel(name.replaceAll("-", " "))
-        classified = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags).classify(Seq(hostel), hostel)
+        parameters = tagsQuery.replace("-", " ").replace("%21", "-")
+        classifier = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+        classified = classifier.classifyByTags(Seq(hostel), parameters.split("[ ,]"))
       } yield classified
 
     classifiedHostels.map(classifiedHostels => Ok(views.html.detail(classifiedHostels.head)))
