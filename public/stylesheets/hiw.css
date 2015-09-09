@@ -2,6 +2,7 @@
 
 .jumbotron {
   background: url(../images/hiw.jpg) no-repeat center center;
+  background-size: cover;
 }
 .navbar-brand {
   text-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
