@@ -159,7 +159,7 @@ var ResultsGrid = React.createClass({
   render: function() {
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
-      results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} />);
+      results.push(<Result key={i} result={this.props.results[i]} moreTags={this.state.more} showMoreTags={this.showMoreTags} showLessTags={this.showLessTags} searchId={this.props.searchId} tags={this.props.tags} />);
     };
     return (
       <div>
@@ -182,7 +182,7 @@ var Result = React.createClass({
     })
   },
   render: function() {
-    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /, "-"));
+    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /g, "-"), getStringTags(this.props.tags));
     var tags = [];
     for(var i = 0; i < 8 && i < this.props.result.tags.length; i++) {
       tags.push(<Tag key={i} name={this.props.result.tags[i].name} type={this.props.result.tags[i].type} />);
