@@ -276,7 +276,7 @@ var TagsHint = React.createClass({
     return (
       <div className="tags-hint filter">
         <p className="filter-label"><i className="fa fa-rocket fa-1x"></i><strong>Hint</strong></p>
-        <div>Tags are keywords that people mentioned a lot, in a positive context.</div>
+        <div>Tags are keywords that people mentioned a lot in a positive context.</div>
       </div>
     );
   }

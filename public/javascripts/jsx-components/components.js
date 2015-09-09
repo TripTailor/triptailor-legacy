@@ -230,7 +230,7 @@ var TripTailorHowItWorks = React.createClass({
           <div className="col-md-3 step">
             <i className="fa fa-tags fa-3x"></i>
             <p className="step-title">2. Play with tags</p>
-            <p className="step-text">Tags are keywords that people mentioned a lot, in a positive context</p>
+            <p className="step-text">Tags are keywords that people mentioned a lot in a positive context</p>
           </div>
           <div className="col-md-3 step">
             <i className="fa fa-search fa-3x"></i>

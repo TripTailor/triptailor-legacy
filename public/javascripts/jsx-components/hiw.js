@@ -49,17 +49,17 @@ var Features = React.createClass({
           <div className="col-md-3 step">
             <i className="fa fa-magic fa-3x"></i>
             <p className="step-title">Smart</p>
-            <p className="step-text">We made a Natural Language Processing analysis on that information, to get the relevant keywords</p>
+            <p className="step-text">We analysed thousands of reviews to pick relevant keywords</p>
           </div>
           <div className="col-md-3 step">
             <i className="fa fa-arrows fa-3x"></i>
             <p className="step-title">Contextual</p>
-            <p className="step-text">Hostel tags are keywords that people mentioned a lot, in a positive context</p>
+            <p className="step-text">Hostel tags are keywords that people mentioned a lot in a positive context</p>
           </div>
           <div className="col-md-3 step">
             <i className="fa fa-dot-circle-o fa-3x"></i>
             <p className="step-title">Intuitive</p>
-            <p className="step-text">We sort the hostels for each search you make, to give you the most relevant hostels</p>
+            <p className="step-text">We sort the hostels for each search you make to give you the most relevant hostels</p>
           </div>
         </div>
       </div>

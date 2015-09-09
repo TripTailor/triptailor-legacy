@@ -49,17 +49,17 @@ var Features = React.createClass({displayName: "Features",
           React.createElement("div", {className: "col-md-3 step"}, 
             React.createElement("i", {className: "fa fa-magic fa-3x"}), 
             React.createElement("p", {className: "step-title"}, "Smart"), 
-            React.createElement("p", {className: "step-text"}, "We made a Natural Language Processing analysis on that information, to get the relevant keywords")
+            React.createElement("p", {className: "step-text"}, "We analysed thousands of reviews to pick relevant keywords")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
             React.createElement("i", {className: "fa fa-arrows fa-3x"}), 
             React.createElement("p", {className: "step-title"}, "Contextual"), 
-            React.createElement("p", {className: "step-text"}, "Hostel tags are keywords that people mentioned a lot, in a positive context")
+            React.createElement("p", {className: "step-text"}, "Hostel tags are keywords that people mentioned a lot in a positive context")
           ), 
           React.createElement("div", {className: "col-md-3 step"}, 
             React.createElement("i", {className: "fa fa-dot-circle-o fa-3x"}), 
             React.createElement("p", {className: "step-title"}, "Intuitive"), 
-            React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make, to give you the most relevant hostels")
+            React.createElement("p", {className: "step-text"}, "We sort the hostels for each search you make to give you the most relevant hostels")
           )
         )
       )

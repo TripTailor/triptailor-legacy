@@ -276,7 +276,7 @@ var TagsHint = React.createClass({displayName: "TagsHint",
     return (
       React.createElement("div", {className: "tags-hint filter"}, 
         React.createElement("p", {className: "filter-label"}, React.createElement("i", {className: "fa fa-rocket fa-1x"}), React.createElement("strong", null, "Hint")), 
-        React.createElement("div", null, "Tags are keywords that people mentioned a lot, in a positive context.")
+        React.createElement("div", null, "Tags are keywords that people mentioned a lot in a positive context.")
       )
     );
   }
