@@ -1,0 +1,17 @@
+[
+  {"name":"staff","type":1},
+  {"name":"view","type":0},
+  {"name":"location","type":0},
+  {"name":"friendly","type":1},
+  {"name":"clean","type":1},
+  {"name":"breakfast","type":1},
+  {"name":"restaurant","type":1},
+  {"name":"helpful","type":1},
+  {"name":"sea","type":1},
+  {"name":"atmosphere","type":1},
+  {"name":"night","type":1},
+  {"name":"bed","type":1},
+  {"name":"beautiful","type":1},
+  {"name":"new","type":1},
+  {"name":"terrace","type":0}
+]

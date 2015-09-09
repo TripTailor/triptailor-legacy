@@ -1,0 +1,15 @@
+@(hostel: Hostel)(implicit req: RequestHeader)
+
+@main("TripTailor Hostels") {
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/detail.css")">
+  <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("font-awesome.min.css"))'>
+} {
+    <script>
+      var hostel = {
+        name: "@hostel.name",
+        url: "@hostel.url"
+      };
+      console.log("@hostel.attributes");
+    </script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
+}

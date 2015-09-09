@@ -28,53 +28,38 @@ var Content = React.createClass({
   render: function() {
     return (
       <div className="container-fluid">
-        <p id="howItWorks" className="title">How It Works</p>
+        <TripTailorHowItWorks />
+        <Features />
+      </div>
+    );
+  }
+});
+
+var Features = React.createClass({
+  render: function() {
+    return(
+      <div className="features-container">
+        <p id="features" className="title">Features</p>
         <div className="row no-horizontal-margins">
           <div className="col-md-3 step">
-            <i className="fa fa-check-circle fa-3x"></i>
-            <p className="step-title">1. Pick a city</p>
-            <p className="step-text">Pick a city from hundreds of cities around the world</p>
+            <i className="fa fa-expand fa-3x"></i>
+            <p className="step-title">Exhaustive</p>
+            <p className="step-text">We browsed the web to find what people were saying about almost every hostel in the world</p>
           </div>
           <div className="col-md-3 step">
-            <i className="fa fa-tags fa-3x"></i>
-            <p className="step-title">2. Play with tags</p>
-            <p className="step-text">Add and remove tags as you filter hostels</p>
+            <i className="fa fa-magic fa-3x"></i>
+            <p className="step-title">Smart</p>
+            <p className="step-text">We analysed thousands of reviews to pick relevant keywords</p>
           </div>
           <div className="col-md-3 step">
-            <i className="fa fa-search fa-3x"></i>
-            <p className="step-title">3. Browse hostels</p>
-            <p className="step-text">Hostels where the tags are more relevant will be displayed first</p>
+            <i className="fa fa-arrows fa-3x"></i>
+            <p className="step-title">Contextual</p>
+            <p className="step-text">Hostel tags are keywords that people mentioned a lot in a positive context</p>
           </div>
           <div className="col-md-3 step">
-            <i className="fa fa-bookmark fa-3x"></i>
-            <p className="step-title">4. Book your hostel</p>
-            <p className="step-text">Finish your booking with our friends at HostelWorld</p>
-          </div>
-        </div>
-
-        <div className="features-container">
-          <p id="features" className="title">Features</p>
-          <div className="row no-horizontal-margins">
-            <div className="col-md-3 step">
-              <i className="fa fa-expand fa-3x"></i>
-              <p className="step-title">Exhaustive</p>
-              <p className="step-text">We browsed the web to find what people were saying about almost every hostel in the world</p>
-            </div>
-            <div className="col-md-3 step">
-              <i className="fa fa-magic fa-3x"></i>
-              <p className="step-title">Smart</p>
-              <p className="step-text">We made a Natural Language Processing analysis on that information, to get the relevant keywords</p>
-            </div>
-            <div className="col-md-3 step">
-              <i className="fa fa-arrows fa-3x"></i>
-              <p className="step-title">Contextual</p>
-              <p className="step-text">Hostel tags are keywords that people mentioned a lot, in a positive context</p>
-            </div>
-            <div className="col-md-3 step">
-              <i className="fa fa-dot-circle-o fa-3x"></i>
-              <p className="step-title">Intuitive</p>
-              <p className="step-text">We sort the hostels for each search you make, to give you the most relevant hostels</p>
-            </div>
+            <i className="fa fa-dot-circle-o fa-3x"></i>
+            <p className="step-title">Intuitive</p>
+            <p className="step-text">We sort the hostels for each search you make to give you the most relevant hostels</p>
           </div>
         </div>
       </div>

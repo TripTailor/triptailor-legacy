@@ -200,6 +200,21 @@ body {
   padding-right: 10px;
   cursor: pointer;
 }
+/* Content tag */
+.tag {
+  color: white;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+.tag-selected {
+  background: #5C87D1;
+}
+.tag-unselected {
+  background: #637079;
+}
 
 /*** Helper classes ***/
 

@@ -1,4 +1,4 @@
-var HOSTELSTODISPLAY = 12;
+var HOSTELSTODISPLAY = 10;
 
 var Hostels = React.createClass({displayName: "Hostels",
   mixins: [AutoCompleteContainerMixin],
@@ -151,45 +151,19 @@ var NumberResults = React.createClass({displayName: "NumberResults",
 
 var ResultsGrid = React.createClass({displayName: "ResultsGrid",
   getInitialState: function() {
-    return {displayedResults: HOSTELSTODISPLAY, more: false};
+    return {displayedResults: HOSTELSTODISPLAY};
   },
   displayMoreResults: function() {
     this.setState({displayedResults: this.state.displayedResults + HOSTELSTODISPLAY});
   },
-  showMoreTags: function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({more: true});
-  },
-  showLessTags: function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.setState({more: false});
-  },
   render: function() {
-    var rows = [];
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
       results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId}));
-      if((i + 1) % 3 == 0) {
-        rows.push(
-          React.createElement("div", {key: rows.length, className: "row results-row"}, 
-            results
-          )
-        );
-        results = [];
-      }
     };
-    if(results.length > 0) {
-      rows.push(
-        React.createElement("div", {key: rows.length, className: "row results-row"}, 
-          results
-        )
-      );
-    }
     return (
       React.createElement("div", null, 
-        rows, 
+        results, 
         this.props.results.length > this.state.displayedResults ? React.createElement("button", {className: "more-results", onClick: this.displayMoreResults}, "Show more results") : ''
       )
     );
@@ -208,41 +182,29 @@ var Result = React.createClass({displayName: "Result",
     })
   },
   render: function() {
+    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /, "-"));
+    var tags = [];
+    for(var i = 0; i < 8 && i < this.props.result.tags.length; i++) {
+      tags.push(React.createElement(Tag, {key: i, name: this.props.result.tags[i].name, type: this.props.result.tags[i].type}));
+    }
     return (
-      React.createElement("div", {className: "col-md-4"}, 
-        React.createElement("div", {className: "result"}, 
-          React.createElement("a", {href: this.props.result.url, target: "_blank", className: "result-a", onClick: this.handleClick}, 
-            React.createElement("div", {className: "result-name"}, React.createElement("strong", null, this.props.result.name)), 
-            React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
-            React.createElement("div", {className: "result-book"}, React.createElement("div", {className: "info"}, "View in  HostelWorld")), 
-            React.createElement(TagsRow, {tags: this.props.result.tags, more: this.props.moreTags, showMoreTags: this.props.showMoreTags, showLessTags: this.props.showLessTags})
+      React.createElement("div", {className: "result"}, 
+        React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-3"}, 
+              React.createElement("div", {className: "result-photo", style: {background: "url(http://placehold.it/600x600) no-repeat center top", backgroundSize: "contain"}})
+            ), 
+            React.createElement("div", {className: "col-xs-9"}, 
+              React.createElement("div", {className: "result-name"}, 
+                React.createElement("div", {className: "result-price"}, this.props.result.price, " USD"), 
+                React.createElement("strong", null, this.props.result.name)
+              ), 
+              React.createElement("div", {className: "result-tags"}, 
+                tags
+              )
+            )
           )
         )
-      )
-    );
-  }
-});
-
-var TagsRow = React.createClass({displayName: "TagsRow",
-  render: function() {
-    var tags = [];
-    var i = 0;
-    for(; i < 4 && i < this.props.tags.length; i++) {
-      tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
-    }
-    if (!this.props.more) {
-      tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showMoreTags}, "More"));
-    }
-    else {
-      for(; i < this.props.tags.length; i++) {
-        tags.push(React.createElement(Tag, {key: i, name: this.props.tags[i].name, type: this.props.tags[i].type}));
-      }
-      tags.push(React.createElement("button", {key: this.props.tags.length + 1, className: "tag more-tags", onClick: this.props.showLessTags}, "Less"));
-    }
-
-    return (
-      React.createElement("div", {className: this.props.more ? "result-tags" : "result-tags tags-less"}, 
-        tags
       )
     );
   }
@@ -314,7 +276,7 @@ var TagsHint = React.createClass({displayName: "TagsHint",
     return (
       React.createElement("div", {className: "tags-hint filter"}, 
         React.createElement("p", {className: "filter-label"}, React.createElement("i", {className: "fa fa-rocket fa-1x"}), React.createElement("strong", null, "Hint")), 
-        React.createElement("div", null, "Tags are keywords that people who reviewed the hostels mentioned a lot, in a positive context.")
+        React.createElement("div", null, "Tags are keywords that people mentioned a lot in a positive context.")
       )
     );
   }
