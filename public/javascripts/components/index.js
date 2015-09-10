@@ -149,10 +149,10 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
             React.createElement("div", {className: "col-md-4"}, 
               React.createElement("div", {className: "row"}, 
                React.createElement("div", {className: "col-xs-6 autocomplete-col xs-border-right"}, 
-                 React.createElement("input", {type: "text", id: "dateFrom", placeholder: "Check in", className: "triptailor-input inline-left-picker"})
+                 React.createElement("input", {type: "text", id: "dateFrom", placeholder: "Check in", className: "triptailor-input inline-left-picker", readOnly: true})
                ), 
                React.createElement("div", {className: "col-xs-6 autocomplete-col"}, 
-                 React.createElement("input", {type: "text", id: "dateTo", placeholder: "Check out", className: "triptailor-input inline-right-picker"})
+                 React.createElement("input", {type: "text", id: "dateTo", placeholder: "Check out", className: "triptailor-input inline-right-picker", readOnly: true})
                )
               )
             ), 
@@ -212,10 +212,3 @@ var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
 });
 
 React.render(React.createElement(Index, null), document.getElementById("content"));
-
-$(function() {
-  $( "#dateFrom" ).datepicker();
-});
-$(function() {
-  $( "#dateTo" ).datepicker();
-});

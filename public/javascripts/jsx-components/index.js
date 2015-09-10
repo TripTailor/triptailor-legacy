@@ -149,10 +149,10 @@ var AutoCompleteSearch = React.createClass({
             <div className="col-md-4">
               <div className="row">
                <div className="col-xs-6 autocomplete-col xs-border-right">
-                 <input type="text" id="dateFrom" placeholder="Check in" className="triptailor-input inline-left-picker" />
+                 <input type="text" id="dateFrom" placeholder="Check in" className="triptailor-input inline-left-picker" readOnly />
                </div>
                <div className="col-xs-6 autocomplete-col">
-                 <input type="text" id="dateTo" placeholder="Check out" className="triptailor-input inline-right-picker" />
+                 <input type="text" id="dateTo" placeholder="Check out" className="triptailor-input inline-right-picker" readOnly />
                </div>
               </div>
             </div>
@@ -212,10 +212,3 @@ var AutoCompleteTags = React.createClass({
 });
 
 React.render(<Index />, document.getElementById("content"));
-
-$(function() {
-  $( "#dateFrom" ).datepicker();
-});
-$(function() {
-  $( "#dateTo" ).datepicker();
-});
