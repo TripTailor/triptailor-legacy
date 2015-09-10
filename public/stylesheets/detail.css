@@ -114,7 +114,7 @@ body {
   margin-bottom: 20px;
 }
 .tag {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 /*** Reviews ***/
