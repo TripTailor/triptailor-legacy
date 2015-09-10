@@ -140,13 +140,23 @@ var AutoCompleteSearch = React.createClass({
       <div className="row">
         <div className="col-md-10 col-md-offset-1">
           <div className="row autocomplete-row">
-            <div className="col-md-5 autocomplete-col-left">
+            <div className="col-md-3 autocomplete-col border-right">
               <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.state.location} updateValue={this.updateLocationValue} submit={this.enterSubmit} />
             </div>
-            <div className="col-md-5 autocomplete-col-center">
+            <div className="col-md-4 autocomplete-col border-right">
               <AutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.state.query} updateValue={this.updateQueryValue} submit={this.enterSubmit} tags={this.state.tags} addTag={this.addTag} removeTag={this.removeTag} removeSpecificTag={this.removeSpecificTag} />
             </div>
-            <div className="col-md-2 autocomplete-a-col">
+            <div className="col-md-4">
+              <div className="row">
+               <div className="col-xs-6 autocomplete-col xs-border-right">
+                 <input type="text" id="dateFrom" placeholder="Check in" className="triptailor-input inline-left-picker" />
+               </div>
+               <div className="col-xs-6 autocomplete-col">
+                 <input type="text" id="dateTo" placeholder="Check out" className="triptailor-input inline-right-picker" />
+               </div>
+              </div>
+            </div>
+            <div className="col-md-1 autocomplete-a-col">
               <a ref="submit" className="submit" href="" onClick={this.submit}>Search</a>
             </div>
           </div>
@@ -188,7 +198,7 @@ var AutoCompleteTags = React.createClass({
     }.bind(this));
 
     return (
-      <div ref="tags-container" className="autocomplete-tags-container">
+      <div ref="tags-container" className="autocomplete-tags-container inline-input-tags">
         <div className="tag-search-container">
           {tags}
           <div className="tag-search-input">
@@ -202,3 +212,10 @@ var AutoCompleteTags = React.createClass({
 });
 
 React.render(<Index />, document.getElementById("content"));
+
+$(function() {
+  $( "#dateFrom" ).datepicker();
+});
+$(function() {
+  $( "#dateTo" ).datepicker();
+});

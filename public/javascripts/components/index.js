@@ -140,13 +140,23 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
           React.createElement("div", {className: "row autocomplete-row"}, 
-            React.createElement("div", {className: "col-md-5 autocomplete-col-left"}, 
+            React.createElement("div", {className: "col-md-3 autocomplete-col border-right"}, 
               React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.state.location, updateValue: this.updateLocationValue, submit: this.enterSubmit})
             ), 
-            React.createElement("div", {className: "col-md-5 autocomplete-col-center"}, 
+            React.createElement("div", {className: "col-md-4 autocomplete-col border-right"}, 
               React.createElement(AutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.state.query, updateValue: this.updateQueryValue, submit: this.enterSubmit, tags: this.state.tags, addTag: this.addTag, removeTag: this.removeTag, removeSpecificTag: this.removeSpecificTag})
             ), 
-            React.createElement("div", {className: "col-md-2 autocomplete-a-col"}, 
+            React.createElement("div", {className: "col-md-4"}, 
+              React.createElement("div", {className: "row"}, 
+               React.createElement("div", {className: "col-xs-6 autocomplete-col xs-border-right"}, 
+                 React.createElement("input", {type: "text", id: "dateFrom", placeholder: "Check in", className: "triptailor-input inline-left-picker"})
+               ), 
+               React.createElement("div", {className: "col-xs-6 autocomplete-col"}, 
+                 React.createElement("input", {type: "text", id: "dateTo", placeholder: "Check out", className: "triptailor-input inline-right-picker"})
+               )
+              )
+            ), 
+            React.createElement("div", {className: "col-md-1 autocomplete-a-col"}, 
               React.createElement("a", {ref: "submit", className: "submit", href: "", onClick: this.submit}, "Search")
             )
           )
@@ -188,7 +198,7 @@ var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
     }.bind(this));
 
     return (
-      React.createElement("div", {ref: "tags-container", className: "autocomplete-tags-container"}, 
+      React.createElement("div", {ref: "tags-container", className: "autocomplete-tags-container inline-input-tags"}, 
         React.createElement("div", {className: "tag-search-container"}, 
           tags, 
           React.createElement("div", {className: "tag-search-input"}, 
@@ -202,3 +212,10 @@ var AutoCompleteTags = React.createClass({displayName: "AutoCompleteTags",
 });
 
 React.render(React.createElement(Index, null), document.getElementById("content"));
+
+$(function() {
+  $( "#dateFrom" ).datepicker();
+});
+$(function() {
+  $( "#dateTo" ).datepicker();
+});
