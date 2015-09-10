@@ -57,12 +57,14 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
 
   private def createHostel(hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
     models.Hostel(
-      id = hr.id,
-      name = hr.name,
-      noReviews = hr.noReviews,
-      price = hr.price.map(_.toDouble).map(BigDecimal.apply),
-      url = hr.url,
-      attributes = createHostelAttributes(attrsRows)
+      id            = hr.id,
+      name          = hr.name,
+      noReviews     = hr.noReviews,
+      price         = hr.price.map(_.toDouble).map(BigDecimal.apply),
+      imageUrlsText = hr.images getOrElse "",
+      url           = hr.url,
+      hostelworldId = hr.hostelworldId,
+      attributes    = createHostelAttributes(attrsRows)
     )
 
   private def createHostelAttributes(attrsRows: Seq[HostelAttrsRow]) = {

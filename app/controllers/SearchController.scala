@@ -7,13 +7,14 @@ import classification.HostelsClassifier
 import db.{HostelsDAO, LocationsDAO, SearchesDAO, TagsDAO}
 import extensions.FutureO
 import models.{ClassifiedHostel, TagHolder}
-import play.api.{Logger, Play}
+import play.api.{Configuration, Logger, Play}
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+import services.HostelImageUrlsBuilder
 
 import scala.concurrent.Future
 
@@ -22,7 +23,8 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
                                  locationsDAO: LocationsDAO,
                                  hostelsDAO: HostelsDAO,
                                  searchesDAO: SearchesDAO,
-                                 tagsDAO: TagsDAO) extends Controller {
+                                 tagsDAO: TagsDAO,
+                                 config: Configuration) extends Controller {
 
   private val logger = Logger(this.getClass)
 
@@ -88,7 +90,6 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
 
   def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
-
     val classifiedHostels =
       for {
         hostel     ← hostelsDAO.loadHostel(name.replaceAll("-", " "))
@@ -97,7 +98,11 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         classified = classifier.classifyByTags(Seq(hostel), parameters.split("[ ,]"))
       } yield classified
 
-    classifiedHostels.map(classifiedHostels => Ok(views.html.detail(classifiedHostels.head)))
+    classifiedHostels map { classifiedHostels =>
+      val imageUrlsBuilder = new HostelImageUrlsBuilder(config)
+      val classifiedHostel = classifiedHostels.head
+      Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel)))
+    }
   }
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =
