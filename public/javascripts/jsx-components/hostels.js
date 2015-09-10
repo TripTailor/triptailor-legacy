@@ -196,10 +196,11 @@ var Result = React.createClass({
             </div>
             <div className="col-xs-9">
               <div className="result-name">
-                <div className="result-price">{this.props.result.price} USD</div>
+                <div className="result-price"><strong>{this.props.result.price}</strong> USD</div>
                 <strong>{this.props.result.name}</strong>
               </div>
               <div className="result-tags">
+                <p><strong>Tags</strong></p>
                 {tags}
               </div>
             </div>

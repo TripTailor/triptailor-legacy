@@ -74,7 +74,8 @@ body {
 }
 .result {
   border: 1px solid #DBDFE5;
-  padding: 25px 15px;
+  padding: 25px;
+  padding-right: 15px;
   margin-bottom: 40px;
 }
 .result-a:link, .result-a:visited, .result-a:hover, .result-a:active {
@@ -82,18 +83,18 @@ body {
   text-decoration: none;
 }
 .result-name {
-  padding-bottom: 15px;
+  padding-bottom: 25px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   border-bottom: 1px solid #DBDFE5;
 }
 .result-price {
-  font-size: 12px;
+  font-size: 16px;
   float: right;
 }
 .result-photo {
-  height: 300px;
+  height: 360px;
 }
 .info {
   background: #dbdfe5;
@@ -103,8 +104,8 @@ body {
   display: block;
 }
 .result-tags {
-  padding-top: 15px;
-  padding-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 15px;
   overflow: hidden;
 }
 .more-results {
