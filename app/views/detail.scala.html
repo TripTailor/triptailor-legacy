@@ -7,9 +7,14 @@
     <script>
       var hostel = {
         name: "@ch.hostel.name",
-        url: "@ch.hostel.url"
+        url: "@ch.hostel.url",
+        description: "null",
+        image: "[600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600]",
+        tags: []
       };
-      console.log("@ch.orderedTags");
+      @for(tag <- ch.orderedTags) {
+        hostel.tags.push("@tag.attribute");
+      }
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
 }
