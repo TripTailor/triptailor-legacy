@@ -36,7 +36,7 @@ var Photos = React.createClass({displayName: "Photos",
   },
   getPhotos: function() {
     $.ajax({
-      url: "../assets/test/photos.json",
+      url: "../../assets/test/photos.json",
       dataType: "json",
       type: "GET",
       success: function(data) {
@@ -150,7 +150,7 @@ var Reviews = React.createClass({displayName: "Reviews",
   },
   getReviews: function() {
     $.ajax({
-      url: "../assets/test/reviews.json",
+      url: "../../assets/test/reviews.json",
       dataType: "json",
       type: "GET",
       success: function(data) {
@@ -213,7 +213,7 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
   },
   getTags: function() {
     $.ajax({
-      url: "../assets/test/tags.json",
+      url: "../../assets/test/tags.json",
       dataType: "json",
       type: "GET",
       success: function(data) {
