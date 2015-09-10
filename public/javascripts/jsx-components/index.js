@@ -36,9 +36,9 @@ var Content = React.createClass({
               <div className="tip-big">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
-                    <h3><span className="medium">Istanbul</span>, Turkey</h3>
+                    <h3>Istanbul, Turkey</h3>
                     <p>Location, View & Terrace</p>
-                    <div className="tip-results medium">145 Matches</div>
+                    <div className="tip-results">145 Matches</div>
                   </div>
                 </div>
               </div>
@@ -49,9 +49,9 @@ var Content = React.createClass({
               <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious"} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
-                    <h3><span className="medium">Bangkok</span>, Thailand</h3>
+                    <h3>Bangkok, Thailand</h3>
                     <p>Clean, Modern & Spacious</p>
-                    <div className="tip-results medium">171 Matches</div>
+                    <div className="tip-results">171 Matches</div>
                   </div>
                 </div>
               </a>
@@ -65,9 +65,9 @@ var Content = React.createClass({
               <a href={SEARCHURL + "?location=Amsterdam,Netherlands"} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
-                    <h3><span className="medium">Amsterdam</span>, Netherlands</h3>
+                    <h3>Amsterdam, Netherlands</h3>
                     <p>popular destination</p>
-                    <div className="tip-results medium">151 Results</div>
+                    <div className="tip-results">151 Results</div>
                   </div>
                 </div>
               </a>
@@ -78,9 +78,9 @@ var Content = React.createClass({
               <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people"} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
-                    <h3><span className="medium">Rio de Janeiro</span>, Brazil</h3>
+                    <h3>Rio de Janeiro, Brazil</h3>
                     <p>Fun, People & Party</p>
-                    <div className="tip-results medium">177 Matches</div>
+                    <div className="tip-results">177 Matches</div>
                   </div>
                 </div>
               </a>
@@ -91,9 +91,9 @@ var Content = React.createClass({
               <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork"} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
-                    <h3><span className="medium">New York</span>, USA</h3>
+                    <h3>New York, USA</h3>
                     <p>Breakfast, Bar & Artwork</p>
-                    <div className="tip-results medium">55 Matches</div>
+                    <div className="tip-results">55 Matches</div>
                   </div>
                 </div>
               </a>

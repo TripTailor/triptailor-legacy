@@ -79,13 +79,13 @@ body {
 .tips-header {
   font-family: 'Ubuntu', sans-serif;
   font-size: 30px;
-  color: #000;
+  color: #5a5b5b;
   margin-top: 0;
   margin-bottom: 8px;
   font-weight: normal;
 }
 .tips-subheader {
-  color: #000;
+  color: #5a5b5b;
   margin-bottom: 0;
 }
 .tip-a:link, .tip-a:visited, .tip-a:hover, .tip-a:active  {
@@ -145,6 +145,7 @@ body {
   margin-top: 0;
   font-family: 'Ubuntu', sans-serif;
   font-size: 24px;
+  font-weight: normal;
 }
 .tip-content p {
   color: inherit;

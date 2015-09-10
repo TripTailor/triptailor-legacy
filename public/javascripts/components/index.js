@@ -36,9 +36,9 @@ var Content = React.createClass({displayName: "Content",
               React.createElement("div", {className: "tip-big"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
-                    React.createElement("h3", null, React.createElement("span", {className: "medium"}, "Istanbul"), ", Turkey"), 
+                    React.createElement("h3", null, "Istanbul, Turkey"), 
                     React.createElement("p", null, "Location, View & Terrace"), 
-                    React.createElement("div", {className: "tip-results medium"}, "145 Matches")
+                    React.createElement("div", {className: "tip-results"}, "145 Matches")
                   )
                 )
               )
@@ -49,9 +49,9 @@ var Content = React.createClass({displayName: "Content",
               React.createElement("a", {href: SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious", className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
-                    React.createElement("h3", null, React.createElement("span", {className: "medium"}, "Bangkok"), ", Thailand"), 
+                    React.createElement("h3", null, "Bangkok, Thailand"), 
                     React.createElement("p", null, "Clean, Modern & Spacious"), 
-                    React.createElement("div", {className: "tip-results medium"}, "171 Matches")
+                    React.createElement("div", {className: "tip-results"}, "171 Matches")
                   )
                 )
               )
@@ -65,9 +65,9 @@ var Content = React.createClass({displayName: "Content",
               React.createElement("a", {href: SEARCHURL + "?location=Amsterdam,Netherlands", className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
-                    React.createElement("h3", null, React.createElement("span", {className: "medium"}, "Amsterdam"), ", Netherlands"), 
+                    React.createElement("h3", null, "Amsterdam, Netherlands"), 
                     React.createElement("p", null, "popular destination"), 
-                    React.createElement("div", {className: "tip-results medium"}, "151 Results")
+                    React.createElement("div", {className: "tip-results"}, "151 Results")
                   )
                 )
               )
@@ -78,9 +78,9 @@ var Content = React.createClass({displayName: "Content",
               React.createElement("a", {href: SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people", className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
-                    React.createElement("h3", null, React.createElement("span", {className: "medium"}, "Rio de Janeiro"), ", Brazil"), 
+                    React.createElement("h3", null, "Rio de Janeiro, Brazil"), 
                     React.createElement("p", null, "Fun, People & Party"), 
-                    React.createElement("div", {className: "tip-results medium"}, "177 Matches")
+                    React.createElement("div", {className: "tip-results"}, "177 Matches")
                   )
                 )
               )
@@ -91,9 +91,9 @@ var Content = React.createClass({displayName: "Content",
               React.createElement("a", {href: SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork", className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
-                    React.createElement("h3", null, React.createElement("span", {className: "medium"}, "New York"), ", USA"), 
+                    React.createElement("h3", null, "New York, USA"), 
                     React.createElement("p", null, "Breakfast, Bar & Artwork"), 
-                    React.createElement("div", {className: "tip-results medium"}, "55 Matches")
+                    React.createElement("div", {className: "tip-results"}, "55 Matches")
                   )
                 )
               )
