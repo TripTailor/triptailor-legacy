@@ -56,10 +56,11 @@ body {
   margin-bottom: 52px;
   font-weight: normal;
 }
-.autocomplete-col, .autocomplete-col, .autocomplete-a-col {
+.autocomplete-col, .autocomplete-a-col {
   padding-left: 0;
   padding-right: 0;
   margin-top: 10px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .submit {
   border-radius: 5px;
@@ -204,7 +205,7 @@ body {
   .border-right {
     border-right: 1px solid #ccc;
   }
-  .autocomplete-col, .autocomplete-col, .autocomplete-a-col {
+  .autocomplete-col, .autocomplete-a-col {
     margin-top: 0;
   }
   .inline-input-left {
