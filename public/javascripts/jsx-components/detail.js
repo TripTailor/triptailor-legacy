@@ -21,7 +21,7 @@ var Description = React.createClass({
     return (
       <div className="description">
         <p className="description-label"><strong>Description</strong></p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a massa dui. Praesent ac sapien est. Nullam in fermentum ipsum. Nulla nec ullamcorper risus. Curabitur maximus facilisis eros, eu dapibus eros efficitur consectetur. Proin rhoncus elit id libero convallis, eu placerat quam interdum. Aliquam iaculis tellus dolor, in aliquet erat faucibus ultricies. Duis aliquam nulla eu pretium auctor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed malesuada lacus sed tortor feugiat, tristique lobortis enim vulputate. Nam a dictum quam, ac fringilla nisl.</p>
+        <p>{hostel.description}</p>
       </div>
     );
   }
@@ -29,24 +29,8 @@ var Description = React.createClass({
 
 var Photos = React.createClass({
   getInitialState: function() {
-    return {photos: [], mainPhoto: -1, more: false};
-  },
-  componentWillMount: function() {
-    this.getPhotos();
-  },
-  getPhotos: function() {
-    $.ajax({
-      url: "../../assets/test/photos.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        var i = data.length > 0 ? 0 : -1;
-        this.setState({photos: data, mainPhoto: i});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    var photos = hostel.image.split(",");
+    return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
   },
   selectPhoto: function(i) {
     this.setState({mainPhoto: i});
@@ -206,23 +190,7 @@ var Review = React.createClass({
 
 var ReviewsSection = React.createClass({
   getInitialState: function() {
-    return {tags: []};
-  },
-  componentWillMount: function() {
-    this.getTags();
-  },
-  getTags: function() {
-    $.ajax({
-      url: "../../assets/test/tags.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({tags: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Tags test", status, err.toString());
-      }.bind(this)
-    });
+    return {tags: hostel.tags};
   },
   toggleTag: function(i) {
     var tags = this.state.tags.slice();
@@ -233,7 +201,7 @@ var ReviewsSection = React.createClass({
     return (
       <div>
         <Tags tags={this.state.tags} toggleTag={this.toggleTag} />
-        <Reviews tags={this.state.tags} />
+        {/* <Reviews tags={this.state.tags} /> */}
       </div>
     );
   }
@@ -249,7 +217,7 @@ var Content = React.createClass({
             <ReviewsSection />
           </div>
           <div className="col-md-3">
-            {/* <Description /> */}
+            <Description />
           </div>
         </div>
       </div>

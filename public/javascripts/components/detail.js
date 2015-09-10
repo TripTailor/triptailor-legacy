@@ -21,7 +21,7 @@ var Description = React.createClass({displayName: "Description",
     return (
       React.createElement("div", {className: "description"}, 
         React.createElement("p", {className: "description-label"}, React.createElement("strong", null, "Description")), 
-        React.createElement("p", null, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a massa dui. Praesent ac sapien est. Nullam in fermentum ipsum. Nulla nec ullamcorper risus. Curabitur maximus facilisis eros, eu dapibus eros efficitur consectetur. Proin rhoncus elit id libero convallis, eu placerat quam interdum. Aliquam iaculis tellus dolor, in aliquet erat faucibus ultricies. Duis aliquam nulla eu pretium auctor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed malesuada lacus sed tortor feugiat, tristique lobortis enim vulputate. Nam a dictum quam, ac fringilla nisl.")
+        React.createElement("p", null, hostel.description)
       )
     );
   }
@@ -29,24 +29,8 @@ var Description = React.createClass({displayName: "Description",
 
 var Photos = React.createClass({displayName: "Photos",
   getInitialState: function() {
-    return {photos: [], mainPhoto: -1, more: false};
-  },
-  componentWillMount: function() {
-    this.getPhotos();
-  },
-  getPhotos: function() {
-    $.ajax({
-      url: "../../assets/test/photos.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        var i = data.length > 0 ? 0 : -1;
-        this.setState({photos: data, mainPhoto: i});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    var photos = hostel.image.split(",");
+    return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
   },
   selectPhoto: function(i) {
     this.setState({mainPhoto: i});
@@ -206,23 +190,7 @@ var Review = React.createClass({displayName: "Review",
 
 var ReviewsSection = React.createClass({displayName: "ReviewsSection",
   getInitialState: function() {
-    return {tags: []};
-  },
-  componentWillMount: function() {
-    this.getTags();
-  },
-  getTags: function() {
-    $.ajax({
-      url: "../../assets/test/tags.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({tags: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Tags test", status, err.toString());
-      }.bind(this)
-    });
+    return {tags: hostel.tags};
   },
   toggleTag: function(i) {
     var tags = this.state.tags.slice();
@@ -232,8 +200,8 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag}), 
-        React.createElement(Reviews, {tags: this.state.tags})
+        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag})
+        /* <Reviews tags={this.state.tags} /> */
       )
     );
   }
@@ -248,8 +216,8 @@ var Content = React.createClass({displayName: "Content",
             React.createElement(Photos, null), 
             React.createElement(ReviewsSection, null)
           ), 
-          React.createElement("div", {className: "col-md-3"}
-            /* <Description /> */
+          React.createElement("div", {className: "col-md-3"}, 
+            React.createElement(Description, null)
           )
         )
       )

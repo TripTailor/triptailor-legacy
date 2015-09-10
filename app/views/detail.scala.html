@@ -8,12 +8,12 @@
       var hostel = {
         name: "@ch.hostel.name",
         url: "@ch.hostel.url",
-        description: "null",
-        image: "[600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600,600x600]",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a massa dui. Praesent ac sapien est. Nullam in fermentum ipsum. Nulla nec ullamcorper risus. Curabitur maximus facilisis eros, eu dapibus eros efficitur consectetur. Proin rhoncus elit id libero convallis, eu placerat quam interdum. Aliquam iaculis tellus dolor, in aliquet erat faucibus ultricies. Duis aliquam nulla eu pretium auctor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed malesuada lacus sed tortor feugiat, tristique lobortis enim vulputate. Nam a dictum quam, ac fringilla nisl.",
+        image: "http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600",
         tags: []
       };
       @for(tag <- ch.orderedTags) {
-        hostel.tags.push("@tag.attribute");
+        hostel.tags.push({name: "@tag.attribute", type: @tag.tagType});
       }
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
