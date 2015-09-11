@@ -3,7 +3,7 @@
 @main("TripTailor Hostels") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/hostels.css")">
   <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("font-awesome.min.css"))'>
-  <link rel="stylesheet" media="screen" href="@routes.Assets.at("jquery-ui/jquery-ui.min.css")">
+  <link rel="stylesheet" media="screen" href='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.css"))'>
 } {
   <script type="text/javascript">
     @locationOpt.fold {
@@ -13,6 +13,6 @@
     }
   </script>
   <script type="text/javascript" src="@routes.Assets.at("javascripts/components/hostels.js")"></script>
-  <script type="text/javascript" src="@routes.Assets.at("jquery-ui/jquery-ui.min.js")"></script>
+  <script type="text/javascript" src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery-ui.min.js"))'></script>
   <script type="text/javascript" src="@routes.Assets.at("javascripts/date-picker.js")"></script>
 }

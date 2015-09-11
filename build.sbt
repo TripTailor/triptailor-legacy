@@ -17,6 +17,7 @@ val dbDependencies = Seq(
 val jsWebJars = Seq(
   "org.webjars" %% "webjars-play" % "2.4.0-1",
   "org.webjars" % "jquery" % "2.1.4",
+  "org.webjars" % "jquery-ui" % "1.11.4",
   "org.webjars" % "react" % "0.13.3"
 )
 
