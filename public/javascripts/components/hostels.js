@@ -61,8 +61,24 @@ var SearchHeader = React.createClass({displayName: "SearchHeader",
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid header"}, 
-        React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Location")), 
-        React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.props.location, updateValue: this.props.updateLocationValue, getResults: this.props.getResults, tags: this.props.tags}), 
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-md-8 location-col"}, 
+            React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Location")), 
+            React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.props.location, updateValue: this.props.updateLocationValue, getResults: this.props.getResults, tags: this.props.tags})
+          ), 
+          React.createElement("div", {className: "col-md-4"}, 
+            React.createElement("div", {className: "row"}, 
+              React.createElement("div", {className: "col-xs-6 date-col-left"}, 
+                React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Check in")), 
+                 React.createElement("input", {type: "text", id: "dateFrom", placeholder: "Check in", className: "triptailor-input date-input-left", readOnly: true})
+               ), 
+               React.createElement("div", {className: "col-xs-6 date-col-right"}, 
+                React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Check out")), 
+                 React.createElement("input", {type: "text", id: "dateTo", placeholder: "Check out", className: "triptailor-input date-input-right", readOnly: true})
+               )
+            )
+          )
+        ), 
         React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Tags")), 
         React.createElement(AutoCompleteTags, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags=", value: this.props.query, updateValue: this.props.updateQueryValue, tags: this.props.tags, addTag: this.props.addTag, removeTag: this.props.removeTag, removeSpecificTag: this.props.removeSpecificTag})
       )

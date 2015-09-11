@@ -40,7 +40,22 @@ body {
 .tag-search-container {
   border-spacing: 10px 4px;
 }
-
+.date-col-left {
+  padding-right: 0;
+}
+.date-col-right {
+  padding-left: 0;
+}
+.date-input-left {
+  border-top: 1px solid #DBDFE5;
+  border-bottom: 1px solid #DBDFE5;
+  border-left: 1px solid #DBDFE5;
+  margin-bottom: 25px;
+}
+.date-input-right {
+ border: 1px solid #DBDFE5;
+ margin-bottom: 25px;
+}
 
 /*** Results ***/
 
@@ -124,6 +139,16 @@ body {
 }
 
 @media (min-width: 992px) {
+  .location-col {
+    padding-right: 0;
+  }
+  .date-col-left {
+    padding-left: 0;
+  }
+  .date-input-left {
+    border-left: 0;
+  }
+
   .tags-hint {
     border-bottom: 0;
   }
