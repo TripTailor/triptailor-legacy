@@ -30,25 +30,9 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
     if (tags.isEmpty)
       Future.successful(None)
     else {
-      val f = db.run(attributeLocationQuery(tags, city).result)
+      val searchIdFO = saveSearch(sessionId, city, adwords)
 
-      // Insert search
-      val searchIdFO =
-        for {
-          attrLocation  ← FutureO(f.map(_.headOption))
-          (_, location) = attrLocation
-          searchId      ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, None)).map(Some(_)))
-        } yield searchId
-
-      // Insert Attributes
-      val attrRowsFO =
-        for {
-          searchId      ← FutureO(searchIdFO.future)
-          attrsLocation ← FutureO(f.map(Some(_)))
-          attrRow       = attrsLocation.map(attrLocation => buildAttributeSearchRow(searchId, attrLocation._1))
-        } yield attrRow
-
-      attrRowsFO.flatMap(attrRow => FutureO(db.run(insertAttributeSearchesQuery(attrRow)).map(Some(_))))
+      saveAttributeSearch(searchIdFO, tags).flatMap(attrRow => FutureO(db.run(insertAttributeSearchesQuery(attrRow))))
 
       searchIdFO.future
     }
@@ -59,6 +43,19 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       searchId ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, None)).map(Some(_)))
     } yield searchId).future
 
+  private def saveSearch(sessionId: String, city: String, adwords: Int) =
+    for {
+      location ← FutureO(db.run(locationQuery(city).result).map(_.headOption))
+      searchId ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, None)).map(Some(_)))
+    } yield searchId
+
+  private def saveAttributeSearch(searchIdFO: FutureO[Int], tags: Seq[String]) =
+    for {
+      searchId ← searchIdFO
+      attr     ← FutureO(db.run(attributeQuery(tags).result).map(Some(_)))
+      attrRow  = attr.map(buildAttributeSearchRow(searchId, _))
+    } yield attrRow
+
   private def attributeLocationQuery(tags: Seq[String], city: String) =
     for {
       l ← Location  if l.city === city
@@ -67,6 +64,9 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
 
   private def hostelQuery(name: String) =
     Hostel.filter(_.name === name)
+
+  private def attributeQuery(tags: Seq[String]) =
+    for (a ← Attribute if a.name inSetBind tags) yield a
 
   private def locationQuery(city: String) =
     Location.filter(_.city === city)
