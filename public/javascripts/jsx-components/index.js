@@ -130,6 +130,7 @@ var AutoCompleteSearch = React.createClass({
     var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if(this.state.tags.length > 0)
       url += "&tags=" + getStringTags(this.state.tags);
+    url += "&date-from=" + dateFromParam + "&date-to=" + dateToParam;
     React.findDOMNode(this.refs.submit).href = url + adVariables();
   },
   enterSubmit: function() {
