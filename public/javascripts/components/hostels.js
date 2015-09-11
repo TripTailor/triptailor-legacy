@@ -175,7 +175,8 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
   render: function() {
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
-      results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId, tags: this.props.tags}));
+      if(this.props.results[i].url != null)
+        results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId, tags: this.props.tags}));
     };
     return (
       React.createElement("div", null, 

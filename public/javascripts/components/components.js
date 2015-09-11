@@ -150,7 +150,7 @@ var AutoCompleteTagsMixin = {
         this.props.addTag(this.state.hints[this.state.selectedItem]);
         this.setState({hints: [], selectedItem: -1});
       }
-      else
+      else if(this.props.value != "")
         this.props.addTag(this.props.value.toLowerCase());
       this.props.updateValue("");
     }
