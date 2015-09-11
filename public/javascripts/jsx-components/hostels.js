@@ -61,8 +61,24 @@ var SearchHeader = React.createClass({
   render: function() {
     return (
       <div className="container-fluid header">
-        <p className="header-label" ><strong>Location</strong></p>
-        <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} getResults={this.props.getResults} tags={this.props.tags} />
+        <div className="row">
+          <div className="col-md-8 location-col">
+            <p className="header-label" ><strong>Location</strong></p>
+            <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} getResults={this.props.getResults} tags={this.props.tags} />
+          </div>
+          <div className="col-md-4">
+            <div className="row">
+              <div className="col-xs-6 date-col-left">
+                <p className="header-label" ><strong>Check in</strong></p>
+                 <input type="text" id="dateFrom" placeholder="Check in" className="triptailor-input date-input-left" readOnly />
+               </div>
+               <div className="col-xs-6 date-col-right">
+                <p className="header-label" ><strong>Check out</strong></p>
+                 <input type="text" id="dateTo" placeholder="Check out" className="triptailor-input date-input-right" readOnly />
+               </div>
+            </div>
+          </div>
+        </div>
         <p className="header-label" ><strong>Tags</strong></p>
         <AutoCompleteTags url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?tags="} value={this.props.query} updateValue={this.props.updateQueryValue} tags={this.props.tags} addTag={this.props.addTag} removeTag={this.props.removeTag} removeSpecificTag={this.props.removeSpecificTag} />
       </div>

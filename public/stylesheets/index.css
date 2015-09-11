@@ -8,16 +8,22 @@ body {
 .autocomplete-row {
   margin: auto 0;
 }
+.xs-border-right {
+    border-right: 1px solid #ccc;
+  }
 .autocomplete-a-col {
   text-align: center;
   padding-left: 0;
   padding-right: 0;
 }
-.inline-input-left, .input-tags {
+.inline-input-left, .inline-input-tags {
   border-radius: 5px;
 }
-.autocomplete-input-container {
-  border-radius: 5px;
+.inline-left-picker {
+  border-radius: 5px 0 0 5px;
+}
+.inline-right-picker {
+  border-radius: 0 5px 5px 0;
 }
 .tag-search-container {
   border-spacing: 10px 5px;
@@ -50,10 +56,11 @@ body {
   margin-bottom: 52px;
   font-weight: normal;
 }
-.autocomplete-col-left, .autocomplete-col-center, .autocomplete-a-col {
+.autocomplete-col, .autocomplete-a-col {
   padding-left: 0;
   padding-right: 0;
   margin-top: 10px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 4px;
 }
 .submit {
   border-radius: 5px;
@@ -196,24 +203,20 @@ body {
 /*** Media queries ***/
 
 @media (min-width: 992px) {
-  .autocomplete-col-left {
+  .border-right {
     border-right: 1px solid #ccc;
   }
-  .autocomplete-col-left, .autocomplete-col-center, .autocomplete-a-col {
+  .autocomplete-col, .autocomplete-a-col {
     margin-top: 0;
   }
   .inline-input-left {
     border-radius: 5px 0 0 5px;
   }
-  .inline-input-center {
+  .inline-input-tags, .inline-left-picker, .inline-right-picker {
     border-radius: 0;
   }
   .submit {
     border-radius: 0 5px 5px 0;
     width: 100%;
-  }
-
-  .autocomplete-input-container {
-    border-radius: 0;
   }
 }

@@ -163,7 +163,6 @@ body {
 /* Tags style */
 .autocomplete-tags-container {
   background-color: white;
-  border-radius: 5px;
 }
 .tag-search-container {
   display: table;
@@ -268,10 +267,6 @@ body {
     margin-top: -50px;
   }
   
-  .autocomplete-tags-container {
-    border-radius: 0;
-  }
-
   .love {
     margin-top: 0;
   }
