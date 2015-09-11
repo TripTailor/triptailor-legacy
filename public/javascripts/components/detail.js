@@ -218,8 +218,8 @@ var Content = React.createClass({displayName: "Content",
             React.createElement(Photos, null), 
             React.createElement(ReviewsSection, null)
           ), 
-          React.createElement("div", {className: "col-md-3"}, 
-            React.createElement(Description, null)
+          React.createElement("div", {className: "col-md-3"}
+            /* <Description /> */
           )
         )
       )
