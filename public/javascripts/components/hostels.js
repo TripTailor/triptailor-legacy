@@ -192,7 +192,7 @@ var Result = React.createClass({displayName: "Result",
         React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-3"}, 
-              React.createElement("div", {className: "result-photo", style: {background: "url(http://placehold.it/600x600) no-repeat center top", backgroundSize: "contain"}})
+              React.createElement("div", {className: "result-photo", style: this.props.result.images.length > 0 ? {background: "url(" + this.props.result.images[0] + ") no-repeat center center", backgroundSize: "contain"} : {}})
             ), 
             React.createElement("div", {className: "col-xs-9"}, 
               React.createElement("div", {className: "result-name"}, 
