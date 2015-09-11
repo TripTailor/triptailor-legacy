@@ -21,6 +21,13 @@ var Header = React.createClass({
 
 var Content = React.createClass({
   render: function() {
+    var dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() + 1);
+    var dateTo = new Date();
+    dateTo.setDate(dateTo.getDate() + 4);
+
+    dateFromStr = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate();
+    dateToStr = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate();
     return (
       <div className="container-fluid">
         <div className="row tips-header-container">
@@ -32,7 +39,7 @@ var Content = React.createClass({
 
         <div className="row">
           <div className="col-md-8">
-            <a href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace"} className="tip-a">
+            <a href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
               <div className="tip-big">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
@@ -46,7 +53,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip bangkok">
-              <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious"} className="tip-a">
+              <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Bangkok, Thailand</h3>
@@ -62,7 +69,7 @@ var Content = React.createClass({
         <div className="row bottom-tips">
           <div className="col-md-4">
             <div className="tip amsterdam">
-              <a href={SEARCHURL + "?location=Amsterdam,Netherlands"} className="tip-a">
+              <a href={SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Amsterdam, Netherlands</h3>
@@ -75,7 +82,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip rio">
-              <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people"} className="tip-a">
+              <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Rio de Janeiro, Brazil</h3>
@@ -88,7 +95,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip ny">
-              <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork"} className="tip-a">
+              <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>New York, USA</h3>
@@ -213,5 +220,3 @@ var AutoCompleteTags = React.createClass({
 });
 
 React.render(<Index />, document.getElementById("content"));
-
-var dateAction = function(){};
