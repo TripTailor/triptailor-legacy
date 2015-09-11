@@ -25,7 +25,6 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       searchId  ← FutureO(db.run(insertSearchQuery(sessionId, adwords, location, Some(hostel))).map(Some(_)))
     } yield searchId).future
 
-  // TODO: Separate into smaller methods
   def saveTagsSearch(sessionId: String, tags: Seq[String], city: String, adwords: Int): Future[Option[Int]] =
     if (tags.isEmpty)
       Future.successful(None)
@@ -55,12 +54,6 @@ class SearchesDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       attr     ← FutureO(db.run(attributeQuery(tags).result).map(Some(_)))
       attrRow  = attr.map(buildAttributeSearchRow(searchId, _))
     } yield attrRow
-
-  private def attributeLocationQuery(tags: Seq[String], city: String) =
-    for {
-      l ← Location  if l.city === city
-      a ← Attribute if a.name inSetBind tags
-    } yield (a, l)
 
   private def hostelQuery(name: String) =
     Hostel.filter(_.name === name)
