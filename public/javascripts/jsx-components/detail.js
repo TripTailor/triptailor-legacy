@@ -61,7 +61,7 @@ var Photos = React.createClass({
     return (
       <div>
         <MainPhoto photos={this.state.photos} mainPhoto={this.state.mainPhoto} selectRight={this.selectRight} selectLeft={this.selectLeft} />
-        <OtherPhotos photos={this.state.photos} more={this.state.more} selectPhoto={this.selectPhoto} showMore={this.showMore} showLess={this.showLess} />
+        <OtherPhotos photos={this.state.photos} mainPhoto={this.state.mainPhoto} more={this.state.more} selectPhoto={this.selectPhoto} showMore={this.showMore} showLess={this.showLess} />
       </div>
     );
   }
@@ -84,7 +84,8 @@ var OtherPhotos = React.createClass({
   render: function() {
     var photos = [];
     for(var i = 0; i < this.props.photos.length && (this.props.more || i < 4); i++) {
-        photos.push(<div key={i} className="other-photo" style={{background: "url(" + this.props.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.props.selectPhoto.bind(this, i)}></div>);
+      var photo = this.props.mainPhoto != i ? <div key={i} className="other-photo" style={{background: "url(" + this.props.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.props.selectPhoto.bind(this, i)}></div> : <div key={i} className="other-photo" style={{background: "url(" + this.props.photos[i] + ") no-repeat center center", backgroundSize: "cover"}} onClick={this.props.selectPhoto.bind(this, i)}><div className="selected-photo"></div></div>;
+      photos.push(photo);
     }
     if(this.props.photos.length > 0 && !this.props.more)
       photos.push(<div className="other-photo more-photos" onClick={this.props.showMore}>View More</div>);

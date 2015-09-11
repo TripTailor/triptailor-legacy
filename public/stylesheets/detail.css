@@ -90,6 +90,10 @@ body {
   text-align: center;
   line-height: 82px;
 }
+.selected-photo {
+  height: 82px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
 .more-text {
 }
 
