@@ -77,21 +77,21 @@ trait Tables {
    *  @param name Database column name SqlType(varchar), Length(100,true)
    *  @param description Database column description SqlType(text), Default(None)
    *  @param price Database column price SqlType(numeric), Default(None)
-   *  @param image Database column image SqlType(varchar), Length(50,true), Default(None)
+   *  @param images Database column image SqlType(varchar), Length(500,true), Default(None)
    *  @param url Database column url SqlType(varchar), Length(200,true), Default(None)
    *  @param noReviews Database column no_reviews SqlType(int4)
    *  @param locationId Database column location_id SqlType(int4) */
-  case class HostelRow(id: Int, name: String, description: Option[String] = None, price: Option[scala.math.BigDecimal] = None, image: Option[String] = None, url: Option[String] = None, noReviews: Int, locationId: Int)
+  case class HostelRow(id: Int, name: String, description: Option[String] = None, price: Option[scala.math.BigDecimal] = None, images: Option[String] = None, url: Option[String] = None, noReviews: Int, locationId: Int, hostelworldId: Option[Int] = None)
   /** GetResult implicit for fetching HostelRow objects using plain SQL queries */
   implicit def GetResultHostelRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]], e3: GR[Option[scala.math.BigDecimal]]): GR[HostelRow] = GR{
     prs => import prs._
-    HostelRow.tupled((<<[Int], <<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<[Int], <<[Int]))
+    HostelRow.tupled((<<[Int], <<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<[Int], <<[Int], <<?[Int]))
   }
   /** Table description of table hostel. Objects of this class serve as prototypes for rows in queries. */
   class Hostel(_tableTag: Tag) extends Table[HostelRow](_tableTag, "hostel") {
-    def * = (id, name, description, price, image, url, noReviews, locationId) <> (HostelRow.tupled, HostelRow.unapply)
+    def * = (id, name, description, price, images, url, noReviews, locationId, hostelworldId) <> (HostelRow.tupled, HostelRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(name), description, price, image, url, Rep.Some(noReviews), Rep.Some(locationId)).shaped.<>({r=>import r._; _1.map(_=> HostelRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(name), description, price, images, url, Rep.Some(noReviews), Rep.Some(locationId), Rep.Some(hostelworldId)).shaped.<>({r=>import r._; _1.map(_=> HostelRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7.get, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
@@ -102,13 +102,15 @@ trait Tables {
     /** Database column price SqlType(numeric), Default(None) */
     val price: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("price", O.Default(None))
     /** Database column image SqlType(varchar), Length(50,true), Default(None) */
-    val image: Rep[Option[String]] = column[Option[String]]("image", O.Length(50,varying=true), O.Default(None))
+    val images: Rep[Option[String]] = column[Option[String]]("images", O.Length(50,varying=true), O.Default(None))
     /** Database column url SqlType(varchar), Length(200,true), Default(None) */
     val url: Rep[Option[String]] = column[Option[String]]("url", O.Length(200,varying=true), O.Default(None))
     /** Database column no_reviews SqlType(int4) */
     val noReviews: Rep[Int] = column[Int]("no_reviews")
     /** Database column location_id SqlType(int4) */
     val locationId: Rep[Int] = column[Int]("location_id")
+    /** Database column hostelworld_id SqlType(int4) */
+    val hostelworldId: Rep[Option[Int]] = column[Option[Int]]("hostelworld_id")
 
     /** Foreign key referencing Location (database name hostel_location_id_fkey) */
     lazy val locationFk = foreignKey("hostel_location_id_fkey", locationId, Location)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)

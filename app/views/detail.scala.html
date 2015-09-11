@@ -1,4 +1,4 @@
-@(ch: ClassifiedHostel)(implicit req: RequestHeader)
+@(ch: ClassifiedHostel, hostelImageUrls: Seq[String])(implicit req: RequestHeader)
 
 @main("TripTailor Hostels") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/detail.css")">
@@ -9,7 +9,7 @@
         name: "@ch.hostel.name",
         url: "@ch.hostel.url",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed a massa dui. Praesent ac sapien est. Nullam in fermentum ipsum. Nulla nec ullamcorper risus. Curabitur maximus facilisis eros, eu dapibus eros efficitur consectetur. Proin rhoncus elit id libero convallis, eu placerat quam interdum. Aliquam iaculis tellus dolor, in aliquet erat faucibus ultricies. Duis aliquam nulla eu pretium auctor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed malesuada lacus sed tortor feugiat, tristique lobortis enim vulputate. Nam a dictum quam, ac fringilla nisl.",
-        image: "http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600,http://placehold.it/600x600",
+        image: "@hostelImageUrls.mkString(",")",
         tags: []
       };
       @for(tag <- ch.orderedTags) {

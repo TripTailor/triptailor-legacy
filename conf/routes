@@ -2,14 +2,15 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
 GET     /                                       @controllers.ApplicationController.index
 GET     /how-it-works                           @controllers.ApplicationController.howItWorks
+
 GET     /hostels/search                         @controllers.SearchController.search
-GET     /hostels/:name/:tags                    @controllers.SearchController.detail(name: String, tags: String)
+GET     /hostels/:name/tags/                    @controllers.SearchController.detail(name: String, tags: String = "")
+GET     /hostels/:name/tags/:tags               @controllers.SearchController.detail(name: String, tags: String)
 
 # JSON endpoints
-GET     /hostels/hints                          @controllers.HintsController.hostelHints
+GET     /hostels/search/hints                   @controllers.HintsController.hostelHints
 GET     /hostels/search/:location               @controllers.SearchController.displayAll(location: String)
 GET     /hostels/search/:city/:tags             @controllers.SearchController.classify(city: String, tags: String)
 GET     /tags/suggestions                       @controllers.HintsController.tagSuggestions

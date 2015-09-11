@@ -5,7 +5,9 @@ case class Hostel(
   name: String,
   noReviews: Int,
   price: Option[BigDecimal],
+  imageUrlsText: String,
   url: Option[String],
+  hostelworldId: Option[Int],
   attributes: Map[String,Double]
 ) {
   def isEmpty  = id == 0
@@ -13,5 +15,5 @@ case class Hostel(
 }
 
 object Hostel {
-  def empty: Hostel = Hostel(0, "", 0, None, None, Map.empty)
+  def empty: Hostel = Hostel(0, "", 0, None, "", None, None, Map.empty)
 }
