@@ -213,3 +213,5 @@ var AutoCompleteTags = React.createClass({
 });
 
 React.render(<Index />, document.getElementById("content"));
+
+var dateAction = function(){};

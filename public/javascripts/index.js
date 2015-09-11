@@ -35,9 +35,9 @@ $(function() {
   fromInput.datepicker("setDate", dateFrom);
   toInput.datepicker("setDate", dateTo);
 
-  dateFrom.setDate(dateFrom.getDate() + 1);
-  toInput.datepicker("option", "minDate", dateFrom);
-
   dateFromParam = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate();
   dateToParam = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate();
+
+  dateFrom.setDate(dateFrom.getDate() + 1);
+  toInput.datepicker("option", "minDate", dateFrom);
 });
