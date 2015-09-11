@@ -6,6 +6,7 @@ GET     /                                       @controllers.ApplicationControll
 GET     /how-it-works                           @controllers.ApplicationController.howItWorks
 
 GET     /hostels/search                         @controllers.SearchController.search
+GET     /hostels/:name/tags/                    @controllers.SearchController.detail(name: String, tags: String = "")
 GET     /hostels/:name/tags/:tags               @controllers.SearchController.detail(name: String, tags: String)
 
 # JSON endpoints
