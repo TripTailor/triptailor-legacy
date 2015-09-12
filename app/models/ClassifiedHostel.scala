@@ -15,6 +15,7 @@ object ClassifiedHostel {
       "id"     -> ch.hostel.id,
       "name"   -> ch.hostel.name,
       "price"  -> ch.hostel.price.map(_.setScale(2, RoundingMode.HALF_EVEN)),
+      "currency" -> ch.hostel.currency,
       "images" -> new HostelImageUrlsBuilder(Play.current.configuration).hostelWorldUrls(ch.hostel),
       "url"    -> ch.hostel.url,
       "tags"   -> ch.orderedTags

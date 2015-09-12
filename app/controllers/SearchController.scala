@@ -14,7 +14,9 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+
 import services.HostelImageUrlsBuilder
+import services.HostelPriceScraper
 
 import scala.concurrent.Future
 
@@ -52,7 +54,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       for {
         location       ← FutureO(loadLocation(location))
         scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo)
+        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
@@ -66,7 +68,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified     = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
                          else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
-      } yield (searchID, classified, scraper.assignPricing(classified, pricingInfo))
+      } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
