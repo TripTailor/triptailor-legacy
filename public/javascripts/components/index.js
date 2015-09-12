@@ -21,6 +21,13 @@ var Header = React.createClass({displayName: "Header",
 
 var Content = React.createClass({displayName: "Content",
   render: function() {
+    var dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() + 1);
+    var dateTo = new Date();
+    dateTo.setDate(dateTo.getDate() + 4);
+
+    dateFromStr = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate();
+    dateToStr = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate();
     return (
       React.createElement("div", {className: "container-fluid"}, 
         React.createElement("div", {className: "row tips-header-container"}, 
@@ -32,7 +39,7 @@ var Content = React.createClass({displayName: "Content",
 
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-8"}, 
-            React.createElement("a", {href: SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace", className: "tip-a"}, 
+            React.createElement("a", {href: SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + dateFromStr + "&date-to=" + dateToStr, className: "tip-a"}, 
               React.createElement("div", {className: "tip-big"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
@@ -46,7 +53,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip bangkok"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious", className: "tip-a"}, 
+              React.createElement("a", {href: SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + dateFromStr + "&date-to=" + dateToStr, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Bangkok, Thailand"), 
@@ -62,7 +69,7 @@ var Content = React.createClass({displayName: "Content",
         React.createElement("div", {className: "row bottom-tips"}, 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip amsterdam"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Amsterdam,Netherlands", className: "tip-a"}, 
+              React.createElement("a", {href: SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + dateFromStr + "&date-to=" + dateToStr, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Amsterdam, Netherlands"), 
@@ -75,7 +82,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip rio"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people", className: "tip-a"}, 
+              React.createElement("a", {href: SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + dateFromStr + "&date-to=" + dateToStr, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Rio de Janeiro, Brazil"), 
@@ -88,7 +95,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip ny"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork", className: "tip-a"}, 
+              React.createElement("a", {href: SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + dateFromStr + "&date-to=" + dateToStr, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "New York, USA"), 
@@ -130,6 +137,7 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
     var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if(this.state.tags.length > 0)
       url += "&tags=" + getStringTags(this.state.tags);
+    url += "&date-from=" + dateFromParam + "&date-to=" + dateToParam;
     React.findDOMNode(this.refs.submit).href = url + adVariables();
   },
   enterSubmit: function() {

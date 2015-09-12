@@ -6,18 +6,21 @@ var Hostels = React.createClass({
     return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1};
   },
   componentWillMount: function() {
-    this.getResults(this.state.location, this.state.tags);
+    this.getResults(this.state.location, this.state.tags, dateFromParam, dateToParam);
   },
   hostelsAddTag: function(value) {
-    this.getResults(this.state.location, this.addTag(value));
+    this.getResults(this.state.location, this.addTag(value), dateFromParam, dateToParam);
   },
   hostelsRemoveTag: function() {
-    this.getResults(this.state.location, this.removeTag());
+    this.getResults(this.state.location, this.removeTag(), dateFromParam, dateToParam);
   },
   hostelsRemoveSpecificTag: function(i) {
-    this.getResults(this.state.location, this.removeSpecificTag(i));
+    this.getResults(this.state.location, this.removeSpecificTag(i), dateFromParam, dateToParam);
   },
-  getResults: function(location, tags) {
+  getResultsDate: function() {
+    this.getResults(this.state.location, this.state.tags, dateFromParam, dateToParam);
+  },
+  getResults: function(location, tags, dateFrom, dateTo) {
     this.setState({searchId: -1});
     var route;
     location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
@@ -90,18 +93,18 @@ var AutoCompleteInput = React.createClass({
   mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
   hostelsElementClick: function(elementValue) {
     this.elementClick(elementValue);
-    this.props.getResults(elementValue, this.props.tags);
+    this.props.getResults(elementValue, this.props.tags, dateFrom, dateTo);
   },
   hostelsHandleKeyUp: function(e) {
     this.handleKeyUp(e);
     if(e.keyCode == 13 && this.state.selectedItem >= 0)
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
   },
   hostelsHandleKeyDown: function(e) {
     this.handleKeyDown(e);
     if(e.keyCode == 9 && this.state.selectedItem >= 0) {
       e.preventDefault();
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
     }
   },
   render: function() {
@@ -312,4 +315,6 @@ var AlsoTryTag = React.createClass({
   }
 });
 
-React.render(<Hostels />, document.getElementById("content"));
+var dateFromParam;
+var dateToParam;
+var hostels = React.render(<Hostels />, document.getElementById("content"));
