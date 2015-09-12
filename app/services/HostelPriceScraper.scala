@@ -40,13 +40,12 @@ class HostelPriceScraper @Inject() (config: Configuration) {
     }
     classifiedHostels.map { ch =>
       hostel = ch.hostel
-      val updatedPriceOpt =
+      val pricingInfoOpt =
         for {
           id    ← hostel.hostelworldId
           info  ← keyToPricingInfo.get(id)
-          price ← info.price
-        } yield price
-      ch.copy(hostel = hostel.copy(price = updatedPrice))
+        } yield info
+      ch.copy(hostel = hostel.copy(price = pricingInfoOpt.map(_.price), currency = pricingInfoOpt.map(_.currency)))
     }
   }
 

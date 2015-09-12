@@ -216,7 +216,7 @@ var Result = React.createClass({
             </div>
             <div className="col-xs-9">
               <div className="result-name">
-                <div className="result-price"><strong>{this.props.result.price}</strong> USD</div>
+                <div className="result-price"><strong>{this.props.result.price}</strong> {this.props.result.currency}</div>
                 <strong>{this.props.result.name}</strong>
               </div>
               <div className="result-tags">
