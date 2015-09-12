@@ -27,7 +27,7 @@ var Hostels = React.createClass({
     if (tags.length == 0)
       route = jsRoutes.controllers.SearchController.displayAll(location);
     else
-      route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags));
+      route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags), dateFrom, dateTo);
     $.ajax({
       url: route.absoluteURL(),
       dataType: 'json',

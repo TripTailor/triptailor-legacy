@@ -32,7 +32,23 @@ class HostelPriceScraper @Inject() (config: Configuration) {
       tokenRequest("city" -> city, "country" -> country, "date_from" -> dateFrom, "date_to" -> dateTo) flatMap { token =>
         parsePricingInfo(token)
       }
+    } recover { case NonFatal(_) => Seq.empty[HostelPricingInfo] }
+
+  def assignPricing(classifiedHostels: Seq[ClassifiedHostel], pricingInfo: Seq[HostelPricingInfo]): Seq[HostelPricing] = {
+    val keyToPricingInfo = pricingInfo.foldLeft( Map.empty[Int, HostelPricingInfo] ) { (map, pricing) =>
+      map + pricing.id -> pricing
     }
+    classifiedHostels.map { ch =>
+      hostel = ch.hostel
+      val updatedPriceOpt =
+        for {
+          id    ← hostel.hostelworldId
+          info  ← keyToPricingInfo.get(id)
+          price ← info.price
+        } yield price
+      ch.copy(hostel = hostel.copy(price = updatedPrice))
+    }
+  }
 
   private def tokenRequest(queryParams: (String, String)*): Future[String] =
     hostelworldSearchRequest(queryParams: _*)

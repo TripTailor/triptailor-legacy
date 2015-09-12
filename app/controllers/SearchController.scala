@@ -44,13 +44,15 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }
   }
 
-  def classify(location: String, tagsQuery: String) = Action.async { implicit request =>
+  def classify(location: String, tagsQuery: String, dateFrom: String, dateTo: String) = Action.async { implicit request =>
     val queryParams = adWordsParamsBinding.bindFromRequest.get
     val sessionId   = request.session.get("id").getOrElse(generateId)
 
     val fOpt =
       for {
         location       ← FutureO(loadLocation(location))
+        scraper        = new HostelPriceScraper(config)
+        pricingInfo    ← scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo)
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
@@ -64,7 +66,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified     = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
                          else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
-      } yield (searchID, classified)
+      } yield (searchID, classified, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
