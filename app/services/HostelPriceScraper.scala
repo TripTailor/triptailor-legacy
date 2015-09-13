@@ -12,6 +12,8 @@ import play.api.libs.ws.WS
 
 import scala.concurrent.Future
 import scala.util.control.NonFatal
+import models.ClassifiedHostel
+
 
 sealed trait DormType
 case object PublicDorm extends DormType
@@ -19,7 +21,7 @@ case object PrivateDorm extends DormType
 case object UnknownDorm extends DormType
 
 case class PricingInfo(price: Option[BigDecimal], dormType: DormType, currency: Option[String])
-case class HostelPricingInfo(id: String, pricingInfo: PricingInfo)
+case class HostelPricingInfo(id: Int, pricingInfo: PricingInfo)
 
 @Singleton
 class HostelPriceScraper @Inject() (config: Configuration) {
@@ -32,7 +34,26 @@ class HostelPriceScraper @Inject() (config: Configuration) {
       tokenRequest("city" -> city, "country" -> country, "date_from" -> dateFrom, "date_to" -> dateTo) flatMap { token =>
         parsePricingInfo(token)
       }
+    } recover { case NonFatal(_) => Seq.empty[HostelPricingInfo] }
+
+  def assignPricing(classifiedHostels: Seq[ClassifiedHostel], pricingInfo: Seq[HostelPricingInfo]): Seq[ClassifiedHostel] = {
+    val keyToPricingInfo = pricingInfo.foldLeft( Map.empty[Int, HostelPricingInfo] ) { (map, pricing) =>
+      map + (pricing.id -> pricing)
     }
+    classifiedHostels.flatMap { ch =>
+      val hostel = ch.hostel
+      val pricingInfoOpt =
+        for {
+          id    ← hostel.hostelworldId
+          info  ← keyToPricingInfo.get(id)
+        } yield info
+      pricingInfoOpt.fold {
+        Seq.empty[ClassifiedHostel]
+      } { hostelInfo =>
+        Seq(ch.copy(hostel = hostel.copy(price = hostelInfo.pricingInfo.price, currency = hostelInfo.pricingInfo.currency)))
+      }
+    }
+  }
 
   private def tokenRequest(queryParams: (String, String)*): Future[String] =
     hostelworldSearchRequest(queryParams: _*)
@@ -46,7 +67,7 @@ class HostelPriceScraper @Inject() (config: Configuration) {
 
   private def parseHostelPricingInfo(info: JsValue) =
     HostelPricingInfo(
-      id          = (info \ "pid").as[String],
+      id          = (info \ "pid").as[String].toInt,
       pricingInfo = parsePricingInfo(info)
     )
 

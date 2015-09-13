@@ -14,7 +14,9 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
+
 import services.HostelImageUrlsBuilder
+import services.HostelPriceScraper
 
 import scala.concurrent.Future
 
@@ -44,13 +46,15 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     }
   }
 
-  def classify(location: String, tagsQuery: String) = Action.async { implicit request =>
+  def classify(location: String, tagsQuery: String, dateFrom: String, dateTo: String) = Action.async { implicit request =>
     val queryParams = adWordsParamsBinding.bindFromRequest.get
     val sessionId   = request.session.get("id").getOrElse(generateId)
 
     val fOpt =
       for {
         location       ← FutureO(loadLocation(location))
+        scraper        = new HostelPriceScraper(config)
+        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
@@ -64,7 +68,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified     = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
                          else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
-      } yield (searchID, classified)
+      } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
@@ -75,16 +79,18 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     val fOpt =
       for {
-        location   ← FutureO(loadLocation(location))
-        _          = logger.info(s"loaded location $location")
-        model      ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
-        _          = logger.info("loaded model")
-        adWords    = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
-        searchID   ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
-        _          = logger.info(s"saved search $searchID")
-        classifier = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified = classifier.classifyByTags(model.toSeq, tags = Seq(""))
-      } yield (searchID, classified)
+        location       ← FutureO(loadLocation(location))
+        scraper        = new HostelPriceScraper(config)
+        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, "", "").map(Some(_)))
+        _              = logger.info(s"loaded location $location")
+        model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
+        _              = logger.info("loaded model")
+        adWords        = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
+        searchID       ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
+        _              = logger.info(s"saved search $searchID")
+        classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+        classified     = classifier.classifyByTags(model.toSeq, tags = Seq(""))
+      } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }

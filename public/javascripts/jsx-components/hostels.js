@@ -27,7 +27,7 @@ var Hostels = React.createClass({
     if (tags.length == 0)
       route = jsRoutes.controllers.SearchController.displayAll(location);
     else
-      route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags));
+      route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags), dateFrom, dateTo);
     $.ajax({
       url: route.absoluteURL(),
       dataType: 'json',
@@ -216,7 +216,7 @@ var Result = React.createClass({
             </div>
             <div className="col-xs-9">
               <div className="result-name">
-                <div className="result-price"><strong>{this.props.result.price}</strong> USD</div>
+                <div className="result-price"><strong>{this.props.result.price}</strong> {this.props.result.currency}</div>
                 <strong>{this.props.result.name}</strong>
               </div>
               <div className="result-tags">
