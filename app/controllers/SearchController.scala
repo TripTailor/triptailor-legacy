@@ -98,7 +98,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
     val classifiedHostels =
       for {
-        hostel     ← hostelsDAO.loadHostel(name.replaceAll("-", " "))
+        hostel     ← hostelsDAO.loadHostel(name)
         parameters = tagsQuery.replace("-", " ").replace("%21", "-")
         classifier = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
         classified = classifier.classifyByTags(Seq(hostel), parameters.split("[ ,]"))

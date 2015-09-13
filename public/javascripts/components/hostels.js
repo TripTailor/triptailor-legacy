@@ -202,7 +202,7 @@ var Result = React.createClass({displayName: "Result",
     })
   },
   render: function() {
-    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name.replace(/ /g, "-"), getStringTags(this.props.tags));
+    var route = jsRoutes.controllers.SearchController.detail(this.props.result.name, getStringTags(this.props.tags));
     var tags = [];
     for(var i = 0; i < this.props.result.tags.length; i++) {
       tags.push(React.createElement(Tag, {key: i, name: this.props.result.tags[i].name, type: this.props.result.tags[i].type}));
