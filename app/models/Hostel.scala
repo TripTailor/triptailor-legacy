@@ -8,7 +8,8 @@ case class Hostel(
   imageUrlsText: String,
   url: Option[String],
   hostelworldId: Option[Int],
-  attributes: Map[String,Double]
+  attributes: Map[String,Double],
+  description: Option[String] = None
 ) {
   def isEmpty  = id == 0
   def nonEmpty = !isEmpty

@@ -64,7 +64,8 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       imageUrlsText = hr.images getOrElse "",
       url           = hr.url,
       hostelworldId = hr.hostelworldId,
-      attributes    = createHostelAttributes(attrsRows)
+      attributes    = createHostelAttributes(attrsRows),
+      description   = hr.description
     )
 
   private def createHostelAttributes(attrsRows: Seq[HostelAttrsRow]) = {

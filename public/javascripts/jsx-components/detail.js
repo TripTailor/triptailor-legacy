@@ -220,7 +220,7 @@ var Content = React.createClass({
             <ReviewsSection />
           </div>
           <div className="col-md-3">
-            {/* <Description /> */}
+            { <Description /> }
           </div>
         </div>
       </div>
