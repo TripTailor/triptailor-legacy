@@ -26,8 +26,8 @@ var Content = React.createClass({
     var dateTo = new Date();
     dateTo.setDate(dateTo.getDate() + 4);
 
-    dateFromStr = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate();
-    dateToStr = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate();
+    dateFromStr = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate();
+    dateToStr = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
     return (
       <div className="container-fluid">
         <div className="row tips-header-container">

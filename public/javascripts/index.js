@@ -9,7 +9,7 @@ $(function() {
     dateFormat: "dd M yy",
     onSelect: function(date, inst) {
       var fromDate = new Date(date);
-      dateFromParam = fromDate.getFullYear() + "-" + fromDate.getMonth() + "-" + fromDate.getDate();
+      dateFromParam = fromDate.getFullYear() + "-" + (fromDate.getMonth() + 1) + "-" + fromDate.getDate();
       
       var toDate = new Date(toInput.datepicker("getDate"));
       if(fromDate >= toDate) {
@@ -24,7 +24,7 @@ $(function() {
     dateFormat: "dd M yy",
     onSelect: function(date, inst) {
       var toDate = new Date(date);
-      dateToParam = toDate.getFullYear() + "-" + toDate.getMonth() + "-" + toDate.getDate();
+      dateToParam = toDate.getFullYear() + "-" + (toDate.getMonth() + 1) + "-" + toDate.getDate();
     }
   });
 
@@ -35,8 +35,8 @@ $(function() {
   fromInput.datepicker("setDate", dateFrom);
   toInput.datepicker("setDate", dateTo);
 
-  dateFromParam = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate();
-  dateToParam = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate();
+  dateFromParam = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate();
+  dateToParam = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
 
   dateFrom.setDate(dateFrom.getDate() + 1);
   toInput.datepicker("option", "minDate", dateFrom);

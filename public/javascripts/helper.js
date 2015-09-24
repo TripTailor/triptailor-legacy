@@ -42,6 +42,10 @@ var getStringTags = function(tagsArr) {
   return tags;
 }
 
+var getStringDate = function(date) {
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+};
+
 var shareFB = function(e) {
   FB.ui({
     method: 'share',

@@ -9,6 +9,9 @@ var AutoCompleteContainerMixin = {
   updateQueryValue: function(value) {
     this.setState({query: value});
   },
+  updateDates: function(dateFrom, dateTo) {
+    this.setState({dateFrom: dateFrom, dateTo: dateTo});
+  },
   addTag: function(value) {
     var tags = this.state.tags.slice(0, this.state.tags.length);
     tags.push(value);

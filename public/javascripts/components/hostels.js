@@ -3,22 +3,23 @@ var HOSTELSTODISPLAY = 10;
 var Hostels = React.createClass({displayName: "Hostels",
   mixins: [AutoCompleteContainerMixin],
   getInitialState: function() {
-    return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1};
+    return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1, dateFrom: getQueryValue("date-from"), dateTo: getQueryValue("date-to")};
   },
   componentWillMount: function() {
-    this.getResults(this.state.location, this.state.tags, dateFromParam, dateToParam);
+    this.getResults(this.state.location, this.state.tags, this.state.dateFrom, this.state.dateTo);
+  },
+  hostelsUpdateDates: function(dateFrom, dateTo) {
+    this.updateDates(dateTo, dateFrom);
+    this.getResults(this.state.location, this.state.tags, dateFrom, dateTo); 
   },
   hostelsAddTag: function(value) {
-    this.getResults(this.state.location, this.addTag(value), dateFromParam, dateToParam);
+    this.getResults(this.state.location, this.addTag(value), this.state.dateFrom, this.state.dateTo);
   },
   hostelsRemoveTag: function() {
-    this.getResults(this.state.location, this.removeTag(), dateFromParam, dateToParam);
+    this.getResults(this.state.location, this.removeTag(), this.state.dateFrom, this.state.dateTo);
   },
   hostelsRemoveSpecificTag: function(i) {
-    this.getResults(this.state.location, this.removeSpecificTag(i), dateFromParam, dateToParam);
-  },
-  getResultsDate: function() {
-    this.getResults(this.state.location, this.state.tags, dateFromParam, dateToParam);
+    this.getResults(this.state.location, this.removeSpecificTag(i), this.state.dateFrom, this.state.dateTo);
   },
   getResults: function(location, tags, dateFrom, dateTo) {
     this.setState({searchId: -1});
@@ -53,7 +54,7 @@ var Hostels = React.createClass({displayName: "Hostels",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.hostelsAddTag, removeTag: this.hostelsRemoveTag, removeSpecificTag: this.hostelsRemoveSpecificTag, getResults: this.getResults}), 
+        React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.hostelsAddTag, removeTag: this.hostelsRemoveTag, removeSpecificTag: this.hostelsRemoveSpecificTag, getResults: this.getResults, dateFrom: this.state.dateFrom, dateTo: this.state.dateTo, updateDates: this.hostelsUpdateDates}), 
         React.createElement(Content, {results: this.state.results, searchId: this.state.searchId, location: this.state.location, tags: this.state.tags, alsoTags: this.state.alsoTags, addTag: this.hostelsAddTag})
       )
     );
@@ -61,6 +62,42 @@ var Hostels = React.createClass({displayName: "Hostels",
 });
 
 var SearchHeader = React.createClass({displayName: "SearchHeader",
+  componentDidMount: function() {
+    var fromInput = $(React.findDOMNode(this.refs.dateFrom));
+    var toInput = $(React.findDOMNode(this.refs.dateTo));
+
+    fromInput.datepicker({
+      dateFormat: "dd M yy",
+      onSelect: function(date, inst) {
+        var fromDate = new Date(date);
+        var toDate = new Date(toInput.datepicker("getDate"));
+        if(fromDate >= toDate) {
+          toDate.setDate(fromDate.getDate() + 1);
+          toInput.datepicker("setDate", toDate);
+        }
+
+        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+
+        fromDate.setDate(fromDate.getDate() + 1);
+        toInput.datepicker("option", "minDate", fromDate);
+      }.bind(this)
+    });
+    toInput.datepicker({
+      dateFormat: "dd M yy",
+      onSelect: function(date, inst) {
+        var fromDate = new Date(fromInput.datepicker("getDate"));
+        var toDate = new Date(date);
+        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+      }.bind(this)
+    });
+
+    var dateFrom = new Date(this.props.dateFrom);
+    fromInput.datepicker("setDate", dateFrom);
+    toInput.datepicker("setDate", new Date(this.props.dateTo));
+
+    dateFrom.setDate(dateFrom.getDate() + 1);
+    toInput.datepicker("option", "minDate", dateFrom);
+  },
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid header"}, 
@@ -73,11 +110,11 @@ var SearchHeader = React.createClass({displayName: "SearchHeader",
             React.createElement("div", {className: "row"}, 
               React.createElement("div", {className: "col-xs-6 date-col-left"}, 
                 React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Check in")), 
-                 React.createElement("input", {type: "text", id: "dateFrom", placeholder: "Check in", className: "triptailor-input date-input-left", readOnly: true})
+                 React.createElement("input", {type: "text", ref: "dateFrom", placeholder: "Check in", className: "triptailor-input date-input-left", readOnly: true})
                ), 
                React.createElement("div", {className: "col-xs-6 date-col-right"}, 
                 React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Check out")), 
-                 React.createElement("input", {type: "text", id: "dateTo", placeholder: "Check out", className: "triptailor-input date-input-right", readOnly: true})
+                 React.createElement("input", {type: "text", ref: "dateTo", placeholder: "Check out", className: "triptailor-input date-input-right", readOnly: true})
                )
             )
           )
@@ -216,7 +253,7 @@ var Result = React.createClass({displayName: "Result",
             ), 
             React.createElement("div", {className: "col-xs-9"}, 
               React.createElement("div", {className: "result-name"}, 
-                React.createElement("div", {className: "result-price"}, React.createElement("strong", null, this.props.result.price + " " + this.props.result.currency)), 
+                React.createElement("div", {className: "result-price"}, React.createElement("strong", null, this.props.result.price), " ", this.props.result.currency), 
                 React.createElement("strong", null, this.props.result.name)
               ), 
               React.createElement("div", {className: "result-tags"}, 
@@ -315,6 +352,4 @@ var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
   }
 });
 
-var dateFromParam;
-var dateToParam;
-var hostels = React.render(React.createElement(Hostels, null), document.getElementById("content"));
+React.render(React.createElement(Hostels, null), document.getElementById("content"));
