@@ -11,7 +11,7 @@ var Header = React.createClass({
             </div>
           </div>
 
-          <AutoCompleteSearch />
+          <AutoCompleteSearch {...this.props} />
 
         </div>
       </div>
@@ -21,13 +21,6 @@ var Header = React.createClass({
 
 var Content = React.createClass({
   render: function() {
-    var dateFrom = new Date();
-    dateFrom.setDate(dateFrom.getDate() + 1);
-    var dateTo = new Date();
-    dateTo.setDate(dateTo.getDate() + 4);
-
-    dateFromStr = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate();
-    dateToStr = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
     return (
       <div className="container-fluid">
         <div className="row tips-header-container">
@@ -39,7 +32,7 @@ var Content = React.createClass({
 
         <div className="row">
           <div className="col-md-8">
-            <a href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
+            <a href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
               <div className="tip-big">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
@@ -53,7 +46,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip bangkok">
-              <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
+              <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Bangkok, Thailand</h3>
@@ -69,7 +62,7 @@ var Content = React.createClass({
         <div className="row bottom-tips">
           <div className="col-md-4">
             <div className="tip amsterdam">
-              <a href={SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
+              <a href={SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Amsterdam, Netherlands</h3>
@@ -82,7 +75,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip rio">
-              <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
+              <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Rio de Janeiro, Brazil</h3>
@@ -95,7 +88,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip ny">
-              <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + dateFromStr + "&date-to=" + dateToStr} className="tip-a">
+              <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>New York, USA</h3>
@@ -113,21 +106,34 @@ var Content = React.createClass({
 });
 
 var Index = React.createClass({
+  getDefaultProps: function() {
+    var dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() + 1);
+    var dateTo = new Date();
+    dateTo.setDate(dateTo.getDate() + 4);
+
+    dateFromStr = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate();
+    dateToStr = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
+    return {dateFrom: dateFromStr, dateTo: dateToStr};
+  },
   render: function() {
     return (
       <div>
-        <Header />
+        <Header {...this.props} />
         <TripTailorHowItWorks />
-        <Content />
+        <Content {...this.props} />
       </div>
     );
   }
 });
 
 var AutoCompleteSearch = React.createClass({
-  mixins: [AutoCompleteContainerMixin],
+  mixins: [AutoCompleteContainerMixin, DatesMixin],
   getInitialState: function() {
-    return {location: '', query: '', tags: []};
+    return {location: '', query: '', tags: [], dateFrom: this.props.dateFrom, dateTo: this.props.dateTo};
+  },
+  getDefaultProps: function() {
+    return {updateDates: this.updateDates};
   },
   submit: function(e) {
     if(this.state.location == '') {
@@ -137,7 +143,7 @@ var AutoCompleteSearch = React.createClass({
     var url = SEARCHURL + "?location=" + this.state.location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if(this.state.tags.length > 0)
       url += "&tags=" + getStringTags(this.state.tags);
-    url += "&date-from=" + dateFromParam + "&date-to=" + dateToParam;
+    url += "&date-from=" + this.state.dateFrom + "&date-to=" + this.state.dateTo;
     React.findDOMNode(this.refs.submit).href = url + adVariables();
   },
   enterSubmit: function() {
@@ -157,10 +163,10 @@ var AutoCompleteSearch = React.createClass({
             <div className="col-md-4">
               <div className="row">
                <div className="col-xs-6 autocomplete-col xs-border-right">
-                 <input type="text" id="dateFrom" placeholder="Check in" className="triptailor-input inline-left-picker" readOnly />
+                 <input type="text" ref="dateFrom" placeholder="Check in" className="triptailor-input inline-left-picker" readOnly />
                </div>
                <div className="col-xs-6 autocomplete-col">
-                 <input type="text" id="dateTo" placeholder="Check out" className="triptailor-input inline-right-picker" readOnly />
+                 <input type="text" ref="dateTo" placeholder="Check out" className="triptailor-input inline-right-picker" readOnly />
                </div>
               </div>
             </div>

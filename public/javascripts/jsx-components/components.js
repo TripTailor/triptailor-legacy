@@ -163,6 +163,45 @@ var AutoCompleteTagsMixin = {
   }
 };
 
+var DatesMixin = {
+  componentDidMount: function() {
+    var fromInput = $(React.findDOMNode(this.refs.dateFrom));
+    var toInput = $(React.findDOMNode(this.refs.dateTo));
+
+    fromInput.datepicker({
+      dateFormat: "dd M yy",
+      onSelect: function(date, inst) {
+        var fromDate = new Date(date);
+        var toDate = new Date(toInput.datepicker("getDate"));
+        if(fromDate >= toDate) {
+          toDate.setDate(fromDate.getDate() + 1);
+          toInput.datepicker("setDate", toDate);
+        }
+
+        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+
+        fromDate.setDate(fromDate.getDate() + 1);
+        toInput.datepicker("option", "minDate", fromDate);
+      }.bind(this)
+    });
+    toInput.datepicker({
+      dateFormat: "dd M yy",
+      onSelect: function(date, inst) {
+        var fromDate = new Date(fromInput.datepicker("getDate"));
+        var toDate = new Date(date);
+        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+      }.bind(this)
+    });
+
+    var dateFrom = new Date(this.props.dateFrom);
+    fromInput.datepicker("setDate", dateFrom);
+    toInput.datepicker("setDate", new Date(this.props.dateTo));
+
+    dateFrom.setDate(dateFrom.getDate() + 1);
+    toInput.datepicker("option", "minDate", dateFrom);
+  }
+};
+
 var TripTailorAutoCompleteResults = React.createClass({
   cancelParentBlur: function(e) {
     e.preventDefault();
