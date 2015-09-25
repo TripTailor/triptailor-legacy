@@ -136,7 +136,7 @@ var AutoCompleteTagsMixin = {
     }
     else if(e.keyCode == 32) {
       if(this.props.value.trim().length > 0)
-        this.props.addTag(this.props.value.trim().toLowerCase());
+        this.props.addTag(this.props.value.replace(/\s+/g, '').toLowerCase());
       this.props.updateValue("");
     }
   },
