@@ -63,6 +63,9 @@ var Hostels = React.createClass({displayName: "Hostels",
 
 var SearchHeader = React.createClass({displayName: "SearchHeader",
   mixins: [DatesMixin],
+  updateDates: function(dateFrom, dateTo) {
+    this.props.updateDates(dateFrom, dateTo);
+  },
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid header"}, 

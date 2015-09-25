@@ -132,9 +132,6 @@ var AutoCompleteSearch = React.createClass({
   getInitialState: function() {
     return {location: '', query: '', tags: [], dateFrom: this.props.dateFrom, dateTo: this.props.dateTo};
   },
-  getDefaultProps: function() {
-    return {updateDates: this.updateDates};
-  },
   submit: function(e) {
     if(this.state.location == '') {
       e.preventDefault();

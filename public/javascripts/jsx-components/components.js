@@ -174,14 +174,16 @@ var DatesMixin = {
         var fromDate = new Date(date);
         var toDate = new Date(toInput.datepicker("getDate"));
         if(fromDate >= toDate) {
-          toDate.setDate(fromDate.getDate() + 1);
+          toDate = new Date(fromDate.getTime());
+          toDate.setDate(toDate.getDate() + 1);
           toInput.datepicker("setDate", toDate);
         }
 
-        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+        var auxDate = new Date(fromDate.getTime());
+        auxDate.setDate(auxDate.getDate() + 1);
+        toInput.datepicker("option", "minDate", auxDate);
 
-        fromDate.setDate(fromDate.getDate() + 1);
-        toInput.datepicker("option", "minDate", fromDate);
+        this.updateDates(getStringDate(fromDate), getStringDate(toDate));
       }.bind(this)
     });
     toInput.datepicker({
@@ -189,16 +191,17 @@ var DatesMixin = {
       onSelect: function(date, inst) {
         var fromDate = new Date(fromInput.datepicker("getDate"));
         var toDate = new Date(date);
-        this.props.updateDates(getStringDate(fromDate), getStringDate(toDate));
+        this.updateDates(getStringDate(fromDate), getStringDate(toDate));
       }.bind(this)
     });
 
-    var dateFrom = new Date(this.props.dateFrom);
+    var dateFrom = new Date(this.props.dateFrom + " 0:0:0");
     fromInput.datepicker("setDate", dateFrom);
-    toInput.datepicker("setDate", new Date(this.props.dateTo));
+    toInput.datepicker("setDate", new Date(this.props.dateTo + " 0:0:0"));
 
-    dateFrom.setDate(dateFrom.getDate() + 1);
-    toInput.datepicker("option", "minDate", dateFrom);
+    var dateAux = new Date(dateFrom.getTime());
+    dateAux.setDate(dateAux.getDate() + 1);
+    toInput.datepicker("option", "minDate", dateAux);
   }
 };
 

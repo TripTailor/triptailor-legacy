@@ -63,6 +63,9 @@ var Hostels = React.createClass({
 
 var SearchHeader = React.createClass({
   mixins: [DatesMixin],
+  updateDates: function(dateFrom, dateTo) {
+    this.props.updateDates(dateFrom, dateTo);
+  },
   render: function() {
     return (
       <div className="container-fluid header">
