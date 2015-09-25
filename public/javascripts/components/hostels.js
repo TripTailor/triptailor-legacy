@@ -26,7 +26,7 @@ var Hostels = React.createClass({displayName: "Hostels",
     var route;
     location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
     if (tags.length == 0)
-      route = jsRoutes.controllers.SearchController.displayAll(location);
+      route = jsRoutes.controllers.SearchController.displayAll(location, dateFrom, dateTo);
     else
       route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags), dateFrom, dateTo);
     $.ajax({

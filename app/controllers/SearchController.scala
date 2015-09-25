@@ -73,7 +73,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
   }
 
-  def displayAll(location: String) = Action.async { implicit request =>
+  def displayAll(location: String, dateFrom: String, dateTo: String) = Action.async { implicit request =>
     val queryParams = adWordsParamsBinding.bindFromRequest.get
     val sessionId   = request.session.get("id").getOrElse(generateId)
 
@@ -81,7 +81,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       for {
         location       ← FutureO(loadLocation(location))
         scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, "", "").map(Some(_)))
+        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
