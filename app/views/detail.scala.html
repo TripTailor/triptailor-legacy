@@ -8,7 +8,7 @@
       var hostel = {
         name: "@ch.hostel.name",
         url: "@ch.hostel.url",
-        description: '@ch.hostel.description.map(org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4).map(_.replaceAll("\\<.*?>",""))',
+        description: "@ch.hostel.description".replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
         image: "@hostelImageUrls.mkString(",")",
         tags: []
       };

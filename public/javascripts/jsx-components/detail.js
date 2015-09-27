@@ -21,7 +21,7 @@ var Description = React.createClass({
     return (
       <div className="description">
         <p className="description-label"><strong>Description</strong></p>
-        <p>{hostel.description}</p>
+        <div dangerouslySetInnerHTML={{__html: hostel.description}}></div>
       </div>
     );
   }

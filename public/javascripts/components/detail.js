@@ -21,7 +21,7 @@ var Description = React.createClass({displayName: "Description",
     return (
       React.createElement("div", {className: "description"}, 
         React.createElement("p", {className: "description-label"}, React.createElement("strong", null, "Description")), 
-        React.createElement("p", null, hostel.description)
+        React.createElement("div", {dangerouslySetInnerHTML: {__html: hostel.description}})
       )
     );
   }
