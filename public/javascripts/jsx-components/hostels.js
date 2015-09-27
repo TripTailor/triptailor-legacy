@@ -212,6 +212,11 @@ var Result = React.createClass({
     for(var i = 0; i < this.props.result.tags.length; i++) {
       tags.push(<Tag key={i} name={this.props.result.tags[i].name} type={this.props.result.tags[i].type} />);
     }
+
+    var ps = this.props.result.description.split("</p>");
+    var description = (ps[0].replace(/\\u2019/g, "'") + "</p>" + ps[1].replace(/\\u2019/g, "'") + "</p>");
+    var s = String(ps[0]);
+    console.log(s.replace(/\\u2019/g, ""));
     return (
       <div className="result">
         <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
@@ -224,6 +229,7 @@ var Result = React.createClass({
                 <div className="result-price"><strong>{this.props.result.price}</strong> {this.props.result.currency}</div>
                 <strong>{this.props.result.name}</strong>
               </div>
+              <div className="result-description" dangerouslySetInnerHTML={{__html: description}}></div>
               <div className="result-tags">
                 <p><strong>Tags</strong></p>
                 {tags}

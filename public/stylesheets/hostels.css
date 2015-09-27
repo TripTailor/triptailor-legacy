@@ -95,11 +95,10 @@ body {
   text-decoration: none;
 }
 .result-name {
-  padding-bottom: 25px;
+  padding-bottom: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  border-bottom: 1px solid #DBDFE5;
 }
 .result-price {
   font-size: 16px;
@@ -108,17 +107,14 @@ body {
 .result-photo {
   height: 300px;
 }
-.info {
-  background: #dbdfe5;
-  color: #637079;
-  padding: 7px 10px;
-  border-radius: 3px;
-  display: block;
+.result-description {
+  padding-bottom: 15px;
 }
 .result-tags {
   padding-top: 10px;
   padding-bottom: 15px;
   overflow: hidden;
+  border-top: 1px solid #DBDFE5;
 }
 .more-results {
   border: none;
