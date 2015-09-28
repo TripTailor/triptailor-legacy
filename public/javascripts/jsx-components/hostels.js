@@ -223,12 +223,14 @@ var Result = React.createClass({
       tags.push(<Tag key={i} name={this.props.result.tags[i].name} type={this.props.result.tags[i].type} />);
     }
 
-    var ps = this.props.result.description.split("</p>");
     var description = "";
-    if(ps.length > 0)
-      description += ps[0].replace(/\\u2019/g, "'") + "</p>";
-    if(ps.length > 1)
-      description += ps[1].replace(/\\u2019/g, "'") + "</p>";
+    if(this.props.result.description != null) {
+      var ps = this.props.result.description.split("</p>");
+      if(ps.length > 0)
+        description += ps[0].replace(/\\u2019/g, "'") + "</p>";
+      if(ps.length > 1)
+        description += ps[1].replace(/\\u2019/g, "'") + "</p>";
+    }
     return (
       <div className="result">
         <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
