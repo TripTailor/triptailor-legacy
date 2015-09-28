@@ -214,9 +214,11 @@ var Result = React.createClass({displayName: "Result",
     }
 
     var ps = this.props.result.description.split("</p>");
-    var description = (ps[0].replace(/\\u2019/g, "'") + "</p>" + ps[1].replace(/\\u2019/g, "'") + "</p>");
-    var s = String(ps[0]);
-    console.log(s.replace(/\\u2019/g, ""));
+    var description = "";
+    if(ps.length > 0)
+      description += ps[0].replace(/\\u2019/g, "'") + "</p>";
+    if(ps.length > 1)
+      description += ps[1].replace(/\\u2019/g, "'") + "</p>";
     return (
       React.createElement("div", {className: "result"}, 
         React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
