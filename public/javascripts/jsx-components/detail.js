@@ -8,7 +8,7 @@ var Header = React.createClass({
             {/* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */}
           </div>
           <div className="col-md-3">
-            <p className="header-title">{/* <strong>$Price<span className="currency">USD</span></strong> */}{hostel.url != null ? <span className="book-span"><a href={hostel.url} target="_blank" className="book-link">Book</a></span> : ""}</p>
+            <p className="header-title">{/* <strong>{hostel.price}<span className="currency">{hostel.currency}</span></strong> */}{hostel.url != null ? <span className="book-span"><a href={hostel.url} target="_blank" className="book-link">Book</a></span> : ""}</p>
           </div>
         </div>
       </div>

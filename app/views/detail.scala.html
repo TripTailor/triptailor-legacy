@@ -5,12 +5,15 @@
   <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("font-awesome.min.css"))'>
 } {
     <script>
+      console.log("@ch.hostel.price @ch.hostel.currency");
       var hostel = {
         name: "@ch.hostel.name",
         url: "@ch.hostel.url",
         description: "@ch.hostel.description".replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
         image: "@hostelImageUrls.mkString(",")",
-        tags: []
+        tags: [],
+        price: "@ch.hostel.price",
+        currency: "@ch.hostel.currency"
       };
       @for(tag <- ch.orderedTags) {
         hostel.tags.push({name: "@tag.attribute", type: @tag.tagType});
