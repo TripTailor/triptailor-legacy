@@ -35,6 +35,7 @@ var Hostels = React.createClass({displayName: "Hostels",
       type: route.type,
       success: function(data) {
         this.setState({results: data.classifiedHostels, searchId: data.searchID});
+        this.preloadPhotos(data.classifiedHostels);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(route.absoluteURL(), status, err.toString());
@@ -50,6 +51,15 @@ var Hostels = React.createClass({displayName: "Hostels",
       }
     }
     return tags;
+  },
+  preloadPhotos: function(hostels) {
+    var photos = $.map(hostels, function(hostel, i) {
+      if(hostel.images.length > 0)
+        return hostel.images[0];
+      else
+        return "";
+    });
+    preloadPhotos(photos);
   },
   render: function() {
     return (

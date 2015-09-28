@@ -34,6 +34,9 @@ var Photos = React.createClass({
       photos = [];
     return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
   },
+  componentWillMount: function() {
+    preloadPhotos(this.state.photos);
+  },
   selectPhoto: function(i) {
     this.setState({mainPhoto: i});
   },

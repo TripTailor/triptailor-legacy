@@ -46,6 +46,14 @@ var getStringDate = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
 
+var preloadPhotos = function(photos) {
+  var images = new Array();
+  for (var i = 0; i < photos.length; i++) {
+    images[i] = new Image();
+    images[i].src = photos[i];
+  }
+};
+
 var shareFB = function(e) {
   FB.ui({
     method: 'share',
