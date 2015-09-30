@@ -38,7 +38,6 @@ var Content = React.createClass({
                   <div className="tip-content text-center">
                     <h3>Istanbul, Turkey</h3>
                     <p>Location, View & Terrace</p>
-                    <div className="tip-results">145 Matches</div>
                   </div>
                 </div>
               </div>
@@ -51,7 +50,6 @@ var Content = React.createClass({
                   <div className="tip-content text-center">
                     <h3>Bangkok, Thailand</h3>
                     <p>Clean, Modern & Spacious</p>
-                    <div className="tip-results">171 Matches</div>
                   </div>
                 </div>
               </a>
@@ -67,7 +65,6 @@ var Content = React.createClass({
                   <div className="tip-content text-center">
                     <h3>Amsterdam, Netherlands</h3>
                     <p>popular destination</p>
-                    <div className="tip-results">151 Results</div>
                   </div>
                 </div>
               </a>
@@ -80,7 +77,6 @@ var Content = React.createClass({
                   <div className="tip-content text-center">
                     <h3>Rio de Janeiro, Brazil</h3>
                     <p>Fun, People & Party</p>
-                    <div className="tip-results">177 Matches</div>
                   </div>
                 </div>
               </a>
@@ -93,7 +89,6 @@ var Content = React.createClass({
                   <div className="tip-content text-center">
                     <h3>New York, USA</h3>
                     <p>Breakfast, Bar & Artwork</p>
-                    <div className="tip-results">55 Matches</div>
                   </div>
                 </div>
               </a>
