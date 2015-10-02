@@ -236,7 +236,7 @@ var Result = React.createClass({displayName: "Result",
         React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-3"}, 
-              React.createElement("div", {className: "result-photo", style: this.props.result.images.length > 0 ? {background: "url(" + this.props.result.images[0] + ") no-repeat center top", backgroundSize: "contain"} : {}})
+              this.props.result.images.length > 0 ? React.createElement("img", {className: "result-photo", src: this.props.result.images[0]}) : ""
             ), 
             React.createElement("div", {className: "col-xs-9"}, 
               React.createElement("div", {className: "result-name"}, 

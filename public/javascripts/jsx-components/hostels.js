@@ -236,7 +236,7 @@ var Result = React.createClass({
         <a href={route.absoluteURL()} className="result-a" onClick={this.handleClick}>
           <div className="row">
             <div className="col-xs-3">
-              <div className="result-photo" style={this.props.result.images.length > 0 ? {background: "url(" + this.props.result.images[0] + ") no-repeat center top", backgroundSize: "contain"} : {}}></div>
+              {this.props.result.images.length > 0 ? <img className="result-photo" src={this.props.result.images[0]} /> : ""}
             </div>
             <div className="col-xs-9">
               <div className="result-name">

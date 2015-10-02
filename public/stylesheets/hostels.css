@@ -105,7 +105,8 @@ body {
   float: right;
 }
 .result-photo {
-  height: 300px;
+  max-width: 100%;
+  max-height: 300px;
 }
 .result-description {
   padding-bottom: 15px;
