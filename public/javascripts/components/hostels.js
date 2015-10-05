@@ -65,7 +65,7 @@ var Hostels = React.createClass({displayName: "Hostels",
     return (
       React.createElement("div", null, 
         React.createElement(SearchHeader, {location: this.state.location, query: this.state.query, tags: this.state.tags, updateLocationValue: this.updateLocationValue, updateQueryValue: this.updateQueryValue, addTag: this.hostelsAddTag, removeTag: this.hostelsRemoveTag, removeSpecificTag: this.hostelsRemoveSpecificTag, getResults: this.getResults, dateFrom: this.state.dateFrom, dateTo: this.state.dateTo, updateDates: this.hostelsUpdateDates}), 
-        React.createElement(Content, {results: this.state.results, searchId: this.state.searchId, location: this.state.location, tags: this.state.tags, alsoTags: this.state.alsoTags, addTag: this.hostelsAddTag})
+        React.createElement(Content, {results: this.state.results, searchId: this.state.searchId, location: this.state.location, tags: this.state.tags, alsoTags: this.state.alsoTags, addTag: this.hostelsAddTag, dateFrom: this.state.dateFrom, dateTo: this.state.dateTo})
       )
     );
   }
@@ -194,7 +194,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
       if(this.props.results[i].url != null)
-        results.push(React.createElement(Result, {key: i, result: this.props.results[i], moreTags: this.state.more, showMoreTags: this.showMoreTags, showLessTags: this.showLessTags, searchId: this.props.searchId, tags: this.props.tags}));
+        results.push(React.createElement(Result, {key: i, result: this.props.results[i], searchId: this.props.searchId, tags: this.props.tags, dateFrom: this.props.dateFrom, dateTo: this.props.dateTo}));
     };
     return (
       React.createElement("div", null, 
@@ -233,7 +233,7 @@ var Result = React.createClass({displayName: "Result",
     }
     return (
       React.createElement("div", {className: "result"}, 
-        React.createElement("a", {href: route.absoluteURL(), className: "result-a", onClick: this.handleClick}, 
+        React.createElement("a", {href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-3"}, 
               this.props.result.images.length > 0 ? React.createElement("img", {className: "result-photo", src: this.props.result.images[0]}) : ""
