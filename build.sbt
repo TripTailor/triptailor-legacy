@@ -8,8 +8,8 @@ val scraperDepencncies = Seq(
 
 val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
-  "com.typesafe.play" %% "play-slick" % "1.0.0",
-  "com.typesafe.slick" %% "slick-codegen" % "3.0.0",
+  "com.typesafe.play" %% "play-slick" % "1.0.1",
+  "com.typesafe.slick" %% "slick-codegen" % "3.0.3",
   "com.zaxxer" % "HikariCP" % "2.3.5" % Compile
 )
 
