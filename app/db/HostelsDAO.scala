@@ -1,6 +1,7 @@
 package db
 
 import com.google.inject.{ Inject, Singleton }
+import org.joda.time.DateTime
 
 import play.api.db.slick._
 
@@ -17,18 +18,20 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   extends HasDatabaseConfigProvider[RelationalProfile] {
 
   type HostelAttrsRow = (String, Double, Double, Double)
+  type AttrPositionReviewRow = (String, String, ReviewRow)
 
   def loadModel(city: String, country: String): Future[Seq[models.Hostel]] =
     for {
       hostelRows ← db.run(hostelQuery(city, country).result)
-      hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes))
+      hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _)))
     } yield hostel
 
   def loadHostel(name: String): Future[models.Hostel] = {
     val f =
       for {
-        hostelRows ← db.run(hostelQuery(name).take(1).result)
-        hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes))
+        hostelRows  ← db.run(hostelQuery(name).take(1).result)
+        reviewsData ← Future.sequence(hostelRows.map(createHostelReviewsData))
+        hostel      ← Future.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1)))
       } yield hostel
     f.map(_.headOption getOrElse models.Hostel.empty)
   }
@@ -44,7 +47,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       if location.city === city && location.country === country
     } yield hostel
 
-  private def createHostelWithAttributes(hostelRow: HostelRow): Future[models.Hostel] = {
+  def createHostelWithAttributes(reviewsData: Seq[models.ReviewData], hostelRow: HostelRow): Future[models.Hostel] = {
     val sql =
       sql"""
         SELECT name, freq, cfreq, rating
@@ -52,20 +55,33 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         WHERE  hostel_attribute.hostel_id = ${hostelRow.id}
         AND    hostel_attribute.attribute_id = attribute.id
       """.as[HostelAttrsRow]
-    db.run(sql).map(createHostel(hostelRow, _))
+    db.run(sql).map(createHostel(reviewsData, hostelRow, _))
   }
 
-  private def createHostel(hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
+  private def createHostelReviewsData(hostelRow: HostelRow): Future[Seq[models.ReviewData]] = {
+    val sql =
+      sql"""
+        SELECT   a.name, ar.positions, r.*
+        FROM     attribute a, attribute_review ar, review r
+        WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id}
+        GROUP BY r.id, a.name, ar.positions
+        ORDER BY r.id, r.year DESC
+      """.as[AttrPositionReviewRow]
+    db.run(sql).map(createReviewsData)
+  }
+
+  private def createHostel(reviewsData: Seq[models.ReviewData], hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
     models.Hostel(
       id            = hr.id,
       name          = hr.name,
       noReviews     = hr.noReviews,
-      price         = hr.price.map(_.toDouble).map(BigDecimal.apply),
+      price         = hr.price.map(BigDecimal.apply),
       imageUrlsText = hr.images getOrElse "",
       url           = hr.url,
       hostelworldId = hr.hostelworldId,
       attributes    = createHostelAttributes(attrsRows),
-      description   = hr.description
+      description   = hr.description,
+      reviewsData   = reviewsData
     )
 
   private def createHostelAttributes(attrsRows: Seq[HostelAttrsRow]) = {
@@ -74,5 +90,25 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       attributes + (name -> (cfreq / n) * (rating / freq))
     }
   }
+
+  private def createReviewsData(rows: Seq[AttrPositionReviewRow]) =
+    rows.groupBy(triplet => triplet._3.id).values.toSeq.flatMap { case reviewRows =>
+      if (reviewRows.isEmpty)
+        Seq.empty[models.ReviewData]
+      else {
+        val review = reviewRows.head._3
+        Seq(
+          models.ReviewData(
+            attributePositions = reviewRows.map(triplet => models.AttributePositions(triplet._1, triplet._2)),
+            text               = review.text,
+            year               = review.year.map(year => new DateTime(year.getTime)),
+            reviewer           = review.reviewer,
+            city               = review.city,
+            gender             = review.gender,
+            age                = review.age
+          )
+        )
+      }
+    }
 
 }
