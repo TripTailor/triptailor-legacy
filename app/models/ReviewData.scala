@@ -17,7 +17,7 @@ case class ReviewData(
 object AttributePositions {
   implicit val attributePositionWrites = new Writes[AttributePositions] {
     def writes(ap: AttributePositions) = Json.obj(
-      "tag"        -> ap.name,
+      "tag"       -> ap.name,
       "positions" -> ap.positions
     )
   }

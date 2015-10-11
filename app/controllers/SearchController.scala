@@ -96,7 +96,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
 
   def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
-    val classifiedHostels =
+    val classifiedHostelsFuture =
       for {
         hostel     ← hostelsDAO.loadHostel(name)
         parameters = tagsQuery.replace("-", " ").replace("%21", "-")
@@ -104,10 +104,11 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         classified = classifier.classifyByTags(Seq(hostel), parameters.split("[ ,]"))
       } yield classified
 
-    classifiedHostels map { classifiedHostels =>
+    classifiedHostelsFuture map { classifiedHostels =>
       val imageUrlsBuilder = new HostelImageUrlsBuilder(config)
       val classifiedHostel = classifiedHostels.head
-      Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel)))
+      val json             = Json toJson classifiedHostel
+      Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel), json))
     }
   }
 
