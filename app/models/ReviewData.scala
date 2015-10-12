@@ -26,7 +26,7 @@ object AttributePositions {
 object ReviewData {
   implicit val reviewDataWrites = new Writes[ReviewData] {
     def writes(rd: ReviewData) = Json.obj(
-      "tagPositions" -> Json.toJson(rd.attributePositions),
+      "tagPositions" -> Json.toJson(rd.attributePositions.groupBy(_.name).mapValues(_.head)),
       "text"         -> rd.text,
       "year"         -> rd.year,
       "reviewer"     -> rd.reviewer,
