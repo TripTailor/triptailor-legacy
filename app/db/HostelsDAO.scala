@@ -59,6 +59,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   }
 
   private def createHostelReviewsData(hostelRow: HostelRow): Future[Seq[models.ReviewData]] = {
+    val Limit = 300
     val sql =
       sql"""
         SELECT   a.name, ar.positions, r.*
@@ -66,6 +67,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id}
         GROUP BY r.id, a.name, ar.positions
         ORDER BY r.id, r.year DESC
+        LIMIT $Limit
       """.as[AttrPositionReviewRow]
     db.run(sql).map(createReviewsData)
   }
