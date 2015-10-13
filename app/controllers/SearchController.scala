@@ -6,7 +6,7 @@ import javax.inject.{Inject, Singleton}
 import classification.HostelsClassifier
 import db.{HostelsDAO, LocationsDAO, SearchesDAO, TagsDAO}
 import extensions.FutureO
-import models.{ClassifiedHostel, TagHolder}
+import models.{Location, ClassifiedHostel, TagHolder}
 import play.api.{Configuration, Logger, Play}
 import play.api.data.Form
 import play.api.data.Forms._
@@ -52,21 +52,21 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     val fOpt =
       for {
-        location       ← FutureO(loadLocation(location))
-        scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← FutureO(scraper.pricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
-        _              = logger.info(s"loaded location $location")
-        model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
-        _              = logger.info("loaded model")
-        parameters     = tagsQuery.replace("-", " ").replace("%21", "-")
-        possibleHostel = parameters.split(",").head.mkString
-        hostel         ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
-        adWords        = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
-        searchID       ← if (hostel.nonEmpty) FutureO(searchesDAO.saveHostelSearch(sessionId, hostel.name, location.city, adWords))
-                         else FutureO(searchesDAO.saveTagsSearch(sessionId, parameters.split("[ ,]"), location.city, adWords))
-        _              = logger.info(s"saved search $searchID")
-        classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified     = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
+        location         ← FutureO(loadLocation(location))
+        _                = logger.info(s"loaded location $location")
+        scraper          = new HostelPriceScraper(config)
+        pricingInfoModel ← loadPricingInfoAndModel(location, scraper, dateFrom, dateTo)
+        pricingInfo      = pricingInfoModel._1
+        model            = pricingInfoModel._2
+        parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
+        possibleHostel   = parameters.split(",").head.mkString
+        hostel           ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
+        adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
+        searchID         ← if (hostel.nonEmpty) FutureO(searchesDAO.saveHostelSearch(sessionId, hostel.name, location.city, adWords))
+                           else FutureO(searchesDAO.saveTagsSearch(sessionId, parameters.split("[ ,]"), location.city, adWords))
+        _                = logger.info(s"saved search $searchID")
+        classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+        classified       = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
                          else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
@@ -79,17 +79,17 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     val fOpt =
       for {
-        location       ← FutureO(loadLocation(location))
-        scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← FutureO(scraper.pricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
-        _              = logger.info(s"loaded location $location")
-        model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
-        _              = logger.info("loaded model")
-        adWords        = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
-        searchID       ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
-        _              = logger.info(s"saved search $searchID")
-        classifier     = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified     = classifier.classifyByTags(model.toSeq, tags = Seq(""))
+        location         ← FutureO(loadLocation(location))
+        _                = logger.info(s"loaded location $location")
+        scraper          = new HostelPriceScraper(config)
+        pricingInfoModel ← loadPricingInfoAndModel(location, scraper, dateFrom, dateTo)
+        pricingInfo      = pricingInfoModel._1
+        model            = pricingInfoModel._2
+        adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
+        searchID         ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
+        _                = logger.info(s"saved search $searchID")
+        classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+        classified       = classifier.classifyByTags(model.toSeq, tags = Seq(""))
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
@@ -113,6 +113,17 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
   private def resultsToResponse(searchIDResults: (Int, Seq[ClassifiedHostel])) =
     Ok(Json.obj("searchID" -> searchIDResults._1, "classifiedHostels" -> Json.toJson(searchIDResults._2)))
+
+  private def loadPricingInfoAndModel(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String) = {
+    val pricingInfoFuture = scraper.pricingInfo(location.city, location.country, dateFrom, dateTo)
+    val modelFuture       = hostelsDAO.loadModel(location.city, location.country)
+    for {
+      pricingInfo ← FutureO(pricingInfoFuture.map(Some(_)))
+      _           = logger.info("loaded pricing info")
+      model       ← FutureO(modelFuture.map(Some(_)))
+      _           = logger.info("loaded model")
+    } yield (pricingInfo, model)
+  }
 
   private def loadLocation(location: String) =
     location.replace("-", " ").split(",").map(_.replaceAll("[^a-zA-Z -]", "")) match {
