@@ -54,7 +54,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       for {
         location       ← FutureO(loadLocation(location))
         scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
+        pricingInfo    ← FutureO(scraper.pricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")
@@ -81,7 +81,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       for {
         location       ← FutureO(loadLocation(location))
         scraper        = new HostelPriceScraper(config)
-        pricingInfo    ← FutureO(scraper.retrievePricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
+        pricingInfo    ← FutureO(scraper.pricingInfo(location.city, location.country, dateFrom, dateTo).map(Some(_)))
         _              = logger.info(s"loaded location $location")
         model          ← FutureO(hostelsDAO.loadModel(location.city, location.country).map(Some(_)))
         _              = logger.info("loaded model")

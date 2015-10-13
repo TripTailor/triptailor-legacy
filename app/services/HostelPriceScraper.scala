@@ -14,7 +14,6 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 import models.ClassifiedHostel
 
-
 sealed trait DormType
 case object PublicDorm extends DormType
 case object PrivateDorm extends DormType
@@ -29,12 +28,14 @@ class HostelPriceScraper @Inject() (config: Configuration) {
 
   val timeout = config.getMilliseconds("scraper.pricingInfo.timeout").get
 
-  def retrievePricingInfo(city: String, country: String, dateFrom: String, dateTo: String): Future[Seq[HostelPricingInfo]] =
+  def pricingInfo(city: String, country: String, dateFrom: String, dateTo: String): Future[Seq[HostelPricingInfo]] =
     retryRequestWithin(timeout) {
-      tokenRequest("city" -> city, "country" -> country, "date_from" -> dateFrom, "date_to" -> dateTo) flatMap { token =>
-        parsePricingInfo(token)
-      }
-    } recover { case NonFatal(_) => Seq.empty[HostelPricingInfo] }
+      tokenRequest("city" -> city, "country" -> country, "date_from" -> dateFrom, "date_to" -> dateTo)
+    } flatMap { token =>
+      retryRequestWithin(timeout)(extractPricingInfo(token))
+    } recover {
+      case NonFatal(_) => Seq.empty[HostelPricingInfo]
+    }
 
   def assignPricing(classifiedHostels: Seq[ClassifiedHostel], pricingInfo: Seq[HostelPricingInfo]): Seq[ClassifiedHostel] = {
     val keyToPricingInfo = pricingInfo.foldLeft( Map.empty[Int, HostelPricingInfo] ) { (map, pricing) =>
@@ -59,7 +60,7 @@ class HostelPriceScraper @Inject() (config: Configuration) {
     hostelworldSearchRequest(queryParams: _*)
       .map(_.body).map(retrieveToken)
 
-  private def parsePricingInfo(token: String): Future[Seq[HostelPricingInfo]] =
+  private def extractPricingInfo(token: String): Future[Seq[HostelPricingInfo]] =
     for {
       response ← jsonRequest(token)
       data     = (response.json \ "data").as[Seq[JsValue]]
@@ -104,7 +105,6 @@ object HostelPriceScraper {
           else Future.failed(new TimeoutException(s"Timed out after $timeout millis"))
       }
     }
-
     retry(timeout)
   }
 
