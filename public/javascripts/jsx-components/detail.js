@@ -130,23 +130,7 @@ var Tag = React.createClass({
 
 var Reviews = React.createClass({
   getInitialState: function() {
-    return {reviews: []}
-  },
-  componentWillMount: function() {
-    this.getReviews();
-  },
-  getReviews: function() {
-    $.ajax({
-      url: "../../assets/test/reviews.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({reviews: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    return {reviews: hostel.reviewsData}
   },
   render: function() {
     var reviews = [];
@@ -159,11 +143,11 @@ var Reviews = React.createClass({
     });
     $.each(this.state.reviews, function(i, review) {
       if(selectedTags.length == 0)
-        reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
+        reviews.push(<Review key={i} reviewer={review.reviewer} year={review.date} review={review.text} />);
       else
         for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tags.indexOf(selectedTags[j]) != -1) {
-            reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
+          if(review.tagPositions[selectedTags[j]]) {
+            reviews.push(<Review key={i} reviewer={review.reviewer} year={review.year} review={review.text} />);
             break;
           }
         }
@@ -184,7 +168,7 @@ var Review = React.createClass({
   render: function() {
     return (
       <div className="review">
-        <p className="review-label"><strong>{this.props.reviewer}</strong> (<i>{this.props.date}</i>)</p>
+        <p className="review-label"><strong>{this.props.reviewer}</strong></p>
         <p>{this.props.review}</p>
       </div>
     );
@@ -204,7 +188,7 @@ var ReviewsSection = React.createClass({
     return (
       <div>
         <Tags tags={this.state.tags} toggleTag={this.toggleTag} />
-        {/* <Reviews tags={this.state.tags} /> */}
+        <Reviews tags={this.state.tags} />
       </div>
     );
   }

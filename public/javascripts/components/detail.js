@@ -130,23 +130,7 @@ var Tag = React.createClass({displayName: "Tag",
 
 var Reviews = React.createClass({displayName: "Reviews",
   getInitialState: function() {
-    return {reviews: []}
-  },
-  componentWillMount: function() {
-    this.getReviews();
-  },
-  getReviews: function() {
-    $.ajax({
-      url: "../../assets/test/reviews.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({reviews: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    return {reviews: hostel.reviewsData}
   },
   render: function() {
     var reviews = [];
@@ -159,11 +143,11 @@ var Reviews = React.createClass({displayName: "Reviews",
     });
     $.each(this.state.reviews, function(i, review) {
       if(selectedTags.length == 0)
-        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
+        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.date, review: review.text}));
       else
         for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tags.indexOf(selectedTags[j]) != -1) {
-            reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
+          if(review.tagPositions[selectedTags[j]]) {
+            reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.year, review: review.text}));
             break;
           }
         }
@@ -184,7 +168,7 @@ var Review = React.createClass({displayName: "Review",
   render: function() {
     return (
       React.createElement("div", {className: "review"}, 
-        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer), " (", React.createElement("i", null, this.props.date), ")"), 
+        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer)), 
         React.createElement("p", null, this.props.review)
       )
     );
@@ -203,8 +187,8 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag})
-        /* <Reviews tags={this.state.tags} /> */
+        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag}), 
+        React.createElement(Reviews, {tags: this.state.tags})
       )
     );
   }
