@@ -29,10 +29,7 @@ var Description = React.createClass({displayName: "Description",
 
 var Photos = React.createClass({displayName: "Photos",
   getInitialState: function() {
-    var photos = hostel.image.split(",");
-    if(photos[0] == "")
-      photos = [];
-    return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
+    return {photos: hostel.images, mainPhoto: hostel.images.length > 0 ? 0 : -1, more: false};
   },
   componentWillMount: function() {
     preloadPhotos(this.state.photos);

@@ -8,19 +8,7 @@
     @play.twirl.api.HtmlFormat.raw(json.toString)
   </script>
   <script>
-    console.log("@ch.hostel.price @ch.hostel.currency");
-    var hostel = {
-      name: "@ch.hostel.name",
-      url: "@ch.hostel.url",
-      description: "@ch.hostel.description".replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
-      image: "@hostelImageUrls.mkString(",")",
-      tags: [],
-      price: "@ch.hostel.price",
-      currency: "@ch.hostel.currency"
-    };
-    @for(tag <- ch.orderedTags) {
-      hostel.tags.push({name: "@tag.attribute", type: @tag.tagType});
-    }
+    var hostel = JSON.parse($('#hostel-data').html());
   </script>
   <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
 }
