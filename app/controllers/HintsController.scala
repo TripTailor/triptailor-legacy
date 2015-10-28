@@ -24,7 +24,7 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
     val results =
       queryParams match {
         case HintsParams(Some(tags), None) =>
-          tagsDAO.tagsQuery(tags)
+          tagsDAO.tagsQuery(tags.toLowerCase())
         case HintsParams(None, Some(locations)) =>
           locationsDAO.locationHints(locations.replaceAll("-", " "))
       }
