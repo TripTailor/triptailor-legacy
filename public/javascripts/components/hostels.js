@@ -249,15 +249,15 @@ var Result = React.createClass({displayName: "Result",
     return (
       React.createElement("div", {className: "result"}, 
         React.createElement("a", {href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
+          React.createElement("div", {className: "result-name"}, 
+            React.createElement("div", {className: "result-price"}, this.props.result.price, " ", this.props.result.currency), 
+            React.createElement("strong", null, this.props.result.name)
+          ), 
           React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "col-xs-3"}, 
+            React.createElement("div", {className: "col-md-3 result-photo-container"}, 
               this.props.result.images.length > 0 ? React.createElement("img", {className: "result-photo", src: this.props.result.images[0]}) : ""
             ), 
-            React.createElement("div", {className: "col-xs-9"}, 
-              React.createElement("div", {className: "result-name"}, 
-                React.createElement("div", {className: "result-price"}, this.props.result.price, " ", this.props.result.currency), 
-                React.createElement("strong", null, this.props.result.name)
-              ), 
+            React.createElement("div", {className: "col-md-9"}, 
               React.createElement("div", {className: "result-description", dangerouslySetInnerHTML: {__html: description}}), 
               React.createElement("div", {className: "result-tags"}, 
                 React.createElement("p", null, React.createElement("strong", null, "Tags")), 

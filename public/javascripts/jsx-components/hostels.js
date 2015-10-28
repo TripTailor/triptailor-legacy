@@ -249,15 +249,15 @@ var Result = React.createClass({
     return (
       <div className="result">
         <a href={route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="result-a" onClick={this.handleClick}>
+          <div className="result-name">
+            <div className="result-price">{this.props.result.price} {this.props.result.currency}</div>
+            <strong>{this.props.result.name}</strong>
+          </div>
           <div className="row">
-            <div className="col-xs-3">
+            <div className="col-md-3 result-photo-container">
               {this.props.result.images.length > 0 ? <img className="result-photo" src={this.props.result.images[0]} /> : ""}
             </div>
-            <div className="col-xs-9">
-              <div className="result-name">
-                <div className="result-price">{this.props.result.price} {this.props.result.currency}</div>
-                <strong>{this.props.result.name}</strong>
-              </div>
+            <div className="col-md-9">
               <div className="result-description" dangerouslySetInnerHTML={{__html: description}}></div>
               <div className="result-tags">
                 <p><strong>Tags</strong></p>
