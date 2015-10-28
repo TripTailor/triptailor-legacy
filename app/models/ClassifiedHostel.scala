@@ -16,7 +16,7 @@ object ClassifiedHostel {
     def writes(ch: ClassifiedHostel) = Json.obj(
       "id"     -> ch.hostel.id,
       "name"   -> ch.hostel.name,
-      "description" -> ch.hostel.description.map(StringEscapeUtils.unescapeHtml4),
+      "description" -> ch.hostel.description.map(StringEscapeUtils.unescapeJava),
       "price"  -> ch.hostel.price.map(_.setScale(2, RoundingMode.HALF_EVEN)),
       "currency" -> ch.hostel.currency,
       "images" -> new HostelImageUrlsBuilder(Play.current.configuration).hostelWorldUrls(ch.hostel),
