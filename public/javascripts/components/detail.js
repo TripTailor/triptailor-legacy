@@ -134,6 +134,7 @@ var Reviews = React.createClass({displayName: "Reviews",
   },
   render: function() {
     var reviews = [];
+
     var selectedString = "";
     var selectedTags = $.map(this.props.tags, function(tag, i) {
       if(tag.type == 0) {
@@ -141,17 +142,28 @@ var Reviews = React.createClass({displayName: "Reviews",
         return tag.name;
       }
     });
+
     $.each(this.state.reviews, function(i, review) {
-      if(selectedTags.length == 0)
+      if(selectedTags.length == 0) {
         reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.date, review: review.text}));
-      else
-        for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tagPositions[selectedTags[j]]) {
-            reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.year, review: review.text}));
-            break;
+      }
+      else {
+        var text = "";
+        var start = 0;
+        $.each(review.tagPositions, function(i, position) {
+          if(selectedTags.indexOf(position.tag) != -1) {
+            text += review.text.slice(start, position.positions[0]) + "<strong>" + review.text.slice(position.positions[0], position.positions[1]) + "</strong>";
+            start = position.positions[1];
           }
+        });
+
+        if(text.length > 0) {
+          text += review.text.slice(start, review.text.length);
+          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.year, review: text}));
         }
+      }
     });
+
     return (
       React.createElement("div", {className: "reviews"}, 
         React.createElement("p", {className: "reviews-label"}, React.createElement("strong", null, "Reviews")), 
@@ -169,7 +181,7 @@ var Review = React.createClass({displayName: "Review",
     return (
       React.createElement("div", {className: "review"}, 
         React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer)), 
-        React.createElement("p", null, this.props.review)
+        React.createElement("p", {dangerouslySetInnerHTML: {__html: this.props.review}})
       )
     );
   }

@@ -99,9 +99,17 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         Seq.empty[models.ReviewData]
       else {
         val review = reviewRows.head._3
+        
+        val attributePositions = for {
+          triplet <- reviewRows
+          tupleStr <- triplet._2.substring(1, triplet._2.length() - 1).split("""\),\(""")
+          nums = tupleStr.split(",")
+          tuple = (Integer.parseInt(nums(0)), Integer.parseInt(nums(1)))
+        } yield models.AttributePositions(triplet._1, tuple)
+        
         Seq(
           models.ReviewData(
-            attributePositions = reviewRows.map(triplet => models.AttributePositions(triplet._1, triplet._2)),
+            attributePositions = attributePositions,
             text               = review.text,
             year               = review.year.map(year => new DateTime(year.getTime)),
             reviewer           = review.reviewer,

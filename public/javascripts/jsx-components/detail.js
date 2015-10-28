@@ -134,6 +134,7 @@ var Reviews = React.createClass({
   },
   render: function() {
     var reviews = [];
+
     var selectedString = "";
     var selectedTags = $.map(this.props.tags, function(tag, i) {
       if(tag.type == 0) {
@@ -141,17 +142,28 @@ var Reviews = React.createClass({
         return tag.name;
       }
     });
+
     $.each(this.state.reviews, function(i, review) {
-      if(selectedTags.length == 0)
+      if(selectedTags.length == 0) {
         reviews.push(<Review key={i} reviewer={review.reviewer} year={review.date} review={review.text} />);
-      else
-        for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tagPositions[selectedTags[j]]) {
-            reviews.push(<Review key={i} reviewer={review.reviewer} year={review.year} review={review.text} />);
-            break;
+      }
+      else {
+        var text = "";
+        var start = 0;
+        $.each(review.tagPositions, function(i, position) {
+          if(selectedTags.indexOf(position.tag) != -1) {
+            text += review.text.slice(start, position.positions[0]) + "<strong>" + review.text.slice(position.positions[0], position.positions[1]) + "</strong>";
+            start = position.positions[1];
           }
+        });
+
+        if(text.length > 0) {
+          text += review.text.slice(start, review.text.length);
+          reviews.push(<Review key={i} reviewer={review.reviewer} year={review.year} review={text} />);
         }
+      }
     });
+
     return (
       <div className="reviews">
         <p className="reviews-label"><strong>Reviews</strong></p>
@@ -169,7 +181,7 @@ var Review = React.createClass({
     return (
       <div className="review">
         <p className="review-label"><strong>{this.props.reviewer}</strong></p>
-        <p>{this.props.review}</p>
+        <p dangerouslySetInnerHTML={{__html: this.props.review}}></p>
       </div>
     );
   }
