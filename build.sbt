@@ -2,8 +2,12 @@ name         := """triptailor"""
 version      := "1.0-SNAPSHOT"
 scalaVersion := "2.11.7"
 
-val scraperDepencncies = Seq(
+val scraperDependencies = Seq(
   "org.jsoup" % "jsoup" % "1.8.3"
+)
+
+val mixpanelDependencies = Seq(
+  "com.mixpanel" % "mixpanel-java" % "1.4.2"
 )
 
 val dbDependencies = Seq(
@@ -60,7 +64,7 @@ dockerEntrypoint     :=  Seq(s"bin/${executableScriptName.value}", "-J-Xmx384m",
 libraryDependencies ++= Seq(
   cache,
   ws
-) ++ scraperDepencncies ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
+) ++ scraperDependencies ++ mixpanelDependencies ++ dbDependencies ++ webJarAssetDependencies ++ testDependencies
 
 initialCommands in console := consoleCommands
 
