@@ -26,18 +26,29 @@ var Hostels = React.createClass({
       this.resultsCall.abort();
 
     this.setState({searchId: -1});
-    var route;
+
+    var url = "";
     location = location.replace(/[\/%]/g,"").replace(", ", ",").replace(/-/g, "%21").replace(/ /g, "-");
-    if (tags.length == 0)
+    var route;
+    if (tags.length == 0) {
       route = jsRoutes.controllers.SearchController.displayAll(location, dateFrom, dateTo);
-    else
-      route = jsRoutes.controllers.SearchController.classify(location, getStringTags(tags), dateFrom, dateTo);
+      url = "search?location=" + location + "&date-from=" + dateFrom + "&date-to=" + dateTo;
+    }
+    else {
+      var tagsStr = getStringTags(tags);
+      route = jsRoutes.controllers.SearchController.classify(location, tagsStr, dateFrom, dateTo);
+      url = "search?location=" + location + "&tags=" + tagsStr + "&date-from=" + dateFrom + "&date-to=" + dateTo;
+    }
+
     this.resultsCall = $.ajax({
       url: route.absoluteURL(),
       dataType: 'json',
       type: route.type,
       success: function(data) {
-        this.setState({results: data.classifiedHostels, searchId: data.searchID});
+        this.setState({results: data.classifiedHostels, searchId: data.searchID}, function() {
+          window.history.replaceState(this.state, "Search", url);
+        }.bind(this));
+
         this.preloadPhotos(data.classifiedHostels);
       }.bind(this),
       error: function(xhr, status, err) {
