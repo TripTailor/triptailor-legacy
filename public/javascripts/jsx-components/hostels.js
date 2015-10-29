@@ -97,7 +97,7 @@ var SearchHeader = React.createClass({
         <div className="row">
           <div className="col-md-8 location-col">
             <p className="header-label" ><strong>Location</strong></p>
-            <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} getResults={this.props.getResults} tags={this.props.tags} />
+            <AutoCompleteInput url={jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations="} value={this.props.location} updateValue={this.props.updateLocationValue} getResults={this.props.getResults} tags={this.props.tags} dateFrom={this.props.dateFrom} dateTo={this.props.dateTo} />
           </div>
           <div className="col-md-4">
             <div className="row">
@@ -123,18 +123,18 @@ var AutoCompleteInput = React.createClass({
   mixins: [AutoCompleteInputMixin],
   hostelsElementClick: function(elementValue) {
     this.elementClick(elementValue);
-    this.props.getResults(elementValue, this.props.tags, dateFrom, dateTo);
+    this.props.getResults(elementValue, this.props.tags, this.props.dateFrom, this.props.dateTo);
   },
   hostelsHandleKeyUp: function(e) {
     this.handleKeyUp(e);
     if(e.keyCode == 13 && this.state.selectedItem >= 0)
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, this.props.dateFrom, this.props.dateTo);
   },
   hostelsHandleKeyDown: function(e) {
     this.handleKeyDown(e);
     if(e.keyCode == 9 && this.state.selectedItem >= 0) {
       e.preventDefault();
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, this.props.dateFrom, this.props.dateTo);
     }
   },
   render: function() {

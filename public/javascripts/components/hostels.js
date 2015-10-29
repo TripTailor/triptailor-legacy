@@ -97,7 +97,7 @@ var SearchHeader = React.createClass({displayName: "SearchHeader",
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-8 location-col"}, 
             React.createElement("p", {className: "header-label"}, React.createElement("strong", null, "Location")), 
-            React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.props.location, updateValue: this.props.updateLocationValue, getResults: this.props.getResults, tags: this.props.tags})
+            React.createElement(AutoCompleteInput, {url: jsRoutes.controllers.HintsController.hostelHints().absoluteURL() + "?locations=", value: this.props.location, updateValue: this.props.updateLocationValue, getResults: this.props.getResults, tags: this.props.tags, dateFrom: this.props.dateFrom, dateTo: this.props.dateTo})
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "row"}, 
@@ -123,18 +123,18 @@ var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
   mixins: [AutoCompleteInputMixin],
   hostelsElementClick: function(elementValue) {
     this.elementClick(elementValue);
-    this.props.getResults(elementValue, this.props.tags, dateFrom, dateTo);
+    this.props.getResults(elementValue, this.props.tags, this.props.dateFrom, this.props.dateTo);
   },
   hostelsHandleKeyUp: function(e) {
     this.handleKeyUp(e);
     if(e.keyCode == 13 && this.state.selectedItem >= 0)
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, this.props.dateFrom, this.props.dateTo);
   },
   hostelsHandleKeyDown: function(e) {
     this.handleKeyDown(e);
     if(e.keyCode == 9 && this.state.selectedItem >= 0) {
       e.preventDefault();
-      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, dateFrom, dateTo);
+      this.props.getResults(this.state.hints[this.state.selectedItem], this.props.tags, this.props.dateFrom, this.props.dateTo);
     }
   },
   render: function() {
