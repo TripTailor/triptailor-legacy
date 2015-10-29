@@ -25,7 +25,7 @@ body {
 }
 .currency {
   font-size: 14px;
-  vertical-align: top;
+  vertical-align: text-top;
 }
 .book-span {
   margin-left: 25px;

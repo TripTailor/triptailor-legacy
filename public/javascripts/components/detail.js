@@ -8,7 +8,7 @@ var Header = React.createClass({displayName: "Header",
             /* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */
           ), 
           React.createElement("div", {className: "col-md-3"}, 
-            React.createElement("p", {className: "header-title"}, /* <strong>{hostel.price}<span className="currency">{hostel.currency}</span></strong> */hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
+            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.price, " ", React.createElement("span", {className: "currency"}, hostel.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
           )
         )
       )
