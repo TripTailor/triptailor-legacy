@@ -67,9 +67,8 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id}
         GROUP BY r.id, a.name, ar.positions
         ORDER BY r.id, r.year DESC
-        LIMIT $Limit
       """.as[AttrPositionReviewRow]
-    db.run(sql).map(createReviewsData)
+    db.run(sql).map(createReviewsData).map(_.take(Limit))
   }
 
   private def createHostel(reviewsData: Seq[models.ReviewData], hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
