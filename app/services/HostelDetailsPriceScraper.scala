@@ -53,5 +53,5 @@ object HostelDetailsPriceScraper {
   private val PublicCode  = "Male"
   private val MixedCode   = "Mixed"
 
-  private val PriceDataRegex = """(\w{3})(\d+\.?\d+)""".r
+  private val PriceDataRegex = """(\D+)(\d+\.?\d+)""".r
 }
