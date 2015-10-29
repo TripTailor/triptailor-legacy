@@ -173,7 +173,7 @@ var AutoCompleteSearch = React.createClass({displayName: "AutoCompleteSearch",
 });
 
 var AutoCompleteInput = React.createClass({displayName: "AutoCompleteInput",
-  mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
+  mixins: [AutoCompleteInputMixin],
   indexHandleKeyUp: function(e) {
     this.handleKeyUp(e);
     if(e.keyCode == 13 && this.state.selectedItem < 0)

@@ -69,6 +69,7 @@ var AutoCompleteMixin = {
 };
 
 var AutoCompleteInputMixin = {
+  mixins: [AutoCompleteMixin],
   elementClick: function(elementValue) {
     this.props.updateValue(elementValue);
     this.setState({hints: [], selectedItem: -1});

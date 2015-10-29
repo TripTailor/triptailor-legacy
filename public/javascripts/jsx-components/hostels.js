@@ -120,7 +120,7 @@ var SearchHeader = React.createClass({
 });
 
 var AutoCompleteInput = React.createClass({
-  mixins: [AutoCompleteMixin, AutoCompleteInputMixin],
+  mixins: [AutoCompleteInputMixin],
   hostelsElementClick: function(elementValue) {
     this.elementClick(elementValue);
     this.props.getResults(elementValue, this.props.tags, dateFrom, dateTo);
