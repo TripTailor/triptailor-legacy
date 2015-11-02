@@ -200,6 +200,11 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     var tags = this.state.tags.slice();
     tags[i].type = 1 - tags[i].type;
     this.setState(tags);
+
+    if(tags[i].type == 0)
+      mixpanel.track("Reviews Filtered", {
+        "tag": tags[i].name,
+      });
   },
   render: function() {
     return (

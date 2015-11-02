@@ -221,6 +221,11 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 });
 
 var Result = React.createClass({displayName: "Result",
+  componentDidMount: function() {
+    mixpanel.track_links("#hostelLink", "Hostel Visit", {
+      "hostel": hostel.name
+    });
+  },
   handleClick: function() {
     var route = jsRoutes.controllers.StatsController.saveHostelClick();
     $.ajax({
@@ -248,7 +253,7 @@ var Result = React.createClass({displayName: "Result",
     }
     return (
       React.createElement("div", {className: "result"}, 
-        React.createElement("a", {href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
+        React.createElement("a", {id: "hostelLink", href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-3"}, 
               this.props.result.images.length > 0 ? React.createElement("img", {className: "result-photo", src: this.props.result.images[0]}) : ""
@@ -347,6 +352,10 @@ var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
   handleClick: function() {
     this.props.add(this.props.name);
     this.props.remove(this.props.index);
+
+    mixpanel.track("Also Try Tag", {
+      "tag": this.props.name,
+    });
   },
   render: function() {
     return (
