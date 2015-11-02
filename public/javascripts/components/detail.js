@@ -152,7 +152,7 @@ var Reviews = React.createClass({displayName: "Reviews",
 
     $.each(this.state.reviews, function(i, review) {
       if(selectedTags.length == 0) {
-        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.date, review: review.text}));
+        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: review.text}));
       }
       else {
         var text = "";
@@ -166,7 +166,7 @@ var Reviews = React.createClass({displayName: "Reviews",
 
         if(text.length > 0) {
           text += review.text.slice(start, review.text.length);
-          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.year, review: text}));
+          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: text}));
         }
       }
     });
@@ -185,9 +185,14 @@ var Reviews = React.createClass({displayName: "Reviews",
 
 var Review = React.createClass({displayName: "Review",
   render: function() {
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var d = new Date(this.props.date);
+    var date = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
     return (
       React.createElement("div", {className: "review"}, 
-        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer)), 
+        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, date), " ", this.props.reviewer), 
         React.createElement("p", {dangerouslySetInnerHTML: {__html: this.props.review}})
       )
     );

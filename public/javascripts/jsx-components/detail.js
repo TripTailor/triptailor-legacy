@@ -152,7 +152,7 @@ var Reviews = React.createClass({
 
     $.each(this.state.reviews, function(i, review) {
       if(selectedTags.length == 0) {
-        reviews.push(<Review key={i} reviewer={review.reviewer} year={review.date} review={review.text} />);
+        reviews.push(<Review key={i} reviewer={review.reviewer} date={review.year} review={review.text} />);
       }
       else {
         var text = "";
@@ -166,7 +166,7 @@ var Reviews = React.createClass({
 
         if(text.length > 0) {
           text += review.text.slice(start, review.text.length);
-          reviews.push(<Review key={i} reviewer={review.reviewer} year={review.year} review={text} />);
+          reviews.push(<Review key={i} reviewer={review.reviewer} date={review.year} review={text} />);
         }
       }
     });
@@ -185,9 +185,14 @@ var Reviews = React.createClass({
 
 var Review = React.createClass({
   render: function() {
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var d = new Date(this.props.date);
+    var date = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
     return (
       <div className="review">
-        <p className="review-label"><strong>{this.props.reviewer}</strong></p>
+        <p className="review-label"><strong>{date}</strong> {this.props.reviewer}</p>
         <p dangerouslySetInnerHTML={{__html: this.props.review}}></p>
       </div>
     );
