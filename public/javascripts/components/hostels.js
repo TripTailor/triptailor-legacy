@@ -3,7 +3,7 @@ var HOSTELSTODISPLAY = 10;
 var Hostels = React.createClass({displayName: "Hostels",
   mixins: [AutoCompleteContainerMixin],
   getInitialState: function() {
-    return {location: city, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1, dateFrom: getQueryValue("date-from"), dateTo: getQueryValue("date-to")};
+    return {location: city + ", " + country, query: '', tags: this.getArrayTags(getQueryValue("tags")), results: [], searchId: -1, dateFrom: getQueryValue("date-from"), dateTo: getQueryValue("date-to")};
   },
   componentWillMount: function() {
     this.getResults(this.state.location, this.state.tags, this.state.dateFrom, this.state.dateTo);
@@ -40,13 +40,10 @@ var Hostels = React.createClass({displayName: "Hostels",
         this.setState({results: data.classifiedHostels, searchId: data.searchID});
         this.preloadPhotos(data.classifiedHostels);
 
-        mixpanel.register({
-          "search_id": data.searchID 
-        });
-
         mixpanel.track("Search", {
-         "location": location,
-         "tags": getStringTags(tags),
+         "city": city,
+         "country": country,
+         "tags": tags,
          "date_from": dateFrom,
          "date_to": dateTo
         });
@@ -209,7 +206,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
     var results = [];
     for(var i = 0; i < this.props.results.length && i < this.state.displayedResults; i++) {
       if(this.props.results[i].url != null)
-        results.push(React.createElement(Result, {key: i, result: this.props.results[i], searchId: this.props.searchId, tags: this.props.tags, dateFrom: this.props.dateFrom, dateTo: this.props.dateTo}));
+        results.push(React.createElement(Result, {key: i, i: i, result: this.props.results[i], searchId: this.props.searchId, tags: this.props.tags, dateFrom: this.props.dateFrom, dateTo: this.props.dateTo}));
     };
     return (
       React.createElement("div", null, 
@@ -222,8 +219,15 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 
 var Result = React.createClass({displayName: "Result",
   componentDidMount: function() {
-    mixpanel.track_links("#hostelLink", "Hostel Visit", {
-      "hostel": this.props.result.name
+    mixpanel.track_links("#hostelLink" + this.props.i, "Hostel Visit", {
+      "hostel": this.props.result.name,
+      "city": city,
+      "country": country,
+      "tags": this.props.tags,
+      "date_from": this.props.dateFrom,
+      "date_to": this.props.dateTo,
+      "price": this.props.result.price,
+      "currency": this.props.result.currency
     });
   },
   handleClick: function() {
@@ -253,7 +257,7 @@ var Result = React.createClass({displayName: "Result",
     }
     return (
       React.createElement("div", {className: "result"}, 
-        React.createElement("a", {id: "hostelLink", href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
+        React.createElement("a", {id: "hostelLink" + this.props.i, href: route.absoluteURL() + "?date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "result-a", onClick: this.handleClick}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("div", {className: "col-xs-3"}, 
               this.props.result.images.length > 0 ? React.createElement("img", {className: "result-photo", src: this.props.result.images[0]}) : ""
@@ -355,6 +359,8 @@ var AlsoTryTag = React.createClass({displayName: "AlsoTryTag",
 
     mixpanel.track("Also Try Tag", {
       "tag": this.props.name,
+      "city": city,
+      "country": country
     });
   },
   render: function() {

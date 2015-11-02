@@ -21,7 +21,21 @@ var Header = React.createClass({displayName: "Header",
 
 var Content = React.createClass({displayName: "Content",
   componentDidMount: function() {
-    mixpanel.track_links(".tip-a", "Index Tip Clicked", {});
+    mixpanel.track_links("#istanbulLink", "Index Tip Clicked", {
+      city: "Istanbul"
+    });
+    mixpanel.track_links("#bangkokLink", "Index Tip Clicked", {
+      city: "Bangkok"
+    });
+    mixpanel.track_links("#amsterdamLink", "Index Tip Clicked", {
+      city: "Amsterdam"
+    });
+    mixpanel.track_links("#rioLink", "Index Tip Clicked", {
+      city: "Rio de Janeiro"
+    });
+    mixpanel.track_links("#nyLink", "Index Tip Clicked", {
+      city: "New York"
+    });
   },
   render: function() {
     return (
@@ -35,7 +49,7 @@ var Content = React.createClass({displayName: "Content",
 
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-8"}, 
-            React.createElement("a", {href: SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
+            React.createElement("a", {id: "istanbulLink", href: SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
               React.createElement("div", {className: "tip-big"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
@@ -48,7 +62,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip bangkok"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
+              React.createElement("a", {id: "bangkokLink", href: SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Bangkok, Thailand"), 
@@ -63,7 +77,7 @@ var Content = React.createClass({displayName: "Content",
         React.createElement("div", {className: "row bottom-tips"}, 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip amsterdam"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
+              React.createElement("a", {id: "amsterdamLink", href: SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Amsterdam, Netherlands"), 
@@ -75,7 +89,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip rio"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
+              React.createElement("a", {id: "rioLink", href: SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "Rio de Janeiro, Brazil"), 
@@ -87,7 +101,7 @@ var Content = React.createClass({displayName: "Content",
           ), 
           React.createElement("div", {className: "col-md-4"}, 
             React.createElement("div", {className: "tip ny"}, 
-              React.createElement("a", {href: SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
+              React.createElement("a", {id: "nyLink", href: SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo, className: "tip-a"}, 
                 React.createElement("div", {className: "tip-content-container"}, 
                   React.createElement("div", {className: "tip-content text-center"}, 
                     React.createElement("h3", null, "New York, USA"), 

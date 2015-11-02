@@ -8,8 +8,10 @@
   <script type="text/javascript">
     @locationOpt.fold {
       var city    = getQueryValue("location");
+      var country = "";
     } { location =>
-      var city    = "@location.city, @location.country";
+      var city    = "@location.city";
+      var country = "@location.country";
     }
   </script>
 

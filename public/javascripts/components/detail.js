@@ -1,7 +1,9 @@
 var Header = React.createClass({displayName: "Header",
   componentDidMount: function() {
     mixpanel.track_links("#bookLink", "Booking", {
-      "hostel": hostel.name
+      "hostel": hostel.name,
+      "price": hostel.price,
+      "currency": hostel.currency
     });
   },
   render: function() {
@@ -201,10 +203,11 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     tags[i].type = 1 - tags[i].type;
     this.setState(tags);
 
-    if(tags[i].type == 0)
-      mixpanel.track("Reviews Filtered", {
-        "tag": tags[i].name,
-      });
+    mixpanel.track("Reviews Filtered", {
+      "hostel": hostel.name,
+      "tag": tags[i].name,
+      "type": tags[i].type == 0 ? "selected" : "unselected"
+    });
   },
   render: function() {
     return (
