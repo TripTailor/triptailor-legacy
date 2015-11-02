@@ -223,7 +223,7 @@ var ResultsGrid = React.createClass({displayName: "ResultsGrid",
 var Result = React.createClass({displayName: "Result",
   componentDidMount: function() {
     mixpanel.track_links("#hostelLink", "Hostel Visit", {
-      "hostel": hostel.name
+      "hostel": this.props.result.name
     });
   },
   handleClick: function() {
