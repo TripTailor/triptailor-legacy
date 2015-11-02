@@ -64,7 +64,7 @@
 
       <div class="collapse navbar-collapse" id="navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
+          <li><a class="hiw-link" href="@routes.ApplicationController.howItWorks">How it works</a></li>
           <!-- <li><a href="#">About us</a></li> -->
           <li><a class="a-addthis" href="#"><div class="addthis_sharing_toolbox addthis_top"></div></a></li>
           <!-- <li>
@@ -84,7 +84,7 @@
         <div class="col-sm-4">
           <p class="footer-header">Company</p>
           <ul class="list-unstyled footer-list">
-            <li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
+            <li><a class="hiw-link" href="@routes.ApplicationController.howItWorks">How it works</a></li>
             <!-- <li>About Us</li>
             <li>Contact</li> -->
           </ul>
@@ -112,6 +112,10 @@
     <!-- Addthis -->
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
     <script src="@routes.Assets.at("javascripts/uservoice.js")"></script>
+
+    <script>
+      mixpanel.track_links(".hiw-link", "Hiw Clicked", {});
+    </script>
 
     <img class="share-image" src="@routes.Assets.at("images/share-image.jpg")" />
   </body>

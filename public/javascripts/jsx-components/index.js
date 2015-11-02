@@ -20,6 +20,9 @@ var Header = React.createClass({
 });
 
 var Content = React.createClass({
+  componentDidMount: function() {
+    mixpanel.track_links(".tip-a", "Index Tip Clicked", {});
+  },
   render: function() {
     return (
       <div className="container-fluid">
