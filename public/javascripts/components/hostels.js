@@ -39,6 +39,17 @@ var Hostels = React.createClass({displayName: "Hostels",
       success: function(data) {
         this.setState({results: data.classifiedHostels, searchId: data.searchID});
         this.preloadPhotos(data.classifiedHostels);
+
+        mixpanel.register({
+          "search_id": data.searchID 
+        });
+
+        mixpanel.track("Search", {
+         "location": location,
+         "tags": getStringTags(tags),
+         "date_from": dateFrom,
+         "date_to": dateTo
+        });
       }.bind(this),
       error: function(xhr, status, err) {
         if(status != "abort")
