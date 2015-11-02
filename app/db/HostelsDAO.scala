@@ -66,7 +66,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         FROM     attribute a, attribute_review ar, review r
         WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id}
         GROUP BY r.id, a.name, ar.positions
-        ORDER BY r.id, r.year DESC
+        ORDER BY r.year DESC
       """.as[AttrPositionReviewRow]
     db.run(sql).map(createReviewsData).map(_.take(Limit))
   }
@@ -93,12 +93,12 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   }
 
   private def createReviewsData(rows: Seq[AttrPositionReviewRow]) =
-    rows.groupBy(triplet => triplet._3.id).values.toSeq.flatMap { case reviewRows =>
+    (rows.groupBy(triplet => triplet._3.id).values.toSeq.flatMap { case reviewRows =>
       if (reviewRows.isEmpty)
         Seq.empty[models.ReviewData]
       else {
         val review = reviewRows.head._3
-        
+
         Seq(
           models.ReviewData(
             attributePositions = models.AttributePositions.createAttributePositions(reviewRows),
@@ -111,6 +111,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
           )
         )
       }
-    }
+    }).sortWith( (r1, r2) => r1.year.getOrElse(DateTime.now minusYears 10) isAfter r2.year.getOrElse(DateTime.now minusYears 10) )
 
 }
