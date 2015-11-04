@@ -1,23 +1,14 @@
-@(ch: ClassifiedHostel, hostelImageUrls: Seq[String])(implicit req: RequestHeader)
+@(ch: ClassifiedHostel, hostelImageUrls: Seq[String], json: play.api.libs.json.JsValue)(implicit req: RequestHeader)
 
 @main("TripTailor Hostels") {
   <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/detail.css")">
   <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("font-awesome.min.css"))'>
 } {
-    <script>
-      console.log("@ch.hostel.price @ch.hostel.currency");
-      var hostel = {
-        name: "@ch.hostel.name",
-        url: "@ch.hostel.url",
-        description: "@ch.hostel.description".replace(/&lt;/g, "<").replace(/&gt;/g, ">"),
-        image: "@hostelImageUrls.mkString(",")",
-        tags: [],
-        price: "@ch.hostel.price",
-        currency: "@ch.hostel.currency"
-      };
-      @for(tag <- ch.orderedTags) {
-        hostel.tags.push({name: "@tag.attribute", type: @tag.tagType});
-      }
-    </script>
-    <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
+  <script id="hostel-data" type="application/json">
+    @play.twirl.api.HtmlFormat.raw(json.toString)
+  </script>
+  <script>
+    var hostel = JSON.parse($('#hostel-data').html());
+  </script>
+  <script type="text/javascript" src="@routes.Assets.at("javascripts/components/detail.js")"></script>
 }

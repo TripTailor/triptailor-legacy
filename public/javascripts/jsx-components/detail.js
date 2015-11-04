@@ -1,4 +1,11 @@
 var Header = React.createClass({
+  componentDidMount: function() {
+    mixpanel.track_links("#bookLink", "Booking", {
+      "hostel": hostel.name,
+      "price": hostel.price,
+      "currency": hostel.currency
+    });
+  },
   render: function() {
     return (
       <div className="container-fluid header">
@@ -8,7 +15,7 @@ var Header = React.createClass({
             {/* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */}
           </div>
           <div className="col-md-3">
-            <p className="header-title">{/* <strong>{hostel.price}<span className="currency">{hostel.currency}</span></strong> */}{hostel.url != null ? <span className="book-span"><a href={hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co"} target="_blank" className="book-link">Book</a></span> : ""}</p>
+            <p className="header-title">{<strong>{hostel.price} <span className="currency">{hostel.currency}</span></strong>}{hostel.url != null ? <span className="book-span"><a id="bookLink" href={hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co"} target="_blank" className="book-link">Book</a></span> : ""}</p>
           </div>
         </div>
       </div>
@@ -29,10 +36,7 @@ var Description = React.createClass({
 
 var Photos = React.createClass({
   getInitialState: function() {
-    var photos = hostel.image.split(",");
-    if(photos[0] == "")
-      photos = [];
-    return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
+    return {photos: hostel.images, mainPhoto: hostel.images.length > 0 ? 0 : -1, more: false};
   },
   componentWillMount: function() {
     preloadPhotos(this.state.photos);
@@ -133,26 +137,11 @@ var Tag = React.createClass({
 
 var Reviews = React.createClass({
   getInitialState: function() {
-    return {reviews: []}
-  },
-  componentWillMount: function() {
-    this.getReviews();
-  },
-  getReviews: function() {
-    $.ajax({
-      url: "../../assets/test/reviews.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({reviews: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    return {reviews: hostel.reviewsData}
   },
   render: function() {
     var reviews = [];
+
     var selectedString = "";
     var selectedTags = $.map(this.props.tags, function(tag, i) {
       if(tag.type == 0) {
@@ -160,17 +149,28 @@ var Reviews = React.createClass({
         return tag.name;
       }
     });
+
     $.each(this.state.reviews, function(i, review) {
-      if(selectedTags.length == 0)
-        reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
-      else
-        for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tags.indexOf(selectedTags[j]) != -1) {
-            reviews.push(<Review key={i} reviewer={review.reviewer} date={review.date} review={review.review} />);
-            break;
+      if(selectedTags.length == 0) {
+        reviews.push(<Review key={i} reviewer={review.reviewer} date={review.year} review={review.text} />);
+      }
+      else {
+        var text = "";
+        var start = 0;
+        $.each(review.tagPositions, function(i, position) {
+          if(selectedTags.indexOf(position.tag) != -1) {
+            text += review.text.slice(start, position.positions[0]) + "<strong>" + review.text.slice(position.positions[0], position.positions[1]) + "</strong>";
+            start = position.positions[1];
           }
+        });
+
+        if(text.length > 0) {
+          text += review.text.slice(start, review.text.length);
+          reviews.push(<Review key={i} reviewer={review.reviewer} date={review.year} review={text} />);
         }
+      }
     });
+
     return (
       <div className="reviews">
         <p className="reviews-label"><strong>Reviews</strong></p>
@@ -185,10 +185,15 @@ var Reviews = React.createClass({
 
 var Review = React.createClass({
   render: function() {
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var d = new Date(this.props.date);
+    var date = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
     return (
       <div className="review">
-        <p className="review-label"><strong>{this.props.reviewer}</strong> (<i>{this.props.date}</i>)</p>
-        <p>{this.props.review}</p>
+        <p className="review-label"><strong>{date}</strong> {this.props.reviewer}</p>
+        <p dangerouslySetInnerHTML={{__html: this.props.review}}></p>
       </div>
     );
   }
@@ -202,12 +207,18 @@ var ReviewsSection = React.createClass({
     var tags = this.state.tags.slice();
     tags[i].type = 1 - tags[i].type;
     this.setState(tags);
+
+    mixpanel.track("Reviews Filtered", {
+      "hostel": hostel.name,
+      "tag": tags[i].name,
+      "type": tags[i].type == 0 ? "selected" : "unselected"
+    });
   },
   render: function() {
     return (
       <div>
         <Tags tags={this.state.tags} toggleTag={this.toggleTag} />
-        {/* <Reviews tags={this.state.tags} /> */}
+        <Reviews tags={this.state.tags} />
       </div>
     );
   }

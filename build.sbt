@@ -8,8 +8,8 @@ val scraperDepencncies = Seq(
 
 val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % "9.4-1201-jdbc41",
-  "com.typesafe.play" %% "play-slick" % "1.0.0",
-  "com.typesafe.slick" %% "slick-codegen" % "3.0.0",
+  "com.typesafe.play" %% "play-slick" % "1.1.0",
+  "com.typesafe.slick" %% "slick-codegen" % "3.1.0",
   "com.zaxxer" % "HikariCP" % "2.3.5" % Compile
 )
 
@@ -38,7 +38,6 @@ val consoleCommands =
   """
     | import scala.concurrent.duration.DurationInt
     | import scala.concurrent.{ Await, Future }
-    | import play.api.libs.concurrent.Execution.defaultContext
     | import play.api.libs.json._
     | import play.api.{ Environment, ApplicationLoader, Play, Mode }
     | val env = Environment(new java.io.File("."), this.getClass.getClassLoader, Mode.Dev)
@@ -47,6 +46,7 @@ val consoleCommands =
     | val app = loader.load(context)
     | Play.start(app)
     | import Play.current
+    | implicit val _ = scala.concurrent.ExecutionContext.global
   """.stripMargin
 
 /** Docker settings **/

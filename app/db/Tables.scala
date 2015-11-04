@@ -14,13 +14,13 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema = Array(Attribute.schema, AttributeSearch.schema, Hostel.schema, HostelAttribute.schema, HostelSearch.schema, HostelService.schema, Location.schema, Search.schema, Service.schema).reduceLeft(_ ++ _)
+  lazy val schema = Array(Attribute.schema, AttributeReview.schema, AttributeSearch.schema, Hostel.schema, HostelAttribute.schema, HostelSearch.schema, HostelService.schema, Location.schema, PlayEvolutions.schema, Review.schema, Search.schema, Service.schema, Share.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
   /** Entity class storing rows of table Attribute
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param name Database column name SqlType(varchar), Length(50,true) */
+   *  @param name Database column name SqlType(varchar), Length(200,true) */
   case class AttributeRow(id: Int, name: String)
   /** GetResult implicit for fetching AttributeRow objects using plain SQL queries */
   implicit def GetResultAttributeRow(implicit e0: GR[Int], e1: GR[String]): GR[AttributeRow] = GR{
@@ -35,11 +35,40 @@ trait Tables {
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column name SqlType(varchar), Length(50,true) */
-    val name: Rep[String] = column[String]("name", O.Length(50,varying=true))
+    /** Database column name SqlType(varchar), Length(200,true) */
+    val name: Rep[String] = column[String]("name", O.Length(200,varying=true))
   }
   /** Collection-like TableQuery object for table Attribute */
   lazy val Attribute = new TableQuery(tag => new Attribute(tag))
+
+  /** Entity class storing rows of table AttributeReview
+   *  @param attributeId Database column attribute_id SqlType(int4)
+   *  @param reviewId Database column review_id SqlType(int4)
+   *  @param positions Database column positions SqlType(text) */
+  case class AttributeReviewRow(attributeId: Int, reviewId: Int, positions: String)
+  /** GetResult implicit for fetching AttributeReviewRow objects using plain SQL queries */
+  implicit def GetResultAttributeReviewRow(implicit e0: GR[Int], e1: GR[String]): GR[AttributeReviewRow] = GR{
+    prs => import prs._
+    AttributeReviewRow.tupled((<<[Int], <<[Int], <<[String]))
+  }
+  /** Table description of table attribute_review. Objects of this class serve as prototypes for rows in queries. */
+  class AttributeReview(_tableTag: Tag) extends Table[AttributeReviewRow](_tableTag, "attribute_review") {
+    def * = (attributeId, reviewId, positions) <> (AttributeReviewRow.tupled, AttributeReviewRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(attributeId), Rep.Some(reviewId), Rep.Some(positions)).shaped.<>({r=>import r._; _1.map(_=> AttributeReviewRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column attribute_id SqlType(int4) */
+    val attributeId: Rep[Int] = column[Int]("attribute_id")
+    /** Database column review_id SqlType(int4) */
+    val reviewId: Rep[Int] = column[Int]("review_id")
+    /** Database column positions SqlType(text) */
+    val positions: Rep[String] = column[String]("positions")
+
+    /** Primary key of AttributeReview (database name attribute_review_pkey) */
+    val pk = primaryKey("attribute_review_pkey", (attributeId, reviewId))
+  }
+  /** Collection-like TableQuery object for table AttributeReview */
+  lazy val AttributeReview = new TableQuery(tag => new AttributeReview(tag))
 
   /** Entity class storing rows of table AttributeSearch
    *  @param attributeId Database column attribute_id SqlType(int4)
@@ -64,56 +93,57 @@ trait Tables {
     /** Primary key of AttributeSearch (database name attribute_search_pkey) */
     val pk = primaryKey("attribute_search_pkey", (attributeId, searchId))
 
-    /** Foreign key referencing Attribute (database name attribute_search_attribute_id_fkey) */
-    lazy val attributeFk = foreignKey("attribute_search_attribute_id_fkey", attributeId, Attribute)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
-    /** Foreign key referencing Search (database name attribute_search_search_id_fkey) */
-    lazy val searchFk = foreignKey("attribute_search_search_id_fkey", searchId, Search)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Attribute (database name attribute_search_ibfk_1) */
+    lazy val attributeFk = foreignKey("attribute_search_ibfk_1", attributeId, Attribute)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Search (database name attribute_search_ibfk_2) */
+    lazy val searchFk = foreignKey("attribute_search_ibfk_2", searchId, Search)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table AttributeSearch */
   lazy val AttributeSearch = new TableQuery(tag => new AttributeSearch(tag))
 
   /** Entity class storing rows of table Hostel
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param name Database column name SqlType(varchar), Length(100,true)
+   *  @param name Database column name SqlType(varchar), Length(200,true)
    *  @param description Database column description SqlType(text), Default(None)
-   *  @param price Database column price SqlType(numeric), Default(None)
-   *  @param images Database column image SqlType(varchar), Length(500,true), Default(None)
-   *  @param url Database column url SqlType(varchar), Length(200,true), Default(None)
+   *  @param price Database column price SqlType(float8), Default(None)
+   *  @param images Database column images SqlType(varchar), Length(500,true), Default(None)
+   *  @param url Database column url SqlType(varchar), Length(400,true), Default(None)
    *  @param noReviews Database column no_reviews SqlType(int4)
-   *  @param locationId Database column location_id SqlType(int4) */
-  case class HostelRow(id: Int, name: String, description: Option[String] = None, price: Option[scala.math.BigDecimal] = None, images: Option[String] = None, url: Option[String] = None, noReviews: Int, locationId: Int, hostelworldId: Option[Int] = None)
+   *  @param locationId Database column location_id SqlType(int4)
+   *  @param hostelworldId Database column hostelworld_id SqlType(int4), Default(None) */
+  case class HostelRow(id: Int, name: String, description: Option[String] = None, price: Option[Double] = None, images: Option[String] = None, url: Option[String] = None, noReviews: Int, locationId: Int, hostelworldId: Option[Int] = None)
   /** GetResult implicit for fetching HostelRow objects using plain SQL queries */
-  implicit def GetResultHostelRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]], e3: GR[Option[scala.math.BigDecimal]]): GR[HostelRow] = GR{
+  implicit def GetResultHostelRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]], e3: GR[Option[Double]], e4: GR[Option[Int]]): GR[HostelRow] = GR{
     prs => import prs._
-    HostelRow.tupled((<<[Int], <<[String], <<?[String], <<?[scala.math.BigDecimal], <<?[String], <<?[String], <<[Int], <<[Int], <<?[Int]))
+    HostelRow.tupled((<<[Int], <<[String], <<?[String], <<?[Double], <<?[String], <<?[String], <<[Int], <<[Int], <<?[Int]))
   }
   /** Table description of table hostel. Objects of this class serve as prototypes for rows in queries. */
   class Hostel(_tableTag: Tag) extends Table[HostelRow](_tableTag, "hostel") {
     def * = (id, name, description, price, images, url, noReviews, locationId, hostelworldId) <> (HostelRow.tupled, HostelRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(name), description, price, images, url, Rep.Some(noReviews), Rep.Some(locationId), Rep.Some(hostelworldId)).shaped.<>({r=>import r._; _1.map(_=> HostelRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7.get, _8.get, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(name), description, price, images, url, Rep.Some(noReviews), Rep.Some(locationId), hostelworldId).shaped.<>({r=>import r._; _1.map(_=> HostelRow.tupled((_1.get, _2.get, _3, _4, _5, _6, _7.get, _8.get, _9)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column name SqlType(varchar), Length(100,true) */
-    val name: Rep[String] = column[String]("name", O.Length(100,varying=true))
+    /** Database column name SqlType(varchar), Length(200,true) */
+    val name: Rep[String] = column[String]("name", O.Length(200,varying=true))
     /** Database column description SqlType(text), Default(None) */
     val description: Rep[Option[String]] = column[Option[String]]("description", O.Default(None))
-    /** Database column price SqlType(numeric), Default(None) */
-    val price: Rep[Option[scala.math.BigDecimal]] = column[Option[scala.math.BigDecimal]]("price", O.Default(None))
-    /** Database column image SqlType(varchar), Length(50,true), Default(None) */
-    val images: Rep[Option[String]] = column[Option[String]]("images", O.Length(50,varying=true), O.Default(None))
-    /** Database column url SqlType(varchar), Length(200,true), Default(None) */
-    val url: Rep[Option[String]] = column[Option[String]]("url", O.Length(200,varying=true), O.Default(None))
+    /** Database column price SqlType(float8), Default(None) */
+    val price: Rep[Option[Double]] = column[Option[Double]]("price", O.Default(None))
+    /** Database column images SqlType(varchar), Length(500,true), Default(None) */
+    val images: Rep[Option[String]] = column[Option[String]]("images", O.Length(500,varying=true), O.Default(None))
+    /** Database column url SqlType(varchar), Length(400,true), Default(None) */
+    val url: Rep[Option[String]] = column[Option[String]]("url", O.Length(400,varying=true), O.Default(None))
     /** Database column no_reviews SqlType(int4) */
     val noReviews: Rep[Int] = column[Int]("no_reviews")
     /** Database column location_id SqlType(int4) */
     val locationId: Rep[Int] = column[Int]("location_id")
-    /** Database column hostelworld_id SqlType(int4) */
-    val hostelworldId: Rep[Option[Int]] = column[Option[Int]]("hostelworld_id")
+    /** Database column hostelworld_id SqlType(int4), Default(None) */
+    val hostelworldId: Rep[Option[Int]] = column[Option[Int]]("hostelworld_id", O.Default(None))
 
-    /** Foreign key referencing Location (database name hostel_location_id_fkey) */
-    lazy val locationFk = foreignKey("hostel_location_id_fkey", locationId, Location)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Location (database name hostel_ibfk_1) */
+    lazy val locationFk = foreignKey("hostel_ibfk_1", locationId, Location)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table Hostel */
   lazy val Hostel = new TableQuery(tag => new Hostel(tag))
@@ -150,10 +180,10 @@ trait Tables {
     /** Primary key of HostelAttribute (database name hostel_attribute_pkey) */
     val pk = primaryKey("hostel_attribute_pkey", (hostelId, attributeId))
 
-    /** Foreign key referencing Attribute (database name hostel_attribute_attribute_id_fkey) */
-    lazy val attributeFk = foreignKey("hostel_attribute_attribute_id_fkey", attributeId, Attribute)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
-    /** Foreign key referencing Hostel (database name hostel_attribute_hostel_id_fkey) */
-    lazy val hostelFk = foreignKey("hostel_attribute_hostel_id_fkey", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Attribute (database name hostel_attribute_ibfk_2) */
+    lazy val attributeFk = foreignKey("hostel_attribute_ibfk_2", attributeId, Attribute)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Hostel (database name hostel_attribute_ibfk_1) */
+    lazy val hostelFk = foreignKey("hostel_attribute_ibfk_1", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table HostelAttribute */
   lazy val HostelAttribute = new TableQuery(tag => new HostelAttribute(tag))
@@ -184,10 +214,10 @@ trait Tables {
     /** Primary key of HostelSearch (database name hostel_search_pkey) */
     val pk = primaryKey("hostel_search_pkey", (hostelId, searchId, timestamp))
 
-    /** Foreign key referencing Hostel (database name hostel_search_hostel_id_fkey) */
-    lazy val hostelFk = foreignKey("hostel_search_hostel_id_fkey", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
-    /** Foreign key referencing Search (database name hostel_search_search_id_fkey) */
-    lazy val searchFk = foreignKey("hostel_search_search_id_fkey", searchId, Search)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Hostel (database name hostel_search_ibfk_1) */
+    lazy val hostelFk = foreignKey("hostel_search_ibfk_1", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Search (database name hostel_search_ibfk_2) */
+    lazy val searchFk = foreignKey("hostel_search_ibfk_2", searchId, Search)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table HostelSearch */
   lazy val HostelSearch = new TableQuery(tag => new HostelSearch(tag))
@@ -215,21 +245,21 @@ trait Tables {
     /** Primary key of HostelService (database name hostel_service_pkey) */
     val pk = primaryKey("hostel_service_pkey", (hostelId, serviceId))
 
-    /** Foreign key referencing Hostel (database name hostel_service_hostel_id_fkey) */
-    lazy val hostelFk = foreignKey("hostel_service_hostel_id_fkey", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
-    /** Foreign key referencing Service (database name hostel_service_service_id_fkey) */
-    lazy val serviceFk = foreignKey("hostel_service_service_id_fkey", serviceId, Service)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Hostel (database name hostel_service_ibfk_1) */
+    lazy val hostelFk = foreignKey("hostel_service_ibfk_1", hostelId, Hostel)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Service (database name hostel_service_ibfk_2) */
+    lazy val serviceFk = foreignKey("hostel_service_ibfk_2", serviceId, Service)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table HostelService */
   lazy val HostelService = new TableQuery(tag => new HostelService(tag))
 
   /** Entity class storing rows of table Location
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param city Database column city SqlType(varchar), Length(50,true)
-   *  @param country Database column country SqlType(varchar), Length(30,true)
-   *  @param state Database column state SqlType(varchar), Length(30,true), Default(None)
-   *  @param region Database column region SqlType(varchar), Length(30,true), Default(None)
-   *  @param continent Database column continent SqlType(varchar), Length(30,true), Default(None) */
+   *  @param city Database column city SqlType(varchar), Length(100,true)
+   *  @param country Database column country SqlType(varchar), Length(60,true)
+   *  @param state Database column state SqlType(varchar), Length(60,true), Default(None)
+   *  @param region Database column region SqlType(varchar), Length(60,true), Default(None)
+   *  @param continent Database column continent SqlType(varchar), Length(60,true), Default(None) */
   case class LocationRow(id: Int, city: String, country: String, state: Option[String] = None, region: Option[String] = None, continent: Option[String] = None)
   /** GetResult implicit for fetching LocationRow objects using plain SQL queries */
   implicit def GetResultLocationRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[String]]): GR[LocationRow] = GR{
@@ -244,23 +274,102 @@ trait Tables {
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column city SqlType(varchar), Length(50,true) */
-    val city: Rep[String] = column[String]("city", O.Length(50,varying=true))
-    /** Database column country SqlType(varchar), Length(30,true) */
-    val country: Rep[String] = column[String]("country", O.Length(30,varying=true))
-    /** Database column state SqlType(varchar), Length(30,true), Default(None) */
-    val state: Rep[Option[String]] = column[Option[String]]("state", O.Length(30,varying=true), O.Default(None))
-    /** Database column region SqlType(varchar), Length(30,true), Default(None) */
-    val region: Rep[Option[String]] = column[Option[String]]("region", O.Length(30,varying=true), O.Default(None))
-    /** Database column continent SqlType(varchar), Length(30,true), Default(None) */
-    val continent: Rep[Option[String]] = column[Option[String]]("continent", O.Length(30,varying=true), O.Default(None))
+    /** Database column city SqlType(varchar), Length(100,true) */
+    val city: Rep[String] = column[String]("city", O.Length(100,varying=true))
+    /** Database column country SqlType(varchar), Length(60,true) */
+    val country: Rep[String] = column[String]("country", O.Length(60,varying=true))
+    /** Database column state SqlType(varchar), Length(60,true), Default(None) */
+    val state: Rep[Option[String]] = column[Option[String]]("state", O.Length(60,varying=true), O.Default(None))
+    /** Database column region SqlType(varchar), Length(60,true), Default(None) */
+    val region: Rep[Option[String]] = column[Option[String]]("region", O.Length(60,varying=true), O.Default(None))
+    /** Database column continent SqlType(varchar), Length(60,true), Default(None) */
+    val continent: Rep[Option[String]] = column[Option[String]]("continent", O.Length(60,varying=true), O.Default(None))
   }
   /** Collection-like TableQuery object for table Location */
   lazy val Location = new TableQuery(tag => new Location(tag))
 
+  /** Entity class storing rows of table PlayEvolutions
+   *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
+   *  @param hash Database column hash SqlType(varchar), Length(510,true)
+   *  @param appliedAt Database column applied_at SqlType(timestamp)
+   *  @param applyScript Database column apply_script SqlType(text), Default(None)
+   *  @param revertScript Database column revert_script SqlType(text), Default(None)
+   *  @param state Database column state SqlType(varchar), Length(510,true), Default(None)
+   *  @param lastProblem Database column last_problem SqlType(text), Default(None) */
+  case class PlayEvolutionsRow(id: Int, hash: String, appliedAt: java.sql.Timestamp, applyScript: Option[String] = None, revertScript: Option[String] = None, state: Option[String] = None, lastProblem: Option[String] = None)
+  /** GetResult implicit for fetching PlayEvolutionsRow objects using plain SQL queries */
+  implicit def GetResultPlayEvolutionsRow(implicit e0: GR[Int], e1: GR[String], e2: GR[java.sql.Timestamp], e3: GR[Option[String]]): GR[PlayEvolutionsRow] = GR{
+    prs => import prs._
+    PlayEvolutionsRow.tupled((<<[Int], <<[String], <<[java.sql.Timestamp], <<?[String], <<?[String], <<?[String], <<?[String]))
+  }
+  /** Table description of table play_evolutions. Objects of this class serve as prototypes for rows in queries. */
+  class PlayEvolutions(_tableTag: Tag) extends Table[PlayEvolutionsRow](_tableTag, "play_evolutions") {
+    def * = (id, hash, appliedAt, applyScript, revertScript, state, lastProblem) <> (PlayEvolutionsRow.tupled, PlayEvolutionsRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(hash), Rep.Some(appliedAt), applyScript, revertScript, state, lastProblem).shaped.<>({r=>import r._; _1.map(_=> PlayEvolutionsRow.tupled((_1.get, _2.get, _3.get, _4, _5, _6, _7)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(serial), AutoInc, PrimaryKey */
+    val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column hash SqlType(varchar), Length(510,true) */
+    val hash: Rep[String] = column[String]("hash", O.Length(510,varying=true))
+    /** Database column applied_at SqlType(timestamp) */
+    val appliedAt: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("applied_at")
+    /** Database column apply_script SqlType(text), Default(None) */
+    val applyScript: Rep[Option[String]] = column[Option[String]]("apply_script", O.Default(None))
+    /** Database column revert_script SqlType(text), Default(None) */
+    val revertScript: Rep[Option[String]] = column[Option[String]]("revert_script", O.Default(None))
+    /** Database column state SqlType(varchar), Length(510,true), Default(None) */
+    val state: Rep[Option[String]] = column[Option[String]]("state", O.Length(510,varying=true), O.Default(None))
+    /** Database column last_problem SqlType(text), Default(None) */
+    val lastProblem: Rep[Option[String]] = column[Option[String]]("last_problem", O.Default(None))
+  }
+  /** Collection-like TableQuery object for table PlayEvolutions */
+  lazy val PlayEvolutions = new TableQuery(tag => new PlayEvolutions(tag))
+
+  /** Entity class storing rows of table Review
+   *  @param id Database column id SqlType(serial), AutoInc
+   *  @param hostelId Database column hostel_id SqlType(int4)
+   *  @param text Database column text SqlType(text)
+   *  @param year Database column year SqlType(date), Default(None)
+   *  @param reviewer Database column reviewer SqlType(varchar), Length(200,true), Default(None)
+   *  @param city Database column city SqlType(varchar), Length(200,true), Default(None)
+   *  @param gender Database column gender SqlType(varchar), Length(100,true), Default(None)
+   *  @param age Database column age SqlType(int4), Default(None) */
+  case class ReviewRow(id: Int, hostelId: Int, text: String, year: Option[java.sql.Date] = None, reviewer: Option[String] = None, city: Option[String] = None, gender: Option[String] = None, age: Option[Int] = None)
+  /** GetResult implicit for fetching ReviewRow objects using plain SQL queries */
+  implicit def GetResultReviewRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[java.sql.Date]], e3: GR[Option[String]], e4: GR[Option[Int]]): GR[ReviewRow] = GR{
+    prs => import prs._
+    ReviewRow.tupled((<<[Int], <<[Int], <<[String], <<?[java.sql.Date], <<?[String], <<?[String], <<?[String], <<?[Int]))
+  }
+  /** Table description of table review. Objects of this class serve as prototypes for rows in queries. */
+  class Review(_tableTag: Tag) extends Table[ReviewRow](_tableTag, "review") {
+    def * = (id, hostelId, text, year, reviewer, city, gender, age) <> (ReviewRow.tupled, ReviewRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(hostelId), Rep.Some(text), year, reviewer, city, gender, age).shaped.<>({r=>import r._; _1.map(_=> ReviewRow.tupled((_1.get, _2.get, _3.get, _4, _5, _6, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(serial), AutoInc */
+    val id: Rep[Int] = column[Int]("id", O.AutoInc)
+    /** Database column hostel_id SqlType(int4) */
+    val hostelId: Rep[Int] = column[Int]("hostel_id")
+    /** Database column text SqlType(text) */
+    val text: Rep[String] = column[String]("text")
+    /** Database column year SqlType(date), Default(None) */
+    val year: Rep[Option[java.sql.Date]] = column[Option[java.sql.Date]]("year", O.Default(None))
+    /** Database column reviewer SqlType(varchar), Length(200,true), Default(None) */
+    val reviewer: Rep[Option[String]] = column[Option[String]]("reviewer", O.Length(200,varying=true), O.Default(None))
+    /** Database column city SqlType(varchar), Length(200,true), Default(None) */
+    val city: Rep[Option[String]] = column[Option[String]]("city", O.Length(200,varying=true), O.Default(None))
+    /** Database column gender SqlType(varchar), Length(100,true), Default(None) */
+    val gender: Rep[Option[String]] = column[Option[String]]("gender", O.Length(100,varying=true), O.Default(None))
+    /** Database column age SqlType(int4), Default(None) */
+    val age: Rep[Option[Int]] = column[Option[Int]]("age", O.Default(None))
+  }
+  /** Collection-like TableQuery object for table Review */
+  lazy val Review = new TableQuery(tag => new Review(tag))
+
   /** Entity class storing rows of table Search
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param sess Database column sess SqlType(varchar), Length(40,true)
+   *  @param sess Database column sess SqlType(varchar), Length(80,true)
    *  @param cityId Database column city_id SqlType(int4)
    *  @param hostelId Database column hostel_id SqlType(int4), Default(None)
    *  @param timestamp Database column timestamp SqlType(int8)
@@ -279,8 +388,8 @@ trait Tables {
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column sess SqlType(varchar), Length(40,true) */
-    val sess: Rep[String] = column[String]("sess", O.Length(40,varying=true))
+    /** Database column sess SqlType(varchar), Length(80,true) */
+    val sess: Rep[String] = column[String]("sess", O.Length(80,varying=true))
     /** Database column city_id SqlType(int4) */
     val cityId: Rep[Int] = column[Int]("city_id")
     /** Database column hostel_id SqlType(int4), Default(None) */
@@ -290,17 +399,17 @@ trait Tables {
     /** Database column adwords SqlType(bool) */
     val adwords: Rep[Boolean] = column[Boolean]("adwords")
 
-    /** Foreign key referencing Hostel (database name search_hostel_id_fkey) */
-    lazy val hostelFk = foreignKey("search_hostel_id_fkey", hostelId, Hostel)(r => Rep.Some(r.id), onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
-    /** Foreign key referencing Location (database name search_city_id_fkey) */
-    lazy val locationFk = foreignKey("search_city_id_fkey", cityId, Location)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Hostel (database name search_ibfk_2) */
+    lazy val hostelFk = foreignKey("search_ibfk_2", hostelId, Hostel)(r => Rep.Some(r.id), onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
+    /** Foreign key referencing Location (database name search_ibfk_1) */
+    lazy val locationFk = foreignKey("search_ibfk_1", cityId, Location)(r => r.id, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
   }
   /** Collection-like TableQuery object for table Search */
   lazy val Search = new TableQuery(tag => new Search(tag))
 
   /** Entity class storing rows of table Service
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param name Database column name SqlType(varchar), Length(50,true) */
+   *  @param name Database column name SqlType(varchar), Length(100,true) */
   case class ServiceRow(id: Int, name: String)
   /** GetResult implicit for fetching ServiceRow objects using plain SQL queries */
   implicit def GetResultServiceRow(implicit e0: GR[Int], e1: GR[String]): GR[ServiceRow] = GR{
@@ -315,9 +424,32 @@ trait Tables {
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column name SqlType(varchar), Length(50,true) */
-    val name: Rep[String] = column[String]("name", O.Length(50,varying=true))
+    /** Database column name SqlType(varchar), Length(100,true) */
+    val name: Rep[String] = column[String]("name", O.Length(100,varying=true))
   }
   /** Collection-like TableQuery object for table Service */
   lazy val Service = new TableQuery(tag => new Service(tag))
+
+  /** Entity class storing rows of table Share
+   *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
+   *  @param sessionId Database column session_id SqlType(int4) */
+  case class ShareRow(id: Int, sessionId: Int)
+  /** GetResult implicit for fetching ShareRow objects using plain SQL queries */
+  implicit def GetResultShareRow(implicit e0: GR[Int]): GR[ShareRow] = GR{
+    prs => import prs._
+    ShareRow.tupled((<<[Int], <<[Int]))
+  }
+  /** Table description of table share. Objects of this class serve as prototypes for rows in queries. */
+  class Share(_tableTag: Tag) extends Table[ShareRow](_tableTag, "share") {
+    def * = (id, sessionId) <> (ShareRow.tupled, ShareRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(id), Rep.Some(sessionId)).shaped.<>({r=>import r._; _1.map(_=> ShareRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(serial), AutoInc, PrimaryKey */
+    val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column session_id SqlType(int4) */
+    val sessionId: Rep[Int] = column[Int]("session_id")
+  }
+  /** Collection-like TableQuery object for table Share */
+  lazy val Share = new TableQuery(tag => new Share(tag))
 }

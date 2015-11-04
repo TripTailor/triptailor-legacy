@@ -26,91 +26,97 @@
 
           ga('create', 'UA-43226154-2', 'auto');
           ga('send', 'pageview');
-        </script>
-      </head>
-      <body>
-        <!--JS Reverse routing-->
-        @helper.javascriptRouter("jsRoutes")(
-          routes.javascript.Assets.at,
-          routes.javascript.ApplicationController.index,
-          routes.javascript.ApplicationController.howItWorks,
-          routes.javascript.HintsController.hostelHints,
-          routes.javascript.HintsController.tagSuggestions,
-          routes.javascript.SearchController.search,
-          routes.javascript.SearchController.classify,
-          routes.javascript.SearchController.displayAll,
-          routes.javascript.SearchController.detail,
-          routes.javascript.StatsController.saveHostelClick
-        )
+    </script>
 
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("react.min.js"))'></script>
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
-        <script type='text/javascript'src="@routes.Assets.at("javascripts/helper.js")"></script>
-        <script type="text/javascript" src="@routes.Assets.at("javascripts/components/components.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/mixpanel.js")"></script>
+  </head>
+  <body>
+    <!--JS Reverse routing-->
+    @helper.javascriptRouter("jsRoutes")(
+    routes.javascript.Assets.at,
+    routes.javascript.ApplicationController.index,
+    routes.javascript.ApplicationController.howItWorks,
+    routes.javascript.HintsController.hostelHints,
+    routes.javascript.HintsController.tagSuggestions,
+    routes.javascript.SearchController.search,
+    routes.javascript.SearchController.classify,
+    routes.javascript.SearchController.displayAll,
+    routes.javascript.SearchController.detail,
+    routes.javascript.StatsController.saveHostelClick
+    )
 
-        <nav class="navbar navbar-triptailor">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="@routes.ApplicationController.index"><span class="medium">TripTailor Hostels</span></a>
-          </div>
+    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("react.min.js"))'></script>
+    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+    <script type='text/javascript'src="@routes.Assets.at("javascripts/helper.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/components/components.js")"></script>
 
-          <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
-              <!-- <li><a href="#">About us</a></li> -->
-              <li><a class="a-addthis" href="#"><div class="addthis_sharing_toolbox addthis_top"></div></a></li>
-              <!-- <li>
-              <a className="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-20.png").absoluteURL()}></img></a>
-              <a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-20.png").absoluteURL()}></img></a>
-              </li> -->
-            </ul>
-          </div>
+    <nav class="navbar navbar-triptailor">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="@routes.ApplicationController.index"><span class="medium">TripTailor Hostels</span></a>
+      </div>
+
+      <div class="collapse navbar-collapse" id="navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a class="hiw-link" href="@routes.ApplicationController.howItWorks">How it works</a></li>
+          <!-- <li><a href="#">About us</a></li> -->
+          <li><a class="a-addthis" href="#"><div class="addthis_sharing_toolbox addthis_top"></div></a></li>
+          <!-- <li>
+          <a className="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-20.png").absoluteURL()}></img></a>
+          <a className="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-20.png").absoluteURL()}></img></a>
+          </li> -->
+        </ul>
+      </div>
+    </div>
+    </nav>
+
+    <div id="content"></div>
+    @content
+
+    <div class="container-fluid footer">
+      <div class="row">
+        <div class="col-sm-4">
+          <p class="footer-header">Company</p>
+          <ul class="list-unstyled footer-list">
+            <li><a class="hiw-link" href="@routes.ApplicationController.howItWorks">How it works</a></li>
+            <!-- <li>About Us</li>
+            <li>Contact</li> -->
+          </ul>
         </div>
-        </nav>
-
-        <div id="content"></div>
-        @content
-
-        <div class="container-fluid footer">
-          <div class="row">
-            <div class="col-sm-4">
-              <p class="footer-header">Company</p>
-              <ul class="list-unstyled footer-list">
-                <li><a href="@routes.ApplicationController.howItWorks">How it works</a></li>
-                <!-- <li>About Us</li>
-                <li>Contact</li> -->
-              </ul>
-            </div>
-            <div class="col-sm-4 love">
-              <p class="footer-header">Spread the love</p>
-              <div class="addthis_sharing_toolbox"></div>
-              <!-- <ul class="list-inline">
-                <li><a class="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-25.png").absoluteURL()}></img></a></li>
-                <li><a class="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-25.png").absoluteURL()}></img></a></li>
-              </ul> -->
-            </div>
-          </div>
-          <div class="row disclaimer">
-            <div class="col-sm-12">
-              <p>&copy; TripTailor</p>
-            </div>
-          </div>
+        <div class="col-sm-4 love">
+          <p class="footer-header">Spread the love</p>
+          <div class="addthis_sharing_toolbox"></div>
+          <!-- <ul class="list-inline">
+            <li><a class="fb-link" href="#" onClick={shareFB}><img src={jsRoutes.controllers.Assets.at("images/fb-25.png").absoluteURL()}></img></a></li>
+            <li><a class="tw-link" href={"https://twitter.com/intent/tweet?text=&url=" + encodeURIComponent(window.location.href)}><img src={jsRoutes.controllers.Assets.at("images/tw-25.png").absoluteURL()}></img></a></li>
+          </ul> -->
         </div>
+      </div>
+      <div class="row disclaimer">
+        <div class="col-sm-12">
+          <p>&copy; TripTailor</p>
+        </div>
+      </div>
+    </div>
 
-        <!-- Manual share -->
-        <!-- <div id="fb-root"></div>
-        <script src="@routes.Assets.at("javascripts/share-sdks.js")"></script> -->
-        <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>
-        <!-- Addthis -->
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
-        <script src="@routes.Assets.at("javascripts/uservoice.js")"></script>
+    <!-- Manual share -->
+    <!-- <div id="fb-root"></div>
+    <script src="@routes.Assets.at("javascripts/share-sdks.js")"></script> -->
+    <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>
+    <!-- Addthis -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-520ea186234cadc3" async="async"></script>
+    <script src="@routes.Assets.at("javascripts/uservoice.js")"></script>
 
-        <img class="share-image" src="@routes.Assets.at("images/share-image.jpg")" />
-      </body>
-    </html>
+    <script>
+      mixpanel.track_links(".hiw-link", "Hiw Clicked", {});
+    </script>
+
+    <img class="share-image" src="@routes.Assets.at("images/share-image.jpg")" />
+  </body>
+</html>

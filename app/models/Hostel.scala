@@ -10,7 +10,8 @@ case class Hostel(
   hostelworldId: Option[Int],
   attributes: Map[String,Double],
   description: Option[String] = None,
-  currency: Option[String] = None
+  currency: Option[String] = None,
+  reviewsData: Seq[ReviewData] = Seq.empty
 ) {
   def isEmpty  = id == 0
   def nonEmpty = !isEmpty

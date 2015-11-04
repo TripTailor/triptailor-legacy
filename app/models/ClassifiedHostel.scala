@@ -21,7 +21,8 @@ object ClassifiedHostel {
       "currency" -> ch.hostel.currency,
       "images" -> new HostelImageUrlsBuilder(Play.current.configuration).hostelWorldUrls(ch.hostel),
       "url"    -> ch.hostel.url,
-      "tags"   -> ch.orderedTags
+      "tags"   -> ch.orderedTags,
+      "reviewsData" -> ch.hostel.reviewsData
     )
   }
 }

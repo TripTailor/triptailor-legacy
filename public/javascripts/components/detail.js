@@ -1,4 +1,11 @@
 var Header = React.createClass({displayName: "Header",
+  componentDidMount: function() {
+    mixpanel.track_links("#bookLink", "Booking", {
+      "hostel": hostel.name,
+      "price": hostel.price,
+      "currency": hostel.currency
+    });
+  },
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid header"}, 
@@ -8,7 +15,7 @@ var Header = React.createClass({displayName: "Header",
             /* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */
           ), 
           React.createElement("div", {className: "col-md-3"}, 
-            React.createElement("p", {className: "header-title"}, /* <strong>{hostel.price}<span className="currency">{hostel.currency}</span></strong> */hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
+            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.price, " ", React.createElement("span", {className: "currency"}, hostel.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {id: "bookLink", href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
           )
         )
       )
@@ -29,10 +36,7 @@ var Description = React.createClass({displayName: "Description",
 
 var Photos = React.createClass({displayName: "Photos",
   getInitialState: function() {
-    var photos = hostel.image.split(",");
-    if(photos[0] == "")
-      photos = [];
-    return {photos: photos, mainPhoto: photos.length > 0 ? 0 : -1, more: false};
+    return {photos: hostel.images, mainPhoto: hostel.images.length > 0 ? 0 : -1, more: false};
   },
   componentWillMount: function() {
     preloadPhotos(this.state.photos);
@@ -133,26 +137,11 @@ var Tag = React.createClass({displayName: "Tag",
 
 var Reviews = React.createClass({displayName: "Reviews",
   getInitialState: function() {
-    return {reviews: []}
-  },
-  componentWillMount: function() {
-    this.getReviews();
-  },
-  getReviews: function() {
-    $.ajax({
-      url: "../../assets/test/reviews.json",
-      dataType: "json",
-      type: "GET",
-      success: function(data) {
-        this.setState({reviews: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("Reviews test", status, err.toString());
-      }.bind(this)
-    });
+    return {reviews: hostel.reviewsData}
   },
   render: function() {
     var reviews = [];
+
     var selectedString = "";
     var selectedTags = $.map(this.props.tags, function(tag, i) {
       if(tag.type == 0) {
@@ -160,17 +149,28 @@ var Reviews = React.createClass({displayName: "Reviews",
         return tag.name;
       }
     });
+
     $.each(this.state.reviews, function(i, review) {
-      if(selectedTags.length == 0)
-        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
-      else
-        for(var j = 0; j <  selectedTags.length; j++) {
-          if(review.tags.indexOf(selectedTags[j]) != -1) {
-            reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.date, review: review.review}));
-            break;
+      if(selectedTags.length == 0) {
+        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: review.text}));
+      }
+      else {
+        var text = "";
+        var start = 0;
+        $.each(review.tagPositions, function(i, position) {
+          if(selectedTags.indexOf(position.tag) != -1) {
+            text += review.text.slice(start, position.positions[0]) + "<strong>" + review.text.slice(position.positions[0], position.positions[1]) + "</strong>";
+            start = position.positions[1];
           }
+        });
+
+        if(text.length > 0) {
+          text += review.text.slice(start, review.text.length);
+          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: text}));
         }
+      }
     });
+
     return (
       React.createElement("div", {className: "reviews"}, 
         React.createElement("p", {className: "reviews-label"}, React.createElement("strong", null, "Reviews")), 
@@ -185,10 +185,15 @@ var Reviews = React.createClass({displayName: "Reviews",
 
 var Review = React.createClass({displayName: "Review",
   render: function() {
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var d = new Date(this.props.date);
+    var date = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
     return (
       React.createElement("div", {className: "review"}, 
-        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer), " (", React.createElement("i", null, this.props.date), ")"), 
-        React.createElement("p", null, this.props.review)
+        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, date), " ", this.props.reviewer), 
+        React.createElement("p", {dangerouslySetInnerHTML: {__html: this.props.review}})
       )
     );
   }
@@ -202,12 +207,18 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     var tags = this.state.tags.slice();
     tags[i].type = 1 - tags[i].type;
     this.setState(tags);
+
+    mixpanel.track("Reviews Filtered", {
+      "hostel": hostel.name,
+      "tag": tags[i].name,
+      "type": tags[i].type == 0 ? "selected" : "unselected"
+    });
   },
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag})
-        /* <Reviews tags={this.state.tags} /> */
+        React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag}), 
+        React.createElement(Reviews, {tags: this.state.tags})
       )
     );
   }
