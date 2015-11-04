@@ -1,4 +1,11 @@
 var Header = React.createClass({displayName: "Header",
+  componentDidMount: function() {
+    mixpanel.track_links("#bookLink", "Booking", {
+      "hostel": hostel.name,
+      "price": hostel.price,
+      "currency": hostel.currency
+    });
+  },
   render: function() {
     return (
       React.createElement("div", {className: "container-fluid header"}, 
@@ -8,7 +15,7 @@ var Header = React.createClass({displayName: "Header",
             /* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */
           ), 
           React.createElement("div", {className: "col-md-3"}, 
-            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.price, " ", React.createElement("span", {className: "currency"}, hostel.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
+            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.price, " ", React.createElement("span", {className: "currency"}, hostel.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {id: "bookLink", href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
           )
         )
       )
@@ -145,7 +152,7 @@ var Reviews = React.createClass({displayName: "Reviews",
 
     $.each(this.state.reviews, function(i, review) {
       if(selectedTags.length == 0) {
-        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.date, review: review.text}));
+        reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: review.text}));
       }
       else {
         var text = "";
@@ -159,7 +166,7 @@ var Reviews = React.createClass({displayName: "Reviews",
 
         if(text.length > 0) {
           text += review.text.slice(start, review.text.length);
-          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, year: review.year, review: text}));
+          reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: text}));
         }
       }
     });
@@ -178,9 +185,14 @@ var Reviews = React.createClass({displayName: "Reviews",
 
 var Review = React.createClass({displayName: "Review",
   render: function() {
+    MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    var d = new Date(this.props.date);
+    var date = d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+
     return (
       React.createElement("div", {className: "review"}, 
-        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, this.props.reviewer)), 
+        React.createElement("p", {className: "review-label"}, React.createElement("strong", null, date), " ", this.props.reviewer), 
         React.createElement("p", {dangerouslySetInnerHTML: {__html: this.props.review}})
       )
     );
@@ -195,6 +207,12 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     var tags = this.state.tags.slice();
     tags[i].type = 1 - tags[i].type;
     this.setState(tags);
+
+    mixpanel.track("Reviews Filtered", {
+      "hostel": hostel.name,
+      "tag": tags[i].name,
+      "type": tags[i].type == 0 ? "selected" : "unselected"
+    });
   },
   render: function() {
     return (

@@ -20,6 +20,23 @@ var Header = React.createClass({
 });
 
 var Content = React.createClass({
+  componentDidMount: function() {
+    mixpanel.track_links("#istanbulLink", "Index Tip Clicked", {
+      city: "Istanbul"
+    });
+    mixpanel.track_links("#bangkokLink", "Index Tip Clicked", {
+      city: "Bangkok"
+    });
+    mixpanel.track_links("#amsterdamLink", "Index Tip Clicked", {
+      city: "Amsterdam"
+    });
+    mixpanel.track_links("#rioLink", "Index Tip Clicked", {
+      city: "Rio de Janeiro"
+    });
+    mixpanel.track_links("#nyLink", "Index Tip Clicked", {
+      city: "New York"
+    });
+  },
   render: function() {
     return (
       <div className="container-fluid">
@@ -32,7 +49,7 @@ var Content = React.createClass({
 
         <div className="row">
           <div className="col-md-8">
-            <a href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
+            <a id="istanbulLink" href={SEARCHURL + "?location=Istanbul,Turkey&tags=location-view-terrace&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
               <div className="tip-big">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
@@ -45,7 +62,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip bangkok">
-              <a href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
+              <a id="bangkokLink" href={SEARCHURL + "?location=Bangkok,Thailand&tags=clean-modern-spacious&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Bangkok, Thailand</h3>
@@ -60,7 +77,7 @@ var Content = React.createClass({
         <div className="row bottom-tips">
           <div className="col-md-4">
             <div className="tip amsterdam">
-              <a href={SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
+              <a id="amsterdamLink" href={SEARCHURL + "?location=Amsterdam,Netherlands&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Amsterdam, Netherlands</h3>
@@ -72,7 +89,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip rio">
-              <a href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
+              <a id="rioLink" href={SEARCHURL + "?location=Rio-de-Janeiro,Brazil&tags=fun-party-people&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>Rio de Janeiro, Brazil</h3>
@@ -84,7 +101,7 @@ var Content = React.createClass({
           </div>
           <div className="col-md-4">
             <div className="tip ny">
-              <a href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
+              <a id="nyLink" href={SEARCHURL + "?location=New-York,USA&tags=breakfast-bar-artwork&date-from=" + this.props.dateFrom + "&date-to=" + this.props.dateTo} className="tip-a">
                 <div className="tip-content-container">
                   <div className="tip-content text-center">
                     <h3>New York, USA</h3>
