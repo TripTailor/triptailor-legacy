@@ -95,21 +95,16 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
 
   def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
-    val queryParams = detailsParamsBinding.bindFromRequest.get
-
-    val classifiedHostelsFuture =
-      for {
-        hostel       ← hostelsDAO.loadHostel(name)
-        pricedHostel ← hostelWithScrapedPrice(hostel, queryParams)
-        parameters   = tagsQuery.replace("-", " ").replace("%21", "-")
-        classifier   = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified   = classifier.classifyByTags(Seq(pricedHostel), parameters.split("[ ,]"))
-      } yield classified
-
-    classifiedHostelsFuture map { classifiedHostels =>
-      val imageUrlsBuilder = new HostelImageUrlsBuilder(config)
-      val classifiedHostel = classifiedHostels.head
-      val json             = Json toJson classifiedHostel
+    for {
+      hostel           ← hostelsDAO.loadHostel(name)
+      pricedHostel     ← hostelWithScrapedPrice(hostel, detailsParamsBinding.bindFromRequest.get)
+      parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
+      classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+      classified       = classifier.classifyByTags(Seq(pricedHostel), parameters.split("[ ,]"))
+      imageUrlsBuilder = new HostelImageUrlsBuilder(config)
+      classifiedHostel = classified.head
+      json             = Json toJson classifiedHostel
+    } yield {
       Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel), json))
     }
   }
