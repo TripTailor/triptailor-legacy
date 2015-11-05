@@ -99,7 +99,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       hostel           ← hostelsDAO.loadHostel(name)
       pricedHostel     ← hostelWithScrapedPrice(hostel, detailsParamsBinding.bindFromRequest.get)
       parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
-      classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
+      classifier       = new HostelsClassifier(config, TagHolder.ClicheTags)
       classified       = classifier.classifyByTags(Seq(pricedHostel), parameters.split("[ ,]"))
       imageUrlsBuilder = new HostelImageUrlsBuilder(config)
       classifiedHostel = classified.head

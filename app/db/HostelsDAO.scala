@@ -23,15 +23,15 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   def loadModel(city: String, country: String): Future[Seq[models.Hostel]] =
     for {
       hostelRows ← db.run(hostelQuery(city, country).result)
-      hostel     ← Future.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _)))
+      hostel     ← db.run(DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _))))
     } yield hostel
 
   def loadHostel(name: String): Future[models.Hostel] = {
     val f =
       for {
         hostelRows  ← db.run(hostelQuery(name).take(1).result)
-        reviewsData ← Future.sequence(hostelRows.map(createHostelReviewsData))
-        hostel      ← Future.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1)))
+        reviewsData ← db.run(DBIO.sequence(hostelRows.map(createHostelReviewsData)))
+        hostel      ← db.run(DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1))))
       } yield hostel
     f.map(_.headOption getOrElse models.Hostel.empty)
   }
@@ -47,7 +47,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       if location.city === city && location.country === country
     } yield hostel
 
-  def createHostelWithAttributes(reviewsData: Seq[models.ReviewData], hostelRow: HostelRow): Future[models.Hostel] = {
+  private def createHostelWithAttributes(reviewsData: Seq[models.ReviewData], hostelRow: HostelRow) = {
     val sql =
       sql"""
         SELECT name, freq, cfreq, rating
@@ -55,10 +55,10 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         WHERE  hostel_attribute.hostel_id = ${hostelRow.id}
         AND    hostel_attribute.attribute_id = attribute.id
       """.as[HostelAttrsRow]
-    db.run(sql).map(createHostel(reviewsData, hostelRow, _))
+    sql.map(createHostel(reviewsData, hostelRow, _))
   }
 
-  private def createHostelReviewsData(hostelRow: HostelRow): Future[Seq[models.ReviewData]] = {
+  private def createHostelReviewsData(hostelRow: HostelRow) = {
     val Limit = 300
     val sql =
       sql"""
@@ -66,9 +66,8 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         FROM     attribute a, attribute_review ar, review r
         WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id}
         GROUP BY r.id, a.name, ar.positions
-        ORDER BY r.year DESC
       """.as[AttrPositionReviewRow]
-    db.run(sql).map(createReviewsData).map(_.take(Limit))
+    sql.map(createReviewsData).map(_.take(Limit))
   }
 
   private def createHostel(reviewsData: Seq[models.ReviewData], hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
@@ -93,7 +92,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   }
 
   private def createReviewsData(rows: Seq[AttrPositionReviewRow]) =
-    (rows.groupBy(triplet => triplet._3.id).values.toSeq.flatMap { case reviewRows =>
+    rows.groupBy(triplet => triplet._3.id).values.toSeq.flatMap { case reviewRows =>
       if (reviewRows.isEmpty)
         Seq.empty[models.ReviewData]
       else {
@@ -111,6 +110,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
           )
         )
       }
-    }).sortWith( (r1, r2) => r1.year.getOrElse(DateTime.now minusYears 10) isAfter r2.year.getOrElse(DateTime.now minusYears 10) )
+    }.sortBy(_.year.fold(Long.MaxValue)(_.getMillis))
 
 }
