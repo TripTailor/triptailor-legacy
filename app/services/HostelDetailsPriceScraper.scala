@@ -3,7 +3,7 @@ package services
 import javax.inject.Inject
 
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
+import org.jsoup.nodes.{Document, Element}
 
 import play.api.Configuration
 import play.api.Play.current
@@ -24,19 +24,19 @@ class HostelDetailsPriceScraper @Inject() (config: Configuration) {
     WS.url(uri).withQueryString("dateFrom" -> dateFrom, "dateTo" -> dateTo).get()
 
   private def extractPricingTableElements(html: String) = {
-    val elements = Jsoup.parse(html).select(".currency").iterator().asScala.toStream
-    elements.filter(hasPrice).map(el => parsePrice(el, parseDormType(el)))
+    val doc = Jsoup.parse(html)
+    val currencyOpt = extractCurrencyOpt(doc)
+    val elements = doc.select(".currency").iterator().asScala.toStream
+    elements.filter(hasPrice).map(el => parsePrice(el, parseDormType(el), currencyOpt))
   }
 
-  private def hasPrice(element: Element) = element.text.nonEmpty
+  private def extractCurrencyOpt(doc: Document) =
+    doc.select("#currency_list option").iterator.asScala.toList.find(_.attr("selected").trim == "true")
+      .map(_.attr("value").trim)
 
-  private def nonZeroPrices(pricingInfos: Seq[PricingInfo]) = pricingInfos.filter(_.price.exists(_ != 0))
-
-  private def sortByLowestPrice(pricingInfos: Seq[PricingInfo]) = pricingInfos.sortBy(_.price.get)
-
-  private def parsePrice(element: Element, dormType: DormType) =
+  private def parsePrice(element: Element, dormType: DormType, currencyOpt: Option[String]) =
     element.text match {
-      case PriceDataRegex(currency, price) => PricingInfo(Some(BigDecimal(price)), dormType, Some(currency))
+      case NumericPriceRegex(price) => PricingInfo(Some(BigDecimal(price)), dormType, currencyOpt)
     }
 
   private def parseDormType(element: Element) = {
@@ -46,6 +46,11 @@ class HostelDetailsPriceScraper @Inject() (config: Configuration) {
     else if (dormCode contains MixedCode) PublicDorm
     else PublicDorm
   }
+
+  private def hasPrice(element: Element) = element.text.nonEmpty
+  private def nonZeroPrices(pricingInfos: Seq[PricingInfo]) = pricingInfos.filter(_.price.exists(_ != 0))
+  private def sortByLowestPrice(pricingInfos: Seq[PricingInfo]) = pricingInfos.sortBy(_.price.get)
+
 }
 
 object HostelDetailsPriceScraper {
@@ -53,5 +58,5 @@ object HostelDetailsPriceScraper {
   private val PublicCode  = "Male"
   private val MixedCode   = "Mixed"
 
-  private val PriceDataRegex = """(\D+)(\d+\.?\d+)""".r
+  private val NumericPriceRegex = """.*?(\d+\.?\d+)""".r
 }
