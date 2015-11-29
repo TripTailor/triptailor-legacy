@@ -7,7 +7,7 @@ import org.jsoup.Jsoup
 import play.api.Configuration
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Json, Writes, JsValue}
 import play.api.libs.ws.WS
 
 import scala.concurrent.Future
@@ -21,6 +21,16 @@ case object UnknownDorm extends DormType
 
 case class PricingInfo(price: Option[BigDecimal], dormType: DormType, currency: Option[String])
 case class HostelPricingInfo(id: Int, pricingInfo: PricingInfo)
+
+object PricingInfo {
+  implicit val writes = new Writes[PricingInfo] {
+    def writes(pricing: PricingInfo): JsValue = Json.obj(
+      "currency" -> pricing.currency,
+      "dormType" -> pricing.dormType.toString,
+      "price"    -> pricing.price
+    )
+  }
+}
 
 @Singleton
 class HostelPriceScraper @Inject() (config: Configuration) {

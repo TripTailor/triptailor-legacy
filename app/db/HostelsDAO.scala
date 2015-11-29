@@ -36,6 +36,9 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
     f.map(_.headOption getOrElse models.Hostel.empty)
   }
 
+  def loadHostelUrl(name: String): Future[Option[java.net.URL]] =
+    db.run(hostelQuery(name).take(1).result).map(_.headOption.flatMap(hostel => hostel.url.map(new java.net.URL(_))))
+
   private def hostelQuery(name: String) =
     for {
       hostel ← Hostel if hostel.name === name

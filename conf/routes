@@ -15,6 +15,9 @@ GET     /hostels/search/:location/:from/:to     @controllers.SearchController.di
 GET     /hostels/search/:city/:tags/:from/:to   @controllers.SearchController.classify(city: String, tags: String, from: String, to: String)
 GET     /tags/suggestions                       @controllers.HintsController.tagSuggestions
 
+GET     /hostels/:name/tags/:tags/json          @controllers.SearchController.hostelDetails(name, tags)
+GET     /hostels/:name/pricing/json             @controllers.SearchController.hostelPricingInfo(name)
+
 GET     /stats                                  @controllers.StatsController.stats
 POST    /hostels/click                          @controllers.StatsController.saveHostelClick
 

@@ -33,16 +33,18 @@
   <body>
     <!--JS Reverse routing-->
     @helper.javascriptRouter("jsRoutes")(
-    routes.javascript.Assets.at,
-    routes.javascript.ApplicationController.index,
-    routes.javascript.ApplicationController.howItWorks,
-    routes.javascript.HintsController.hostelHints,
-    routes.javascript.HintsController.tagSuggestions,
-    routes.javascript.SearchController.search,
-    routes.javascript.SearchController.classify,
-    routes.javascript.SearchController.displayAll,
-    routes.javascript.SearchController.detail,
-    routes.javascript.StatsController.saveHostelClick
+      routes.javascript.Assets.at,
+      routes.javascript.ApplicationController.index,
+      routes.javascript.ApplicationController.howItWorks,
+      routes.javascript.HintsController.hostelHints,
+      routes.javascript.HintsController.tagSuggestions,
+      routes.javascript.SearchController.search,
+      routes.javascript.SearchController.classify,
+      routes.javascript.SearchController.displayAll,
+      routes.javascript.SearchController.detail,
+      routes.javascript.SearchController.hostelDetails,
+      routes.javascript.SearchController.hostelPricingInfo,
+      routes.javascript.StatsController.saveHostelClick
     )
 
     <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("react.min.js"))'></script>

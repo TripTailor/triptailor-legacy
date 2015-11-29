@@ -2,7 +2,6 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import db.StatsDAO
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._
 import play.api.routing.JavaScriptReverseRouter
@@ -30,6 +29,8 @@ class ApplicationController @Inject()(dbConfigProvider: DatabaseConfigProvider) 
         routes.javascript.SearchController.classify,
         routes.javascript.SearchController.displayAll,
         routes.javascript.SearchController.detail,
+        routes.javascript.SearchController.hostelDetails,
+        routes.javascript.SearchController.hostelPricingInfo,
         routes.javascript.StatsController.saveHostelClick
       )
     ).as("text/javascript")
