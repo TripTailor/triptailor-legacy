@@ -29,8 +29,7 @@ class ApplicationController @Inject()(dbConfigProvider: DatabaseConfigProvider) 
         routes.javascript.SearchController.classify,
         routes.javascript.SearchController.displayAll,
         routes.javascript.SearchController.detail,
-        routes.javascript.SearchController.hostelDetails,
-        routes.javascript.SearchController.hostelPricingInfo,
+        routes.javascript.SearchController.detailJson,
         routes.javascript.StatsController.saveHostelClick
       )
     ).as("text/javascript")

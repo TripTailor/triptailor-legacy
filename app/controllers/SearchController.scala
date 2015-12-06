@@ -53,7 +53,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         location         ← FutureO(loadLocation(location))
         _                = logger.info(s"loaded location $location")
         scraper          = new HostelPriceScraper(config)
-        pricingInfoModel ← loadPricingInfoAndModel(location, scraper, dateFrom, dateTo)
+        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo)
         pricingInfo      = pricingInfoModel._1
         model            = pricingInfoModel._2
         parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
@@ -80,7 +80,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         location         ← FutureO(loadLocation(location))
         _                = logger.info(s"loaded location $location")
         scraper          = new HostelPriceScraper(config)
-        pricingInfoModel ← loadPricingInfoAndModel(location, scraper, dateFrom, dateTo)
+        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo)
         pricingInfo      = pricingInfoModel._1
         model            = pricingInfoModel._2
         adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
@@ -94,28 +94,6 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
   }
 
   def detail(name: String, tagsQuery: String) = Action.async { implicit request =>
-    val params        = detailsParamsBinding.bindFromRequest.get
-    val hostelFuture  = hostelsDAO.loadHostel(name)
-    val pricingFuture = hostelsDAO.loadHostelUrl(name).flatMap(urlOpt => loadHostelPrice(urlOpt, params))
-
-    for {
-      hostel           ← hostelFuture
-      pricingOpt       ← pricingFuture
-      pricedHostel     = pricingOpt.fold(hostel)(pricing => hostel.copy(price = pricing.price, currency = pricing.currency))
-      parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
-      classifier       = new HostelsClassifier(config, TagHolder.ClicheTags)
-      classified       = classifier.classifyByTags(Seq(pricedHostel), parameters.split("[ ,]"))
-      imageUrlsBuilder = new HostelImageUrlsBuilder(config)
-      classifiedHostel = classified.head
-      json             = Json toJson classifiedHostel
-    } yield Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel), json))
-  }
-
-  def hostelPricingInfo(name: String) = Action.async { implicit request =>
-    loadHostelPricingInfo(name, detailsParamsBinding.bindFromRequest.get).map(pricingOpt => Ok(Json.toJson(pricingOpt)))
-  }
-
-  def hostelDetails(name: String, tagsQuery: String) = Action.async {
     for {
       hostel           ← hostelsDAO.loadHostel(name)
       parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
@@ -124,10 +102,32 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
       imageUrlsBuilder = new HostelImageUrlsBuilder(config)
       classifiedHostel = classified.head
       json             = Json toJson classifiedHostel
-    } yield Ok(Json.obj("imageUrls" -> imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel), "hostel" -> json))
+    } yield Ok(views.html.detail(classifiedHostel, imageUrlsBuilder.hostelWorldUrls(classifiedHostel.hostel), json))
   }
 
-  private def loadPricingInfoAndModel(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String) = {
+  /**
+    * Queries for hostel details, including reviews & pricing info
+    *
+    * @param name hostel name to query for
+    * @param tagsQuery set of tags for classification
+    * @return hostel json details
+    */
+  def detailJson(name: String, tagsQuery: String) = Action.async { implicit request =>
+    val params        = detailsParamsBinding.bindFromRequest.get
+    val hostelFuture  = hostelsDAO.loadHostelWithReviews(name)
+    val pricingFuture = hostelsDAO.loadHostelUrl(name).flatMap(urlOpt => loadHostelPricingInfo(urlOpt, params))
+
+    for {
+      hostel       ← hostelFuture
+      pricingOpt   ← pricingFuture
+      pricedHostel = pricingOpt.fold(hostel)(pricing => hostel.copy(price = pricing.price, currency = pricing.currency))
+      parameters   = tagsQuery.replace("-", " ").replace("%21", "-")
+      classifier   = new HostelsClassifier(config, TagHolder.ClicheTags)
+      classified   = classifier.classifyByTags(Seq(pricedHostel), parameters.split("[ ,]"))
+    } yield Ok(Json toJson classified.head)
+  }
+
+  private def loadModelPricingInfo(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String) = {
     val pricingInfoFuture = scraper.pricingInfo(location.city, location.country, dateFrom, dateTo)
     val modelFuture       = hostelsDAO.loadModel(location.city, location.country)
     for {
@@ -138,23 +138,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     } yield (pricingInfo, model)
   }
 
-  private def loadHostelPricingInfo(name: String, params: DetailsParams) =
-    for {
-      urlOpt     ← hostelsDAO.loadHostelUrl(name)
-      pricingOpt ← loadHostelPrice(urlOpt, params)
-    } yield pricingOpt
-
-  private def loadHostelDetailsInfo(name: String, tagsQuery: String) =
-    for {
-      hostel           ← hostelsDAO.loadHostel(name)
-      parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
-      classifier       = new HostelsClassifier(config, TagHolder.ClicheTags)
-      classified       = classifier.classifyByTags(Seq(hostel), parameters.split("[ ,]"))
-      imageUrlsBuilder = new HostelImageUrlsBuilder(config)
-      classifiedHostel = classified.head
-    } yield classifiedHostel
-
-  private def loadHostelPrice(urlOpt: Option[java.net.URL], params: DetailsParams) =
+  private def loadHostelPricingInfo(urlOpt: Option[java.net.URL], params: DetailsParams) =
     urlOpt.fold {
       Future.successful[Option[PricingInfo]](None)
     } { url =>
