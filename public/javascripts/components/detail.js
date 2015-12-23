@@ -15,7 +15,7 @@ var Header = React.createClass({displayName: "Header",
             /* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */
           ), 
           React.createElement("div", {className: "col-md-3"}, 
-            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, hostel.price, " ", React.createElement("span", {className: "currency"}, hostel.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {id: "bookLink", href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
+            React.createElement("p", {className: "header-title"}, React.createElement("strong", null, this.props.price, " ", React.createElement("span", {className: "currency"}, this.props.currency)), hostel.url != null ? React.createElement("span", {className: "book-span"}, React.createElement("a", {id: "bookLink", href: hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co", target: "_blank", className: "book-link"}, "Book")) : "")
           )
         )
       )
@@ -136,9 +136,6 @@ var Tag = React.createClass({displayName: "Tag",
 });
 
 var Reviews = React.createClass({displayName: "Reviews",
-  getInitialState: function() {
-    return {reviews: hostel.reviewsData}
-  },
   render: function() {
     var reviews = [];
 
@@ -150,7 +147,7 @@ var Reviews = React.createClass({displayName: "Reviews",
       }
     });
 
-    $.each(this.state.reviews, function(i, review) {
+    $.each(this.props.reviews, function(i, review) {
       if(selectedTags.length == 0) {
         reviews.push(React.createElement(Review, {key: i, reviewer: review.reviewer, date: review.year, review: review.text}));
       }
@@ -174,10 +171,14 @@ var Reviews = React.createClass({displayName: "Reviews",
     return (
       React.createElement("div", {className: "reviews"}, 
         React.createElement("p", {className: "reviews-label"}, React.createElement("strong", null, "Reviews")), 
-        React.createElement("p", {className: "reviews-copy"}, "Showing ", React.createElement("strong", null, reviews.length), " (of ", this.state.reviews.length, " total reviews) ", selectedTags.length > 0 ? React.createElement("span", null, "related with ", React.createElement("strong", null, selectedString)) : ""), 
-        React.createElement("div", null, 
-          reviews
-        )
+        this.props.called ?
+          React.createElement("div", null, 
+            React.createElement("p", {className: "reviews-copy"}, "Showing ", React.createElement("strong", null, reviews.length), " (of ", this.props.reviews.length, " total reviews) ", selectedTags.length > 0 ? React.createElement("span", null, "related with ", React.createElement("strong", null, selectedString)) : ""), 
+            React.createElement("div", null, 
+              reviews
+            )
+          )
+          : React.createElement("p", {className: "text-center"}, React.createElement("img", {src: "../../../assets/images/spinner.gif"}))
       )
     );
   }
@@ -218,7 +219,7 @@ var ReviewsSection = React.createClass({displayName: "ReviewsSection",
     return (
       React.createElement("div", null, 
         React.createElement(Tags, {tags: this.state.tags, toggleTag: this.toggleTag}), 
-        React.createElement(Reviews, {tags: this.state.tags})
+        React.createElement(Reviews, React.__spread({tags: this.state.tags},  this.props))
       )
     );
   }
@@ -231,7 +232,7 @@ var Content = React.createClass({displayName: "Content",
         React.createElement("div", {className: "row"}, 
           React.createElement("div", {className: "col-md-9"}, 
             React.createElement(Photos, null), 
-            React.createElement(ReviewsSection, null)
+            React.createElement(ReviewsSection, React.__spread({},  this.props))
           ), 
           React.createElement("div", {className: "col-md-3"}, 
             React.createElement(Description, null)
@@ -243,11 +244,33 @@ var Content = React.createClass({displayName: "Content",
 });
 
 var Detail = React.createClass({displayName: "Detail",
+  getInitialState: function() {
+    return {reviews: hostel.reviewsData, price: hostel.price, currency: hostel.currency, called: false};
+  },
+  componentDidMount: function() {
+    this.getPriceAndReviews();
+  },
+  getPriceAndReviews: function() {
+    var uris = window.location.pathname.split("/");
+    var tags = uris[uris.length - 1];
+    var url = jsRoutes.controllers.SearchController.detailJson(hostel.name, tags).absoluteURL() + window.location.search;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: "GET",
+      success: function(data) {
+        this.setState({reviews: data.reviewsData, price: data.price, currency: data.currency, called: true});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }
+    });
+  },
   render: function() {
     return (
       React.createElement("div", null, 
-        React.createElement(Header, null), 
-        React.createElement(Content, null)
+        React.createElement(Header, {price: this.state.price, currency: this.state.currency}), 
+        React.createElement(Content, {reviews: this.state.reviews, called: this.state.called})
       )
     );
   }
