@@ -122,6 +122,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
           )
         )
       }
-    }.sortBy(_.year.fold(Long.MaxValue)(_.getMillis))
+    }.sortBy(- _.year.fold(Long.MinValue)(_.getMillis))
 
 }
