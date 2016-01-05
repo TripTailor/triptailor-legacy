@@ -46,7 +46,7 @@ val consoleCommands =
     | val app = loader.load(context)
     | Play.start(app)
     | import Play.current
-    | implicit val _ = scala.concurrent.ExecutionContext.global
+    | implicit val ec = scala.concurrent.ExecutionContext.global
   """.stripMargin
 
 /** Docker settings **/
