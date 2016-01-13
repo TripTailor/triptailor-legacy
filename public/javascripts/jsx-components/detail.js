@@ -15,7 +15,7 @@ var Header = React.createClass({
             {/* <p className="hostel-address">Street and number, Neighborhood, City, Country</p> */}
           </div>
           <div className="col-md-3">
-            <p className="header-title">{<strong>{hostel.price} <span className="currency">{hostel.currency}</span></strong>}{hostel.url != null ? <span className="book-span"><a id="bookLink" href={hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co"} target="_blank" className="book-link">Book</a></span> : ""}</p>
+            <p className="header-title">{<strong>{this.props.price} <span className="currency">{this.props.currency}</span></strong>}{hostel.url != null ? <span className="book-span"><a id="bookLink" href={hostel.url + "?dateFrom=" + getQueryValue("date-from") + "&dateTo=" + getQueryValue("date-to") + "&affiliate=triptailor.co"} target="_blank" className="book-link">Book</a></span> : ""}</p>
           </div>
         </div>
       </div>
@@ -136,9 +136,6 @@ var Tag = React.createClass({
 });
 
 var Reviews = React.createClass({
-  getInitialState: function() {
-    return {reviews: hostel.reviewsData}
-  },
   render: function() {
     var reviews = [];
 
@@ -150,7 +147,7 @@ var Reviews = React.createClass({
       }
     });
 
-    $.each(this.state.reviews, function(i, review) {
+    $.each(this.props.reviews, function(i, review) {
       if(selectedTags.length == 0) {
         reviews.push(<Review key={i} reviewer={review.reviewer} date={review.year} review={review.text} />);
       }
@@ -174,10 +171,14 @@ var Reviews = React.createClass({
     return (
       <div className="reviews">
         <p className="reviews-label"><strong>Reviews</strong></p>
-        <p className="reviews-copy">Showing <strong>{reviews.length}</strong> (of {this.state.reviews.length} total reviews) {selectedTags.length > 0 ? <span>related with <strong>{selectedString}</strong></span> : ""}</p>
-        <div>
-          {reviews}
-        </div>
+        {this.props.called ?
+          <div>
+            <p className="reviews-copy">Showing <strong>{reviews.length}</strong> (of {this.props.reviews.length} total reviews) {selectedTags.length > 0 ? <span>related with <strong>{selectedString}</strong></span> : ""}</p>
+            <div>
+              {reviews}
+            </div>
+          </div>
+          : <p className="text-center"><img src="../../../assets/images/spinner.gif" /></p>}
       </div>
     );
   }
@@ -218,7 +219,7 @@ var ReviewsSection = React.createClass({
     return (
       <div>
         <Tags tags={this.state.tags} toggleTag={this.toggleTag} />
-        <Reviews tags={this.state.tags} />
+        <Reviews tags={this.state.tags} {...this.props} />
       </div>
     );
   }
@@ -231,7 +232,7 @@ var Content = React.createClass({
         <div className="row">
           <div className="col-md-9">
             <Photos />
-            <ReviewsSection />
+            <ReviewsSection {...this.props} />
           </div>
           <div className="col-md-3">
             <Description />
@@ -243,11 +244,33 @@ var Content = React.createClass({
 });
 
 var Detail = React.createClass({
+  getInitialState: function() {
+    return {reviews: hostel.reviewsData, price: hostel.price, currency: hostel.currency, called: false};
+  },
+  componentDidMount: function() {
+    this.getPriceAndReviews();
+  },
+  getPriceAndReviews: function() {
+    var uris = window.location.pathname.split("/");
+    var tags = uris[uris.length - 1];
+    var url = jsRoutes.controllers.SearchController.detailJson(hostel.name, tags).absoluteURL() + window.location.search;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: "GET",
+      success: function(data) {
+        this.setState({reviews: data.reviewsData, price: data.price, currency: data.currency, called: true});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err.toString());
+      }
+    });
+  },
   render: function() {
     return (
       <div>
-        <Header />
-        <Content />
+        <Header price={this.state.price} currency={this.state.currency} />
+        <Content reviews={this.state.reviews} called={this.state.called} />
       </div>
     );
   }

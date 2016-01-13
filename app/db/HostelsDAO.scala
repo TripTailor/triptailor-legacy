@@ -29,6 +29,15 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   def loadHostel(name: String): Future[models.Hostel] = {
     val f =
       for {
+        hostelRows ← db.run(hostelQuery(name).take(1).result)
+        hostel     ← db.run(DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _))))
+      } yield hostel
+    f.map(_.headOption getOrElse models.Hostel.empty)
+  }
+
+  def loadHostelWithReviews(name: String): Future[models.Hostel] = {
+    val f =
+      for {
         hostelRows  ← db.run(hostelQuery(name).take(1).result)
         reviewsData ← db.run(DBIO.sequence(hostelRows.map(createHostelReviewsData)))
         hostel      ← db.run(DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1))))
@@ -113,6 +122,6 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
           )
         )
       }
-    }.sortBy(_.year.fold(Long.MaxValue)(_.getMillis))
+    }.sortBy(- _.year.fold(Long.MinValue)(_.getMillis))
 
 }
