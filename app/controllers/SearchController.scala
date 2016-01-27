@@ -129,7 +129,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
   private def loadModelPricingInfo(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String) = {
     val pricingInfoFuture = scraper.pricingInfo(location.city, location.country, dateFrom, dateTo)
-    val modelFuture       = hostelsDAO.loadModel(location.city, location.country)
+    val modelFuture       = hostelsDAO.loadModelWithReviews(location.city, location.country)
     for {
       pricingInfo ← FutureO(pricingInfoFuture.map(Some(_)))
       _           = logger.info("loaded pricing info")

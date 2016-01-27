@@ -19,7 +19,8 @@ case class ReviewData(
   reviewer: Option[String],
   city: Option[String],
   gender: Option[String],
-  age: Option[Int]
+  age: Option[Int],
+  sentiment: BigDecimal
 )
 
 object AttributePositions {

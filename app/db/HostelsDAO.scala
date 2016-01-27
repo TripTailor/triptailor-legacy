@@ -21,32 +21,43 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
   type AttrPositionReviewRow = (String, String, ReviewRow)
 
   def loadModel(city: String, country: String): Future[Seq[models.Hostel]] =
-    for {
-      hostelRows ← db.run(hostelQuery(city, country).result)
-      hostel     ← db.run(DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _))))
-    } yield hostel
+    db.run {
+      for {
+        hostelRows ← hostelQuery(city, country).result
+        hostel     ← DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _)))
+      } yield hostel
+    }
+
+  def loadModelWithReviews(city: String, country: String): Future[Seq[models.Hostel]] =
+    db.run {
+      for {
+        hostelRows  ← hostelQuery(city, country).result
+        reviewsData ← DBIO.sequence(hostelRows.map(createHostelReviewsData))
+        hostel      ← DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1)))
+      } yield hostel
+    }
 
   def loadHostel(name: String): Future[models.Hostel] = {
-    val f =
+    val hostels =
       for {
-        hostelRows ← db.run(hostelQuery(name).take(1).result)
-        hostel     ← db.run(DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _))))
+        hostelRows ← hostelQuery(name).take(1).result
+        hostel ← DBIO.sequence(hostelRows.map(createHostelWithAttributes(Seq.empty, _)))
       } yield hostel
-    f.map(_.headOption getOrElse models.Hostel.empty)
+    db.run(hostels.map(_.headOption getOrElse models.Hostel.empty))
   }
 
   def loadHostelWithReviews(name: String): Future[models.Hostel] = {
-    val f =
+    val hostels =
       for {
-        hostelRows  ← db.run(hostelQuery(name).take(1).result)
-        reviewsData ← db.run(DBIO.sequence(hostelRows.map(createHostelReviewsData)))
-        hostel      ← db.run(DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1))))
+        hostelRows  ← hostelQuery(name).take(1).result
+        reviewsData ← DBIO.sequence(hostelRows.map(createHostelReviewsData))
+        hostel      ← DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1)))
       } yield hostel
-    f.map(_.headOption getOrElse models.Hostel.empty)
+    db.run(hostels.map(_.headOption getOrElse models.Hostel.empty))
   }
 
   def loadHostelUrl(name: String): Future[Option[java.net.URL]] =
-    db.run(hostelQuery(name).take(1).result).map(_.headOption.flatMap(hostel => hostel.url.map(new java.net.URL(_))))
+    db.run(hostelQuery(name).take(1).result.map(_.headOption.flatMap(hostel => hostel.url.map(new java.net.URL(_)))))
 
   private def hostelQuery(name: String) =
     for {
@@ -118,7 +129,8 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
             reviewer           = review.reviewer,
             city               = review.city,
             gender             = review.gender,
-            age                = review.age
+            age                = review.age,
+            sentiment          = review.sentiment
           )
         )
       }

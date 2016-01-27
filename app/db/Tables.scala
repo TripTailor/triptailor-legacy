@@ -14,13 +14,13 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema = Array(Attribute.schema, AttributeReview.schema, AttributeSearch.schema, Hostel.schema, HostelAttribute.schema, HostelSearch.schema, HostelService.schema, Location.schema, PlayEvolutions.schema, Review.schema, Search.schema, Service.schema, Share.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(Attribute.schema, AttributeReview.schema, AttributeSearch.schema, Hostel.schema, HostelAttribute.schema, HostelSearch.schema, HostelService.schema, Location.schema, PlayEvolutions.schema, Review.schema, Search.schema, Service.schema, Share.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
   /** Entity class storing rows of table Attribute
    *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
-   *  @param name Database column name SqlType(varchar), Length(200,true) */
+   *  @param name Database column name SqlType(varchar), Length(1000,true) */
   case class AttributeRow(id: Int, name: String)
   /** GetResult implicit for fetching AttributeRow objects using plain SQL queries */
   implicit def GetResultAttributeRow(implicit e0: GR[Int], e1: GR[String]): GR[AttributeRow] = GR{
@@ -35,8 +35,8 @@ trait Tables {
 
     /** Database column id SqlType(serial), AutoInc, PrimaryKey */
     val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column name SqlType(varchar), Length(200,true) */
-    val name: Rep[String] = column[String]("name", O.Length(200,varying=true))
+    /** Database column name SqlType(varchar), Length(1000,true) */
+    val name: Rep[String] = column[String]("name", O.Length(1000,varying=true))
   }
   /** Collection-like TableQuery object for table Attribute */
   lazy val Attribute = new TableQuery(tag => new Attribute(tag))
@@ -327,28 +327,29 @@ trait Tables {
   lazy val PlayEvolutions = new TableQuery(tag => new PlayEvolutions(tag))
 
   /** Entity class storing rows of table Review
-   *  @param id Database column id SqlType(serial), AutoInc
+   *  @param id Database column id SqlType(serial), AutoInc, PrimaryKey
    *  @param hostelId Database column hostel_id SqlType(int4)
    *  @param text Database column text SqlType(text)
    *  @param year Database column year SqlType(date), Default(None)
    *  @param reviewer Database column reviewer SqlType(varchar), Length(200,true), Default(None)
    *  @param city Database column city SqlType(varchar), Length(200,true), Default(None)
    *  @param gender Database column gender SqlType(varchar), Length(100,true), Default(None)
-   *  @param age Database column age SqlType(int4), Default(None) */
-  case class ReviewRow(id: Int, hostelId: Int, text: String, year: Option[java.sql.Date] = None, reviewer: Option[String] = None, city: Option[String] = None, gender: Option[String] = None, age: Option[Int] = None)
+   *  @param age Database column age SqlType(int4), Default(None)
+   *  @param sentiment Database column sentiment SqlType(numeric), Default(0) */
+  case class ReviewRow(id: Int, hostelId: Int, text: String, year: Option[java.sql.Date] = None, reviewer: Option[String] = None, city: Option[String] = None, gender: Option[String] = None, age: Option[Int] = None, sentiment: scala.math.BigDecimal = 0)
   /** GetResult implicit for fetching ReviewRow objects using plain SQL queries */
-  implicit def GetResultReviewRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[java.sql.Date]], e3: GR[Option[String]], e4: GR[Option[Int]]): GR[ReviewRow] = GR{
+  implicit def GetResultReviewRow(implicit e0: GR[Int], e1: GR[String], e2: GR[Option[java.sql.Date]], e3: GR[Option[String]], e4: GR[Option[Int]], e5: GR[scala.math.BigDecimal]): GR[ReviewRow] = GR{
     prs => import prs._
-    ReviewRow.tupled((<<[Int], <<[Int], <<[String], <<?[java.sql.Date], <<?[String], <<?[String], <<?[String], <<?[Int]))
+    ReviewRow.tupled((<<[Int], <<[Int], <<[String], <<?[java.sql.Date], <<?[String], <<?[String], <<?[String], <<?[Int], <<[scala.math.BigDecimal]))
   }
   /** Table description of table review. Objects of this class serve as prototypes for rows in queries. */
   class Review(_tableTag: Tag) extends Table[ReviewRow](_tableTag, "review") {
-    def * = (id, hostelId, text, year, reviewer, city, gender, age) <> (ReviewRow.tupled, ReviewRow.unapply)
+    def * = (id, hostelId, text, year, reviewer, city, gender, age, sentiment) <> (ReviewRow.tupled, ReviewRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(id), Rep.Some(hostelId), Rep.Some(text), year, reviewer, city, gender, age).shaped.<>({r=>import r._; _1.map(_=> ReviewRow.tupled((_1.get, _2.get, _3.get, _4, _5, _6, _7, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(id), Rep.Some(hostelId), Rep.Some(text), year, reviewer, city, gender, age, Rep.Some(sentiment)).shaped.<>({r=>import r._; _1.map(_=> ReviewRow.tupled((_1.get, _2.get, _3.get, _4, _5, _6, _7, _8, _9.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
-    /** Database column id SqlType(serial), AutoInc */
-    val id: Rep[Int] = column[Int]("id", O.AutoInc)
+    /** Database column id SqlType(serial), AutoInc, PrimaryKey */
+    val id: Rep[Int] = column[Int]("id", O.AutoInc, O.PrimaryKey)
     /** Database column hostel_id SqlType(int4) */
     val hostelId: Rep[Int] = column[Int]("hostel_id")
     /** Database column text SqlType(text) */
@@ -363,6 +364,8 @@ trait Tables {
     val gender: Rep[Option[String]] = column[Option[String]]("gender", O.Length(100,varying=true), O.Default(None))
     /** Database column age SqlType(int4), Default(None) */
     val age: Rep[Option[Int]] = column[Option[Int]]("age", O.Default(None))
+    /** Database column sentiment SqlType(numeric), Default(0) */
+    val sentiment: Rep[scala.math.BigDecimal] = column[scala.math.BigDecimal]("sentiment", O.Default(0))
   }
   /** Collection-like TableQuery object for table Review */
   lazy val Review = new TableQuery(tag => new Review(tag))
