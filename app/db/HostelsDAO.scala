@@ -101,7 +101,7 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         FROM     attribute a, attribute_review ar, review r
         WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id} #$tagsFilter
         GROUP BY r.id, a.name, ar.positions
-        ORDER BY r.sentiment
+        ORDER BY r.sentiment DESC
       """.as[AttrPositionReviewRow]
     sql.map(createReviewsData).map(_.take(3))
   }

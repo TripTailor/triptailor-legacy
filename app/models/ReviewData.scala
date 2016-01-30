@@ -51,7 +51,8 @@ object ReviewData {
       "reviewer"     -> rd.reviewer,
       "city"         -> rd.city,
       "gender"       -> rd.gender,
-      "age"          -> rd.age
+      "age"          -> rd.age,
+      "sentiment"    -> rd.sentiment
     )
   }
 }
