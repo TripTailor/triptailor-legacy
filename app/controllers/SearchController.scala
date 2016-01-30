@@ -53,11 +53,11 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         location         ← FutureO(loadLocation(location))
         _                = logger.info(s"loaded location $location")
         scraper          = new HostelPriceScraper(config)
-        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo)
-        pricingInfo      = pricingInfoModel._1
-        model            = pricingInfoModel._2
         parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
         possibleHostel   = parameters.split(",").head.mkString
+        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, parameters.split("[ ,]"))
+        pricingInfo      = pricingInfoModel._1
+        model            = pricingInfoModel._2
         hostel           ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
         adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
         searchID         ← if (hostel.nonEmpty) FutureO(searchesDAO.saveHostelSearch(sessionId, hostel.name, location.city, adWords))
@@ -80,7 +80,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
         location         ← FutureO(loadLocation(location))
         _                = logger.info(s"loaded location $location")
         scraper          = new HostelPriceScraper(config)
-        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo)
+        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, Seq())
         pricingInfo      = pricingInfoModel._1
         model            = pricingInfoModel._2
         adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
@@ -127,9 +127,9 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     } yield Ok(Json toJson classified.head)
   }
 
-  private def loadModelPricingInfo(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String) = {
+  private def loadModelPricingInfo(location: Location, scraper: HostelPriceScraper, dateFrom: String, dateTo: String, tags: Seq[String]) = {
     val pricingInfoFuture = scraper.pricingInfo(location.city, location.country, dateFrom, dateTo)
-    val modelFuture       = hostelsDAO.loadModelWithReviews(location.city, location.country)
+    val modelFuture       = hostelsDAO.loadModelWithReviews(location.city, location.country, tags)
     for {
       pricingInfo ← FutureO(pricingInfoFuture.map(Some(_)))
       _           = logger.info("loaded pricing info")

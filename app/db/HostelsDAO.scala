@@ -28,11 +28,11 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
       } yield hostel
     }
 
-  def loadModelWithReviews(city: String, country: String): Future[Seq[models.Hostel]] =
+  def loadModelWithReviews(city: String, country: String, tags: Seq[String]): Future[Seq[models.Hostel]] =
     db.run {
       for {
         hostelRows  ← hostelQuery(city, country).result
-        reviewsData ← DBIO.sequence(hostelRows.map(createHostelReviewsData))
+        reviewsData ← DBIO.sequence(hostelRows.map(createHostelReviewsDataFilteredByTags(tags)))
         hostel      ← DBIO.sequence(hostelRows.zip(reviewsData).map(tuple => createHostelWithAttributes(tuple._2, tuple._1)))
       } yield hostel
     }
@@ -91,6 +91,19 @@ class HostelsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvide
         GROUP BY r.id, a.name, ar.positions
       """.as[AttrPositionReviewRow]
     sql.map(createReviewsData).map(_.take(Limit))
+  }
+
+  private def createHostelReviewsDataFilteredByTags(tags: Seq[String])(hostelRow: HostelRow) = {
+    val tagsFilter = if (tags.nonEmpty) "AND a.name IN " + tags.mkString("('", "', '", "')") else ""
+    val sql =
+      sql"""
+        SELECT   a.name, ar.positions, r.*
+        FROM     attribute a, attribute_review ar, review r
+        WHERE    a.id = ar.attribute_id AND ar.review_id = r.id AND hostel_id = ${hostelRow.id} #$tagsFilter
+        GROUP BY r.id, a.name, ar.positions
+        ORDER BY r.sentiment
+      """.as[AttrPositionReviewRow]
+    sql.map(createReviewsData).map(_.take(3))
   }
 
   private def createHostel(reviewsData: Seq[models.ReviewData], hr: HostelRow, attrsRows: Seq[HostelAttrsRow]) =
