@@ -13,7 +13,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
 import play.api.mvc.{Action, Controller}
-import play.api.{Configuration, Logger, Play}
+import play.api.{Configuration, Play}
 import services.{HostelDetailsPriceScraper, HostelImageUrlsBuilder, HostelPriceScraper, PricingInfo}
 
 import scala.concurrent.Future
@@ -25,8 +25,6 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
                                  searchesDAO: SearchesDAO,
                                  tagsDAO: TagsDAO,
                                  config: Configuration) extends Controller {
-
-  private val logger = Logger(this.getClass)
 
   def search = Action.async { implicit request =>
     val locationParams = locationTagsParamsBinding.bindFromRequest.get
@@ -51,13 +49,11 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val fOpt =
       for {
         location             ← FutureO(loadLocation(location))
-        _                    = logger.info(s"loaded location $location")
         scraper              = new HostelPriceScraper(config)
         tags                 = tagsQuery.split("-")
         (pricingInfo, model) ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, tags)
         adWords              = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
         searchID             ← FutureO(searchesDAO.saveTagsSearch(sessionId, tags, location.city, adWords))
-        _                    = logger.info(s"saved search $searchID")
         classifier           = new HostelsClassifier(config, TagHolder.ClicheTags)
         classified           = classifier.classifyByTags(model.toSeq, tags)
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
@@ -72,12 +68,10 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val fOpt =
       for {
         location             ← FutureO(loadLocation(location))
-        _                    = logger.info(s"loaded location $location")
         scraper              = new HostelPriceScraper(config)
         (pricingInfo, model) ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, Seq())
         adWords              = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
         searchID             ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
-        _                    = logger.info(s"saved search $searchID")
         classifier           = new HostelsClassifier(config, TagHolder.ClicheTags)
         classified           = classifier.classifyByTags(model.toSeq, tags = Seq(""))
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
@@ -124,9 +118,7 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
     val modelFuture       = hostelsDAO.loadModelWithReviews(location.city, location.country, tags)
     for {
       pricingInfo ← FutureO(pricingInfoFuture.map(Some(_)))
-      _           = logger.info("loaded pricing info")
       model       ← FutureO(modelFuture.map(Some(_)))
-      _           = logger.info("loaded model")
     } yield (pricingInfo, model)
   }
 
