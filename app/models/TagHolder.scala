@@ -13,12 +13,6 @@ case class TagHolder(attribute: String, rating: Double, tagType: Int) {
 
 object TagHolder {
 
-  lazy val ClicheTags: Set[String] = {
-    play.api.Play.current.resource("resources/cliche_tags.txt")
-      .map(uri => Source.fromFile(uri.getPath).getLines.toSet)
-      .getOrElse(Set.empty)
-  }
-
   val SharedType = 0
   val UniqueType = 1
 

@@ -7,13 +7,14 @@ import org.joda.time.DateTime
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.db.slick.DatabaseConfigProvider
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{Result, Action, Controller}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class StatsController @Inject() (dbConfigProvider: DatabaseConfigProvider, statsDAO: StatsDAO) extends Controller {
+class StatsController @Inject()(dbConfigProvider: DatabaseConfigProvider,
+                                statsDAO: StatsDAO,
+                                implicit val ec: ExecutionContext) extends Controller {
 
   def saveHostelClick = Action.async { implicit request =>
     statsParamsBinding.bindFromRequest.fold(

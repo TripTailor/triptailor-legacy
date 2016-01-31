@@ -1,15 +1,18 @@
 package classification
 
-import com.google.inject.Inject
+import javax.inject.{Inject, Singleton}
+
 import models.{ClassifiedHostel, Hostel, TagHolder}
 import play.api.Configuration
+import services.ClicheTagsFilterService
 
 trait HostelsClassifierConfig { self: HostelsClassifier =>
   lazy val TotalTags  = config.getInt("classifier.hostels.model.totalTags").get
   lazy val WeightBase = config.getDouble("classifier.hostels.model.weightBase").get
 }
 
-class HostelsClassifier @Inject()(protected val config: Configuration, protected val clicheTags: Set[String])
+@Singleton
+class HostelsClassifier @Inject()(protected val config: Configuration, filter: ClicheTagsFilterService)
   extends HostelsClassifierConfig {
 
   /**
@@ -67,7 +70,7 @@ class HostelsClassifier @Inject()(protected val config: Configuration, protected
   }
 
   private def createTags(ar: Map[String,Double], tagType: Int, m: Hostel): Seq[TagHolder] = {
-    def condition(attr: String) = !clicheTags.contains(attr)
+    def condition(attr: String) = !filter.clicheTags.contains(attr)
 
     ar.toSeq.flatMap { case (a, r) =>
       if (condition(a))

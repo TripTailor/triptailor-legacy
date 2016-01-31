@@ -1,6 +1,6 @@
 package services
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
@@ -13,6 +13,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.collection.JavaConverters._
 import scala.concurrent.Future
 
+@Singleton
 class HostelDetailsPriceScraper @Inject() (config: Configuration) {
   import HostelDetailsPriceScraper._
 

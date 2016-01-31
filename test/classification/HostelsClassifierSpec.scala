@@ -4,13 +4,14 @@ import com.typesafe.config.ConfigFactory
 import models.{TagHolder, Hostel}
 import org.scalatest.{Matchers, WordSpec}
 import play.api.Configuration
+import services.ClicheTagsFilterService
 
 class HostelsClassifierSpec extends WordSpec with Matchers {
   import TagHolder.{SharedType, UniqueType}
 
   "#classify" should {
     "make the first classified hostel obtained from model be the same as H" in {
-      val classifier = new HostelsClassifier(generateConfig(), clicheTags = Set())
+      val classifier = new HostelsClassifier(generateConfig(), ClicheTagsFilterMock)
 
       val H1 = Hostel(1, "1", 10, None, "", None, None, Map("a" -> 1))
       val H2 = Hostel(2, "2", 10, None, "", None, None, Map("b" -> 1))
@@ -24,7 +25,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
     }
 
     "includes H as first classified hostel when model does not already include it" in {
-      val classifier = new HostelsClassifier(generateConfig(), clicheTags = Set())
+      val classifier = new HostelsClassifier(generateConfig(), ClicheTagsFilterMock)
 
       val H1 = Hostel(1, "1", 10, None, "", None, None, Map("a" -> 1))
       val H2 = Hostel(2, "2", 10, None, "", None, None, Map("b" -> 1))
@@ -43,7 +44,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val tags2 = ('s' to 'z').map(_.toString)
 
       val totalTagsCount = tags1.size + tags2.size
-      val classifier     = new HostelsClassifier(generateConfig(totalTagsCount), clicheTags = Set())
+      val classifier     = new HostelsClassifier(generateConfig(totalTagsCount), ClicheTagsFilterMock)
 
       val H1 = Hostel(1, "1", 10, None, "", None, None, tags1.map(_ -> 1.0).toMap)
       val H2 = Hostel(2, "2", 10, None, "", None, None, tags1.map(_ -> 2.0).toMap ++ tags2.map(_ -> 2.0).toMap)
@@ -56,7 +57,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       classified.last.orderedTags.count(_.tagType == SharedType) shouldEqual tags1.size
       classified.last.orderedTags.count(_.tagType == UniqueType) shouldEqual tags2.size
 
-      val classifier2 = new HostelsClassifier(generateConfig(tags1.size, tags2.size), clicheTags = Set())
+      val classifier2 = new HostelsClassifier(generateConfig(tags1.size, tags2.size), ClicheTagsFilterMock)
       val classified2 = classifier2.classify(model, H1)
       classified2.head.orderedTags.count(_.tagType == SharedType) shouldEqual math.min(tags1.size + tags2.size, H1.attributes.size)
       classified2.head.orderedTags.count(_.tagType == UniqueType) shouldEqual 0
@@ -70,7 +71,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
       val tags1  = ('a' to 'g').map(_.toString)
       val tags2  = ('h' to 'm').map(_.toString)
 
-      val classifier = new HostelsClassifier(generateConfig(totalTags = tags1.size + tags2.size), clicheTags = Set())
+      val classifier = new HostelsClassifier(generateConfig(totalTags = tags1.size + tags2.size), ClicheTagsFilterMock)
 
       val model = Seq(Hostel(1, "1", 10, None, "", None, None, (tags1 ++ tags2).map(_ -> 1.0).toMap))
 
@@ -80,7 +81,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
     }
 
     "make the first classified hostel be the one with the highest ranked matching tags" in {
-      val classifier = new HostelsClassifier(generateConfig(totalTags = 6), clicheTags = Set())
+      val classifier = new HostelsClassifier(generateConfig(totalTags = 6), ClicheTagsFilterMock)
 
       val tags1 = ('a' to 'e').map(_.toString)
       val tags2 = ('c' to 'f').map(_.toString)
@@ -105,7 +106,7 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
     }
 
     "return classified hostels containing tags with higher ratings first" in {
-      val classifier = new HostelsClassifier(generateConfig(totalTags = 6), clicheTags = Set())
+      val classifier = new HostelsClassifier(generateConfig(totalTags = 6), ClicheTagsFilterMock)
 
       val tags           = ('a' to 'c').map(_.toString)
       val highRatingTags = Map("c" -> 10.0, "d" -> 10.0)
@@ -141,5 +142,9 @@ class HostelsClassifierSpec extends WordSpec with Matchers {
         """.stripMargin
       )
     )
+
+  private[this] object ClicheTagsFilterMock extends ClicheTagsFilterService {
+    val clicheTags = Set.empty[String]
+  }
 
 }

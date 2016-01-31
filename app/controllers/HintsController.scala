@@ -2,21 +2,24 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import db.{TagsDAO, HostelsDAO, LocationsDAO}
-import models.TagHolder
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
-
+import db.{LocationsDAO, TagsDAO}
+import play.api.Configuration
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json.Json
+import play.api.mvc.{Action, Controller}
+import services.ClicheTagsFilterService
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locationsDAO: LocationsDAO, tagsDAO: TagsDAO)
-  extends Controller {
+class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider,
+                                locationsDAO: LocationsDAO,
+                                tagsDAO: TagsDAO,
+                                filter: ClicheTagsFilterService,
+                                config: Configuration,
+                                implicit val ec: ExecutionContext) extends Controller {
 
   def hostelHints = Action.async { implicit request =>
     val queryParams = hintsParamsBinding.bindFromRequest.get
@@ -39,7 +42,7 @@ class HintsController @Inject()(dbConfigProvider: DatabaseConfigProvider, locati
       queryParams match {
         case TagsSuggestions(Some(location), optionalTags) =>
           val chosenTagsOpt = optionalTags.map(_.replace("-", " ").replace("%21", "-").split("[ ,]"))
-          tagSuggestionsFor(location, chosenTagsOpt.fold(TagHolder.ClicheTags)(TagHolder.ClicheTags ++ _))
+          tagSuggestionsFor(location, chosenTagsOpt.fold(filter.clicheTags)(filter.clicheTags ++ _))
         case TagsSuggestions(_, _) =>
           Future.successful(Seq.empty[String])
       }

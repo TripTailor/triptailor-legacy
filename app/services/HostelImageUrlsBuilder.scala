@@ -1,9 +1,12 @@
 package services
 
+import javax.inject.{Inject, Singleton}
+
 import models.Hostel
 import play.api.Configuration
 
-class HostelImageUrlsBuilder(config: Configuration) {
+@Singleton
+class HostelImageUrlsBuilder @Inject()(config: Configuration) {
   private val endpoint = config.getString("s3.hostel.images.endpoint").get
 
   def hostelWorldUrls(hostel: Hostel): Seq[String] =

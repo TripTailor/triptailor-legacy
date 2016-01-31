@@ -1,20 +1,21 @@
 package db
 
-import com.google.inject.{ Inject, Singleton }
-import models.TagHolder
-
+import com.google.inject.{Inject, Singleton}
+import db.Tables._
+import play.api.Configuration
 import play.api.db.slick._
-
+import services.ClicheTagsFilterService
 import slick.driver.PostgresDriver.api._
 import slick.profile.RelationalProfile
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-
-import db.Tables._
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider) extends HasDatabaseConfigProvider[RelationalProfile] {
+class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvider,
+                                           filter: ClicheTagsFilterService,
+                                           config: Configuration,
+                                           implicit val ec: ExecutionContext) extends HasDatabaseConfigProvider[RelationalProfile] {
+
   import extensions.FutureO
 
   type LocationResult = (Int, String, String, String)
@@ -85,7 +86,7 @@ class LocationsDAO @Inject()(protected val dbConfigProvider: DatabaseConfigProvi
           locationOpt.fold {
             Location(lid, city, country, Seq(tag), Set())
           } { location =>
-            if (TagHolder.ClicheTags contains tag)
+            if (filter.clicheTags contains tag)
               location
             else
               location.copy(commonTags = tag +: location.commonTags)
