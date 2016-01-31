@@ -11,6 +11,12 @@ package object extensions {
       FutureO(newFuture)
     }
 
+    def filter(p: A => Boolean)(implicit ec: ExecutionContext): FutureO[A] =
+      FutureO(future.map(option => option filter p))
+
+    def withFilter(p: A => Boolean)(implicit ec: ExecutionContext): FutureO[A] =
+      filter(p)
+
     def map[B](f: A => B)(implicit ec: ExecutionContext): FutureO[B] =
       FutureO(future.map(option => option map f))
   }

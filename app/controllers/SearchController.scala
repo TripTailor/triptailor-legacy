@@ -50,22 +50,16 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     val fOpt =
       for {
-        location         ← FutureO(loadLocation(location))
-        _                = logger.info(s"loaded location $location")
-        scraper          = new HostelPriceScraper(config)
-        parameters       = tagsQuery.replace("-", " ").replace("%21", "-")
-        possibleHostel   = parameters.split(",").head.mkString
-        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, parameters.split("[ ,]"))
-        pricingInfo      = pricingInfoModel._1
-        model            = pricingInfoModel._2
-        hostel           ← FutureO(hostelsDAO.loadHostel(possibleHostel).map(Some(_)))
-        adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
-        searchID         ← if (hostel.nonEmpty) FutureO(searchesDAO.saveHostelSearch(sessionId, hostel.name, location.city, adWords))
-                           else FutureO(searchesDAO.saveTagsSearch(sessionId, parameters.split("[ ,]"), location.city, adWords))
-        _                = logger.info(s"saved search $searchID")
-        classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified       = if (hostel.nonEmpty) classifier.classify(model.toSeq, hostel)
-                         else classifier.classifyByTags(model.toSeq, parameters.split("[ ,]"))
+        location             ← FutureO(loadLocation(location))
+        _                    = logger.info(s"loaded location $location")
+        scraper              = new HostelPriceScraper(config)
+        tags                 = tagsQuery.split("-")
+        (pricingInfo, model) ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, tags)
+        adWords              = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
+        searchID             ← FutureO(searchesDAO.saveTagsSearch(sessionId, tags, location.city, adWords))
+        _                    = logger.info(s"saved search $searchID")
+        classifier           = new HostelsClassifier(config, TagHolder.ClicheTags)
+        classified           = classifier.classifyByTags(model.toSeq, tags)
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
@@ -77,17 +71,15 @@ class SearchController @Inject()(dbConfigProvider: DatabaseConfigProvider,
 
     val fOpt =
       for {
-        location         ← FutureO(loadLocation(location))
-        _                = logger.info(s"loaded location $location")
-        scraper          = new HostelPriceScraper(config)
-        pricingInfoModel ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, Seq())
-        pricingInfo      = pricingInfoModel._1
-        model            = pricingInfoModel._2
-        adWords          = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
-        searchID         ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
-        _                = logger.info(s"saved search $searchID")
-        classifier       = new HostelsClassifier(Play.current.configuration, TagHolder.ClicheTags)
-        classified       = classifier.classifyByTags(model.toSeq, tags = Seq(""))
+        location             ← FutureO(loadLocation(location))
+        _                    = logger.info(s"loaded location $location")
+        scraper              = new HostelPriceScraper(config)
+        (pricingInfo, model) ← loadModelPricingInfo(location, scraper, dateFrom, dateTo, Seq())
+        adWords              = if (queryParams.ad.isEmpty && queryParams.gclid.isEmpty) 0 else 1
+        searchID             ← FutureO(searchesDAO.saveCitySearch(sessionId, location.city, adWords))
+        _                    = logger.info(s"saved search $searchID")
+        classifier           = new HostelsClassifier(config, TagHolder.ClicheTags)
+        classified           = classifier.classifyByTags(model.toSeq, tags = Seq(""))
       } yield (searchID, scraper.assignPricing(classified, pricingInfo))
 
     fOpt.future.map(_ getOrElse (-1, Seq.empty)).map(resultsToResponse)
